@@ -1,7 +1,6 @@
 using System;
 using System.Drawing;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using ZedGraph;
 
 namespace spMain.QData.Common {

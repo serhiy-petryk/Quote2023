@@ -1,6 +1,4 @@
 using System;
-using System.Drawing;
-using System.Drawing.Design;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Runtime.Serialization;

@@ -1,11 +1,7 @@
 using System;
-using System.Threading;
-using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Design;
 using System.Windows.Forms;
-using System.Text;
 using ZedGraph;
 
 namespace spMain.Comp {

@@ -1,7 +1,6 @@
 using System;
 using System.Text;
 using System.Data.OleDb;
-using System.Collections.Generic;
 using System.Globalization;
 using spMain.QData.DataFormat;
 

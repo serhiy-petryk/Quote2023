@@ -1,8 +1,6 @@
 using System;
 using System.Globalization;
-using System.IO;
 using System.Collections.Generic;
-using System.Text;
 
 namespace spMain.QData.DataFormat {
   public class MbtTickHttp {

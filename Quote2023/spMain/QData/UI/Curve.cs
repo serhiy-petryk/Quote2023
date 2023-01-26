@@ -1,10 +1,8 @@
 using System;
 using System.Drawing;
 using System.ComponentModel;
-using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
 using ZedGraph;
 
 namespace spMain.QData.UI {

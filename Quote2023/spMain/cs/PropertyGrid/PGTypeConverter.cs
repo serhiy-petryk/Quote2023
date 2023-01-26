@@ -1,10 +1,7 @@
 using System;
-using System.Drawing;
-using System.Windows.Forms;
 using System.Reflection;
 using System.ComponentModel;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace spMain.cs {
 

@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using spMain.QData.DataFormat;
 
 namespace spMain.QData.DataAdapters {

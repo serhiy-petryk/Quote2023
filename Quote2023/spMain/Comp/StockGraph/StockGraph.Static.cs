@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace spMain.Comp {
   public partial class StockGraph : ZedGraph.ZedGraphControl {
 

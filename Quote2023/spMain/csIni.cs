@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using spMain.csColorEditor;
 using spMain.Helpers;
 
 namespace spMain
@@ -21,8 +21,8 @@ namespace spMain
         public static Dictionary<string, Type> typeXref;
         public static Dictionary<string, object[]> typeDataSet;// Dictionary<id, values>
 
-        public static readonly bool isDesignMode = (System.Diagnostics.Process.GetCurrentProcess().ProcessName.ToLower() == "devenv" ||
-                                                    System.Diagnostics.Process.GetCurrentProcess().ProcessName.ToLower() == "vcsexpress");
+        public static readonly bool isDesignMode = (Process.GetCurrentProcess().ProcessName.ToLower() == "devenv" ||
+                                                    Process.GetCurrentProcess().ProcessName.ToLower() == "vcsexpress");
 
         public static string pathExe = GetPathExe();
         public const string pathLog = @"T:\Log\";
@@ -40,10 +40,12 @@ namespace spMain
         public readonly static DateTimeFormatInfo fiDateUS = ciUS.DateTimeFormat;
         public readonly static NumberFormatInfo fiNumberUS = ciUS.NumberFormat;
 
+        public const string YahooMinuteDataFolder = @"E:\Quote\WebData\Minute\Yahoo\Data\";
+
         static csIni()
         {
             // change Color Editor
-            TypeDescriptor.AddAttributes(typeof(Color), new Attribute[] { new EditorAttribute(typeof(csColorEditor.ColorTypeEditor), typeof(UITypeEditor)) });
+            TypeDescriptor.AddAttributes(typeof(Color), new Attribute[] { new EditorAttribute(typeof(ColorTypeEditor), typeof(UITypeEditor)) });
             LogFolderClear();
             IniHttp();
             GetPathExe();
@@ -86,8 +88,8 @@ namespace spMain
                 {
                     string s = dr["ValueList"].ToString();
                     string sType = dr["fullname"].ToString().ToLower();
-                    Type t = (sType == "system.drawing.color" ? System.Drawing.Color.Empty.GetType() : Type.GetType(sType, true, true));
-                    if (string.IsNullOrEmpty(s))
+                    Type t = (sType == "system.drawing.color" ? Color.Empty.GetType() : Type.GetType(sType, true, true));
+                    if (String.IsNullOrEmpty(s))
                     {
                         typeXref.Add(dr["shortname"].ToString().ToLower(), t);
                     }
@@ -125,8 +127,8 @@ namespace spMain
             HttpWebRequest.DefaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
             //      HttpWebRequest.DefaultWebProxy.als = CredentialCache.DefaultCredentials;
             FtpWebRequest.DefaultWebProxy.Credentials = CredentialCache.DefaultCredentials;
-            System.Net.ServicePointManager.Expect100Continue = false;
-            System.Net.ServicePointManager.DefaultConnectionLimit = 1000;
+            ServicePointManager.Expect100Continue = false;
+            ServicePointManager.DefaultConnectionLimit = 1000;
             int t1; int t2;
             ThreadPool.GetAvailableThreads(out t1, out t2);
             ThreadPool.GetMaxThreads(out t1, out t2);

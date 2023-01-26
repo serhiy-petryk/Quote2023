@@ -1,13 +1,8 @@
 using System;
 using System.Drawing;
-using System.Windows.Forms;
 using System.ComponentModel;
-using System.Data;
-using System.Data.OleDb;
-using System.Collections;
 using System.Collections.Generic;
 //using System.Runtime.Serialization;
-using System.Text;
 
 namespace spMain.QData.DataDB {
 

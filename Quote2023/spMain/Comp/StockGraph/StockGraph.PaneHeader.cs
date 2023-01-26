@@ -1,9 +1,7 @@
 using System;
 using System.Windows.Forms;
 using System.Drawing;
-using System.Drawing.Design;
 using System.Collections.Generic;
-using System.Text;
 using ZedGraph;
 using spMain.QData.DataFormat;
 

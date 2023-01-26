@@ -1,8 +1,6 @@
 using System;
-using System.Data.OleDb;
 using System.IO;
 using System.Collections;
-using System.Collections.Generic;
 using System.Text;
 
 namespace spMain.QData.DataAdapters.MBT {

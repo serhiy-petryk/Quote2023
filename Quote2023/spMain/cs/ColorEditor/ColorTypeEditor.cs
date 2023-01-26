@@ -1,7 +1,5 @@
-using System;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Collections.Generic;
 using System.Windows.Forms.Design;
 
 namespace spMain.csColorEditor {

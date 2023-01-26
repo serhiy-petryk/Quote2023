@@ -4,7 +4,6 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Design;
 using System.ComponentModel;
 using System.Collections.Generic;
-using System.Text;
 using ZedGraph;
 
 namespace spMain.QData.UI {

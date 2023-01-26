@@ -1,9 +1,6 @@
 using System;
-using System.Reflection;
 using System.ComponentModel;
 using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 
 namespace spMain.cs {
 

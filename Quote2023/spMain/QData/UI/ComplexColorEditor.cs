@@ -3,8 +3,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Design;
 using System.ComponentModel;
-using System.Collections.Generic;
-using System.Text;
 
 namespace spMain.QData.UI {
 

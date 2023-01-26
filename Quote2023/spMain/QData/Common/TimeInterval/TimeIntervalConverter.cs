@@ -1,9 +1,6 @@
 using System;
 using System.Globalization;
 using System.ComponentModel;
-using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 
 namespace spMain.QData.Common {
   public partial class TimeInterval {

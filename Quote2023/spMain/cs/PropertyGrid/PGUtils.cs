@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing.Design;
 
 namespace spMain.cs {
 

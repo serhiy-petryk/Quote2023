@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Printing;
