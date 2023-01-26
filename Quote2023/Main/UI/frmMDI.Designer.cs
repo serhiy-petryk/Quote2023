@@ -41,6 +41,7 @@ namespace Main.UI {
             this.btnLog = new System.Windows.Forms.ToolStripButton();
             this.btnWebDownloader = new System.Windows.Forms.ToolStripButton();
             this.btnClearSqlCache = new System.Windows.Forms.ToolStripButton();
+            this.btnStockGraph = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.stripBtns.SuspendLayout();
             this.SuspendLayout();
@@ -147,6 +148,7 @@ namespace Main.UI {
             // 
             this.stripBtns.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.stripBtns.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnStockGraph,
             this.btnMemoryInUsed,
             this.btnLog,
             this.btnWebDownloader,
@@ -194,6 +196,16 @@ namespace Main.UI {
             this.btnClearSqlCache.Size = new System.Drawing.Size(93, 22);
             this.btnClearSqlCache.Text = "Clear Sql Cache";
             this.btnClearSqlCache.Click += new System.EventHandler(this.btnClearSqlCache_Click);
+            // 
+            // btnStockGraph
+            // 
+            this.btnStockGraph.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnStockGraph.Image = ((System.Drawing.Image)(resources.GetObject("btnStockGraph.Image")));
+            this.btnStockGraph.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnStockGraph.Name = "btnStockGraph";
+            this.btnStockGraph.Size = new System.Drawing.Size(75, 22);
+            this.btnStockGraph.Text = "Stock Graph";
+            this.btnStockGraph.Click += new System.EventHandler(this.btnStockGraph_Click);
             // 
             // frmMDI
             // 
@@ -246,5 +258,6 @@ namespace Main.UI {
     private System.Windows.Forms.ToolStripButton btnLog;
     private System.Windows.Forms.ToolStripButton btnWebDownloader;
     private System.Windows.Forms.ToolStripButton btnClearSqlCache;
-  }
+        private System.Windows.Forms.ToolStripButton btnStockGraph;
+    }
 }

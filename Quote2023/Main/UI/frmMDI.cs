@@ -224,6 +224,7 @@ namespace Main.UI
         #endregion    ///////////////////////////////  END ///////////////////////////
 
         private void mnuExit_Click(object sender, EventArgs e) => Application.Exit();
+        private void btnStockGraph_Click(object sender, EventArgs e) => AttachNewChildForm(new spMain.Comp.frmUIStockGraph());
         private void btnMemoryInUsed_Click(object sender, EventArgs e) => MessageBox.Show($@"Програма займає {CsHelper.MemoryUsedInBytes:N0} байт памяті");
         private void btnLog_Click(object sender, EventArgs e) => AttachNewChildForm(new UI.frmLog());
         private void btnWebDownloader_Click(object sender, EventArgs e) => AttachNewChildForm(new WebDownloader.frmWebDownloader());
@@ -241,5 +242,6 @@ namespace Main.UI
             }
             MessageBox.Show(@"Sql Cache was cleared");
         }
+
     }
 }

@@ -1,0 +1,25 @@
+2010-05-18
+
+Summary: 
+Support only 
+   - IDictionary + IList ( can add/remove/change items)
+   - Array - есть только get (can not add/remove items, can edit items in PropertyGrid)
+   - Array - есть get/set (can add/remove/change items)
+
+1. Collection:
+Specialized:
+  - NameValueCollection: элемент массива имеет тип string(дает значение key) - сделать поддержку нельзя
+  - StringDictionary (DictionaryEntry:string, string): нет поддержки (нужна специальная поддержка)
+  - ListDictionary/OrderedDictionary: должно работать 
+Generic:  
+  - (Sorted)Dictionary/List: есть поддержка
+Base:
+  - Hashtable/ArrayList/SortedList/DictionaryBase: должно работать
+  
+Array (int[] example) - is IList with IsFixedSize=true;  
+
+
+
+1. InputBox from VisualBasic
+MethodInfo mi = typeof(Microsoft.VisualBasic.Interaction).GetMethod("InputBox"); 
+string returnString = mi.Invoke(null, new object[] { "Type something!", "Title text", "default value", Missing.Value, Missing.Value }).ToString();
