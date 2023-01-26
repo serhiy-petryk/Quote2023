@@ -1,27 +1,38 @@
-﻿using System;
+using System;
+using System.Net;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Main
+namespace WebDownloader
 {
+
+
     static class Program
     {
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
+        /// 
         [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            var s = csIni.pathExe;
+
             Application.ThreadException += Application_ThreadException;
 
-            Application.Run(new UI.frmMDI());
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+
+            // Application.Run(new frmMDI());
+            Application.Run(new frmWebDownloader());
 
         }
 
-        private static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
         {
             if (e.Exception is System.Data.ConstraintException)
             {
@@ -36,5 +47,7 @@ namespace Main
                 Application.Exit();
             }
         }
+
+
     }
 }
