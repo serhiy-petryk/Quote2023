@@ -81,7 +81,6 @@
     <Compile Include="Refactoring-2019-12.WiP.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Test\cEventHelper.cs" />
-    <Compile Include="Test\Class1.cs" />
     <Compile Include="Test\DGV_FindAndReplace\FindAndReplaceForm.Original.cs">
       <SubType>Form</SubType>
     </Compile>

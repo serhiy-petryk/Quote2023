@@ -51,49 +51,89 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Comp\frmUIStockGraph.cs" />
+    <Compile Include="Comp\frmUIStockGraph.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Comp\frmUIStockGraph.Designer.cs">
       <DependentUpon>frmUIStockGraph.cs</DependentUpon>
     </Compile>
-    <Compile Include="Comp\StockGraph\StockGraph.AdjustPane.cs" />
-    <Compile Include="Comp\StockGraph\StockGraph.AxisChange.cs" />
-    <Compile Include="Comp\StockGraph\StockGraph.cs" />
-    <Compile Include="Comp\StockGraph\StockGraph.Cursor.cs" />
-    <Compile Include="Comp\StockGraph\StockGraph.Events.cs" />
-    <Compile Include="Comp\StockGraph\StockGraph.FillData.cs" />
-    <Compile Include="Comp\StockGraph\StockGraph.GraphObjects.cs" />
-    <Compile Include="Comp\StockGraph\StockGraph.PaneHeader.cs" />
-    <Compile Include="Comp\StockGraph\StockGraph.PaneResize.cs" />
-    <Compile Include="Comp\StockGraph\StockGraph.Static.cs" />
-    <Compile Include="Comp\StockGraph\StockGraph.UI.cs" />
-    <Compile Include="Comp\StockGraph\StockGraph.Utils.cs" />
-    <Compile Include="Comp\UI_StockGraph.cs" />
+    <Compile Include="Comp\StockGraph\StockGraph.AdjustPane.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Comp\StockGraph\StockGraph.AxisChange.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Comp\StockGraph\StockGraph.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Comp\StockGraph\StockGraph.Cursor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Comp\StockGraph\StockGraph.Events.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Comp\StockGraph\StockGraph.FillData.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Comp\StockGraph\StockGraph.GraphObjects.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Comp\StockGraph\StockGraph.PaneHeader.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Comp\StockGraph\StockGraph.PaneResize.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Comp\StockGraph\StockGraph.Static.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Comp\StockGraph\StockGraph.UI.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Comp\StockGraph\StockGraph.Utils.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Comp\UI_StockGraph.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Comp\UI_StockGraph.Designer.cs">
       <DependentUpon>UI_StockGraph.cs</DependentUpon>
     </Compile>
     <Compile Include="csIni.cs" />
     <Compile Include="csUtils.cs" />
-    <Compile Include="cs\ColorEditor\ColorButton.cs" />
+    <Compile Include="cs\ColorEditor\ColorButton.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="cs\ColorEditor\ColorButton.designer.cs">
       <DependentUpon>ColorButton.cs</DependentUpon>
     </Compile>
-    <Compile Include="cs\ColorEditor\ColorFormEditor.cs" />
+    <Compile Include="cs\ColorEditor\ColorFormEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="cs\ColorEditor\ColorFormEditor.designer.cs">
       <DependentUpon>ColorFormEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="cs\ColorEditor\ColorTypeEditor.cs" />
-    <Compile Include="cs\CoolPrintPreview\CoolPrintPreviewControl.cs" />
-    <Compile Include="cs\CoolPrintPreview\CoolPrintPreviewDialog.cs" />
+    <Compile Include="cs\CoolPrintPreview\CoolPrintPreviewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="cs\CoolPrintPreview\CoolPrintPreviewDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="cs\CoolPrintPreview\CoolPrintPreviewDialog.designer.cs">
       <DependentUpon>CoolPrintPreviewDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="cs\CoolPrintPreview\PageImageList.cs" />
     <Compile Include="cs\FastSerializer.cs" />
-    <Compile Include="cs\PropertyGrid\frmObjectEditor.cs" />
+    <Compile Include="cs\PropertyGrid\frmObjectEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="cs\PropertyGrid\frmObjectEditor.designer.cs">
       <DependentUpon>frmObjectEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="cs\PropertyGrid\frmObjectEditor.Helper.cs" />
+    <Compile Include="cs\PropertyGrid\frmObjectEditor.Helper.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="cs\PropertyGrid\PGAttributeList.cs" />
     <Compile Include="cs\PropertyGrid\PGCollectionEditor.cs" />
     <Compile Include="cs\PropertyGrid\PGPropertyDescriptor.cs" />
@@ -116,7 +156,9 @@
     <Compile Include="QData\Common\General.cs" />
     <Compile Include="QData\Common\TimeInterval\TimeInterval.cs" />
     <Compile Include="QData\Common\TimeInterval\TimeIntervalConverter.cs" />
-    <Compile Include="QData\Common\TimeInterval\TimeIntervalFormEditor.cs" />
+    <Compile Include="QData\Common\TimeInterval\TimeIntervalFormEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="QData\Common\TimeInterval\TimeIntervalFormEditor.designer.cs">
       <DependentUpon>TimeIntervalFormEditor.cs</DependentUpon>
     </Compile>
