@@ -12,14 +12,18 @@ namespace spMain.Comp {
     }
 
     // =====================  Public section =============================
-    public void _SetUIGraph(QData.UI.UIGraph uiGraph) {
+    public void _SetUIGraph(QData.UI.UIGraph uiGraph)
+    {
       this._stockGraph._uiGraph = uiGraph;
       this._stockGraph._UIGraphApply();
       this.UpdateToolStrip();
     }
 
+    public void _ShowAllPoints() => this._stockGraph._ShowAllPoints();
+
     // =====================  Clicks =================================
-    private void _btnDataSelect_Click(object sender, EventArgs e) {
+    private void _btnDataSelect_Click(object sender, EventArgs e)
+    {
       this._stockGraph._UIGraphChange();
       this.UpdateToolStrip();
     }

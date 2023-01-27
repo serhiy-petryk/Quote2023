@@ -12,7 +12,7 @@ namespace spMain.Comp
             InitializeComponent();
         }
 
-        public frmUIStockGraph(UIGraph graph):base()
+        public frmUIStockGraph(UIGraph graph) : base()
         {
             InitializeComponent();
             _initialGraph = graph;
@@ -25,6 +25,8 @@ namespace spMain.Comp
                 if (_initialGraph != null)
                 {
                     uI_StockGraph1._SetUIGraph(_initialGraph);
+                    if (!_initialGraph.DataAdapter.IsStream)
+                        uI_StockGraph1._ShowAllPoints();
                     _initialGraph = null;
                     return;
                 }
@@ -33,7 +35,10 @@ namespace spMain.Comp
                 if (o == null)
                     BeginInvoke(new MethodInvoker(Close));
                 else
-                    uI_StockGraph1._SetUIGraph((QData.UI.UIGraph) o);
+                {
+                    uI_StockGraph1._SetUIGraph((QData.UI.UIGraph)o);
+                    uI_StockGraph1._ShowAllPoints();
+                }
             }
         }
     }
