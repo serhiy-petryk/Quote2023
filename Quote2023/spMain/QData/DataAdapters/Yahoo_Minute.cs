@@ -70,10 +70,19 @@ namespace spMain.QData.DataAdapters
                 validFiles.Add(keys[keys.Length - 1].Item2);
             for (var k = 1; k < keys.Length; k++)
             {
-                if (startDate>keys[k-1].Item1 && startDate<=keys[k].Item1 || endDate > keys[k-1].Item1 && endDate <= keys[k].Item1)
+                var minDate = keys[k - 1].Item1;
+                if (minDate.DayOfWeek == DayOfWeek.Saturday) minDate = minDate.AddDays(2);
+                else if (minDate.DayOfWeek == DayOfWeek.Sunday) minDate = minDate.AddDays(1);
+
+                var maxDate = keys[k].Item1;
+                if (maxDate.DayOfWeek == DayOfWeek.Saturday) maxDate = maxDate.AddDays(-1);
+                else if (maxDate.DayOfWeek == DayOfWeek.Sunday) maxDate = maxDate.AddDays(-2);
+
+                if (!((startDate < minDate && endDate < minDate) || (startDate > maxDate && endDate > maxDate)))
                     validFiles.Add(keys[k].Item2);
             }
 
+            // Get data
             var entryName = string.Format(zipFileEntryNameTemplate, symbol);
             foreach (var zipFileName in validFiles)
             {
