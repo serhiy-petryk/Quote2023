@@ -48,7 +48,6 @@ namespace spMain.Comp {
 
     }
 
-
     // =====================  Private section =============================
     private void UpdateToolStrip() {
       this._btnDataSelect.Text = (this._stockGraph._uiGraph == null ||

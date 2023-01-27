@@ -13,7 +13,7 @@ namespace spMain.Comp {
     float _xMarginRight;
     float _xMarginLeft;
     double _graceLeft = 1.0;
-    double _graceRight = 10;
+    double _graceRight = 3.0;
     public const double _xLabelGap = 4.0f;
     List<double> _lastPaneSizes = new List<double>();
     Font _xLabelFont = new Font("Tahoma", 8f);
