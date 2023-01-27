@@ -17,14 +17,18 @@ namespace spMain
                 Description = "Yahoo Minute"
             };
 
-            var pane1 = new UIPane();
-            var indicator1 = new UIIndicator {Type = DBIndicator.GetDBIndByID("framedquote")};
-            indicator1.Check();
-            pane1.Indicators.Add(indicator1);
+            var pane = new UIPane();
+            var dbInd = DBIndicator.GetDBIndByID("framedquote");
+            dbInd.Check();
+            var indicator = new UIIndicator {Type = dbInd};
+            indicator.Check();
+            pane.Indicators.Add(indicator);
 
-            var indicator2 = new UIIndicator {Type = DBIndicator.GetDBIndByID("ma")};
-            indicator2.Check();
-            pane1.Indicators.Add(indicator2);
+            dbInd = DBIndicator.GetDBIndByID("ma");
+            dbInd.Check();
+            indicator = new UIIndicator {Type = dbInd};
+            indicator.Check();
+            pane.Indicators.Add(indicator);
 
             var input = graph.GetDataInputById("symbol");
             if (input != null)
@@ -38,7 +42,17 @@ namespace spMain
             if (input != null)
                 input._value = 10;
 
-            graph.Panes.Add(pane1);
+            graph.Panes.Add(pane);
+
+            pane = new UIPane();
+            dbInd = DBIndicator.GetDBIndByID("volume");
+            dbInd.Check();
+            indicator = new UIIndicator{Type = dbInd};
+            indicator.Check();
+            pane.Indicators.Add(indicator);
+
+            graph.Panes.Add(pane);
+
             return graph;
         }
 

@@ -186,8 +186,14 @@ namespace spMain.QData.DataDB {
           this._valueDataType = ind._valueDataType;
           this._labelTemplate = ind._labelTemplate;
         }
-        Data.DataInput.CheckInputs(this._inputs, ind._inputs);// normalize inputs
+        Check();
       }
+    }
+
+    public void Check()
+    {
+      var ind = GetDBIndByID(this._id);
+      Data.DataInput.CheckInputs(this._inputs, ind._inputs);// normalize inputs
     }
     public void GetObjectData(SerializationInfo info, StreamingContext context) {
       csFastSerializer.Utils.Serialize(info, new object[] { this._id, this._inputs });
