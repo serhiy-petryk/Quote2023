@@ -38,13 +38,8 @@ namespace spMain.QData.DataAdapters
             var days = (int)inputs[2];
             var date = endDate.AddDays(-(days - 1));
             var data = new List<Quote>();
-
             LoadData(symbol, date, endDate, data);
-            /*while (date <= endDate)
-            {
-                LoadData(symbol, date, data);
-                date = date.AddDays(1);
-            }*/
+
             newDataOffset = data.Count;
             data.RemoveRange(0, lastDataOffset);
             return data;
