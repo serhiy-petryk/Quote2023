@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDownloader", "WebDownloa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "spMain", "spMain\spMain.csproj", "{13B07F33-782D-40D4-9B44-840C0EB9CC36}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{BF321539-A424-40D5-AA18-8ECC05085240}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{13B07F33-782D-40D4-9B44-840C0EB9CC36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13B07F33-782D-40D4-9B44-840C0EB9CC36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13B07F33-782D-40D4-9B44-840C0EB9CC36}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF321539-A424-40D5-AA18-8ECC05085240}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF321539-A424-40D5-AA18-8ECC05085240}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF321539-A424-40D5-AA18-8ECC05085240}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF321539-A424-40D5-AA18-8ECC05085240}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
