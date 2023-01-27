@@ -1,8 +1,10 @@
 using System;
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using spMain.QData.Data;
 
 namespace spMain.QData.UI {
 
@@ -126,6 +128,9 @@ namespace spMain.QData.UI {
     }
 
     // ======================== Public section ==================================
+
+    public DataInput GetDataInputById(string id) => _adapterInputs.FirstOrDefault(a => string.Equals(id, a._id, StringComparison.CurrentCultureIgnoreCase));
+
     public void CreateDataSources() {
       this.ClearDataSources();
       List<Data.DataInput> globalInputs = new List<Data.DataInput>();

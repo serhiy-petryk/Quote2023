@@ -62,12 +62,17 @@ namespace spMain.QData.UI {
         }
         this._inputs = (List<Data.DataInput>)x[1];
         this._curveObject = (Curve)x[2];
-        Data.DataInput.CheckInputs(this._inputs, this._dbInd._inputs);// normalize inputs
-        if (this._dbInd != null && this._curveObject == null) this._curveObject = new Curve(this._dbInd);
+        this.Check();
       }
     }
     void ISerializable.GetObjectData(SerializationInfo info, StreamingContext ctxt) {
       csFastSerializer.Utils.Serialize(info, new object[] { (this._dbInd == null ? null : this._dbInd._id), this._inputs, this._curveObject });
+    }
+
+    public void Check()
+    {
+        Data.DataInput.CheckInputs(this._inputs, this._dbInd._inputs);// normalize inputs
+        if (this._dbInd != null && this._curveObject == null) this._curveObject = new Curve(this._dbInd);
     }
 
     // ===========================  Properties =================================

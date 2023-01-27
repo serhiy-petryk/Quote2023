@@ -2,6 +2,7 @@ using System;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
+using spMain.Comp;
 
 namespace DGWnd.UI {
   public partial class frmMDI : Form {
@@ -189,7 +190,12 @@ namespace DGWnd.UI {
     private void btnMemoryInUsed_Click(object sender, EventArgs e) => MessageBox.Show($@"Програма займає {DGCore.Utils.Tips.MemoryUsedInBytes:N0} байт памяті");
     private void btnDependentObjectManager_Click(object sender, EventArgs e) => AttachNewChildForm(new UI.frmDependentObjectManager());
     private void btnLog_Click(object sender, EventArgs e) => AttachNewChildForm(new UI.frmLog());
-        
+    private void btnTestGraph_Click(object sender, EventArgs e)
+    {
+      var graph = spMain.csUtils.GetStandardGraph("MSFT", new DateTime(2022, 12, 12));
+      AttachNewChildForm(new frmUIStockGraph(graph));
+    }
+
 
     private void btnClearSqlCache_Click(object sender, EventArgs e)
     {
@@ -205,5 +211,5 @@ namespace DGWnd.UI {
       MessageBox.Show(@"Sql Cache was cleared");
     }
 
-  }
+    }
 }

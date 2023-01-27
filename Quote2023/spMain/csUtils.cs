@@ -1,9 +1,47 @@
 ﻿using System;
+using spMain.QData.Common;
+using spMain.QData.DataAdapters;
+using spMain.QData.DataDB;
+using spMain.QData.UI;
 
 namespace spMain
 {
-    class csUtils
+    public static class csUtils
     {
+        public static UIGraph GetStandardGraph(string symbol, DateTime date)
+        {
+            var graph = new UIGraph
+            {
+                DataAdapter = QData.Data.DataManager.dataProviders[typeof(Yahoo_Minute)],
+                TimeInterval = new TimeInterval(60),
+                Description = "Yahoo Minute"
+            };
+
+            var pane1 = new UIPane();
+            var indicator1 = new UIIndicator {Type = DBIndicator.GetDBIndByID("framedquote")};
+            indicator1.Check();
+            pane1.Indicators.Add(indicator1);
+
+            var indicator2 = new UIIndicator {Type = DBIndicator.GetDBIndByID("ma")};
+            indicator2.Check();
+            pane1.Indicators.Add(indicator2);
+
+            var input = graph.GetDataInputById("symbol");
+            if (input != null)
+              input._value = symbol;
+
+            input = graph.GetDataInputById("date");
+            if (input != null)
+              input._value = date;
+            
+            input = graph.GetDataInputById("days");
+            if (input != null)
+                input._value = 10;
+
+            graph.Panes.Add(pane1);
+            return graph;
+        }
+
         public static string StringFromObject(object o)
         {
             if (o == null) return "";

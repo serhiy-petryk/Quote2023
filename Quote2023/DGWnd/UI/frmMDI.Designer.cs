@@ -38,12 +38,13 @@ namespace DGWnd.UI {
             this.stripWnds = new System.Windows.Forms.ToolStrip();
             this.stripBtns = new System.Windows.Forms.ToolStrip();
             this.btnDataDefinitionList = new System.Windows.Forms.ToolStripButton();
+            this.btnStockGraph = new System.Windows.Forms.ToolStripButton();
+            this.btnWebDownloader = new System.Windows.Forms.ToolStripButton();
             this.btnMemoryInUsed = new System.Windows.Forms.ToolStripButton();
             this.btnDependentObjectManager = new System.Windows.Forms.ToolStripButton();
             this.btnLog = new System.Windows.Forms.ToolStripButton();
-            this.btnWebDownloader = new System.Windows.Forms.ToolStripButton();
             this.btnClearSqlCache = new System.Windows.Forms.ToolStripButton();
-            this.btnStockGraph = new System.Windows.Forms.ToolStripButton();
+            this.btnTestGraph = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.stripBtns.SuspendLayout();
             this.SuspendLayout();
@@ -156,7 +157,8 @@ namespace DGWnd.UI {
             this.btnMemoryInUsed,
             this.btnDependentObjectManager,
             this.btnLog,
-            this.btnClearSqlCache});
+            this.btnClearSqlCache,
+            this.btnTestGraph});
             this.stripBtns.Location = new System.Drawing.Point(3, 24);
             this.stripBtns.Name = "stripBtns";
             this.stripBtns.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -174,6 +176,26 @@ namespace DGWnd.UI {
             this.btnDataDefinitionList.Size = new System.Drawing.Size(86, 22);
             this.btnDataDefinitionList.Text = "Список даних";
             this.btnDataDefinitionList.Click += new System.EventHandler(this.btnDataDefinitionList_Click);
+            // 
+            // btnStockGraph
+            // 
+            this.btnStockGraph.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnStockGraph.Image = ((System.Drawing.Image)(resources.GetObject("btnStockGraph.Image")));
+            this.btnStockGraph.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnStockGraph.Name = "btnStockGraph";
+            this.btnStockGraph.Size = new System.Drawing.Size(75, 22);
+            this.btnStockGraph.Text = "Stock Graph";
+            this.btnStockGraph.Click += new System.EventHandler(this.btnStockGraph_Click);
+            // 
+            // btnWebDownloader
+            // 
+            this.btnWebDownloader.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnWebDownloader.Image = ((System.Drawing.Image)(resources.GetObject("btnWebDownloader.Image")));
+            this.btnWebDownloader.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnWebDownloader.Name = "btnWebDownloader";
+            this.btnWebDownloader.Size = new System.Drawing.Size(102, 22);
+            this.btnWebDownloader.Text = "Web Downloader";
+            this.btnWebDownloader.Click += new System.EventHandler(this.btnWebDownloader_Click);
             // 
             // btnMemoryInUsed
             // 
@@ -203,16 +225,6 @@ namespace DGWnd.UI {
             this.btnLog.Text = "Журнал";
             this.btnLog.Click += new System.EventHandler(this.btnLog_Click);
             // 
-            // btnWebDownloader
-            // 
-            this.btnWebDownloader.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnWebDownloader.Image = ((System.Drawing.Image)(resources.GetObject("btnWebDownloader.Image")));
-            this.btnWebDownloader.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnWebDownloader.Name = "btnWebDownloader";
-            this.btnWebDownloader.Size = new System.Drawing.Size(102, 22);
-            this.btnWebDownloader.Text = "Web Downloader";
-            this.btnWebDownloader.Click += new System.EventHandler(this.btnWebDownloader_Click);
-            // 
             // btnClearSqlCache
             // 
             this.btnClearSqlCache.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -221,15 +233,15 @@ namespace DGWnd.UI {
             this.btnClearSqlCache.Text = "Clear Sql Cache";
             this.btnClearSqlCache.Click += new System.EventHandler(this.btnClearSqlCache_Click);
             // 
-            // btnStockGraph
+            // btnTestGraph
             // 
-            this.btnStockGraph.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnStockGraph.Image = ((System.Drawing.Image)(resources.GetObject("btnStockGraph.Image")));
-            this.btnStockGraph.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnStockGraph.Name = "btnStockGraph";
-            this.btnStockGraph.Size = new System.Drawing.Size(75, 22);
-            this.btnStockGraph.Text = "Stock Graph";
-            this.btnStockGraph.Click += new System.EventHandler(this.btnStockGraph_Click);
+            this.btnTestGraph.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnTestGraph.Image = ((System.Drawing.Image)(resources.GetObject("btnTestGraph.Image")));
+            this.btnTestGraph.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnTestGraph.Name = "btnTestGraph";
+            this.btnTestGraph.Size = new System.Drawing.Size(68, 22);
+            this.btnTestGraph.Text = "Test Graph";
+            this.btnTestGraph.Click += new System.EventHandler(this.btnTestGraph_Click);
             // 
             // frmMDI
             // 
@@ -285,5 +297,6 @@ namespace DGWnd.UI {
     private System.Windows.Forms.ToolStripButton btnWebDownloader;
     private System.Windows.Forms.ToolStripButton btnClearSqlCache;
         private System.Windows.Forms.ToolStripButton btnStockGraph;
+        private System.Windows.Forms.ToolStripButton btnTestGraph;
     }
 }
