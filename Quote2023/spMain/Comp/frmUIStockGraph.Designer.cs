@@ -42,7 +42,6 @@ namespace spMain.Comp {
             this.Controls.Add(this.uI_StockGraph1);
             this.Name = "frmUIStockGraph";
             this.Text = "frmUIStockGraph";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmUIStockGraph_FormClosing);
             this.Load += new System.EventHandler(this.frmUIStockGraph_Load);
             this.ResumeLayout(false);
 
