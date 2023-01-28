@@ -36,6 +36,8 @@ namespace spMain.Comp
 
         void AdjustPane(GraphPane pane, bool IsFirstPane)
         {
+            // pane.YAxis.IsVisible = _yScaleLeftVisible;
+            // pane.Y2Axis.IsVisible = true;
             pane.YAxis.IsVisible = _yScaleLeftVisible && !_IsSaveFileLayout;
             pane.Y2Axis.IsVisible = !_IsSaveFileLayout;
 
@@ -68,7 +70,8 @@ namespace spMain.Comp
             pane.XAxis.Type = AxisType.Linear;
             pane.XAxis.Scale.MinorStep = 1;
             pane.XAxis.MinorGrid.IsVisible = false;
-            pane.XAxis.MajorGrid.IsVisible = !_IsSaveFileLayout;
+            pane.XAxis.MajorGrid.IsVisible = true;
+            // pane.XAxis.MajorGrid.IsVisible = !_IsSaveFileLayout;
             pane.XAxis.Scale.MajorStep = 10;
 
             pane.IsBoundedRanges = true;// Влияет на автоматическое изменение шкалы при Zoom/Scroll
@@ -127,11 +130,14 @@ namespace spMain.Comp
             //Grid
             pane.YAxis.MajorGrid.Color = Color.Gray;
             pane.Y2Axis.MajorGrid.Color = Color.Gray;
-            pane.YAxis.MajorGrid.IsVisible = !_IsSaveFileLayout;
-            pane.Y2Axis.MajorGrid.IsVisible = !_IsSaveFileLayout;
+            pane.YAxis.MajorGrid.IsVisible = true;
+            pane.Y2Axis.MajorGrid.IsVisible = true;
+            // pane.YAxis.MajorGrid.IsVisible = !_IsSaveFileLayout;
+            // pane.Y2Axis.MajorGrid.IsVisible = !_IsSaveFileLayout;
 
             pane.XAxis.MajorGrid.Color = Color.Gray;
-            pane.XAxis.MajorGrid.IsVisible = !_IsSaveFileLayout;
+            pane.XAxis.MajorGrid.IsVisible = true;
+            // pane.XAxis.MajorGrid.IsVisible = !_IsSaveFileLayout;
             pane.XAxis.IsVisible = false;
 
             if (!_IsSaveFileLayout)
@@ -144,7 +150,6 @@ namespace spMain.Comp
             }
             else
             {
-                // pane.Border.IsVisible = false;
                 pane.Chart.Border.IsVisible = false;
             }
 
@@ -155,7 +160,6 @@ namespace spMain.Comp
 
             pane.XAxis.AxisGap = 0f;
             pane.XAxis.Scale.LabelGap = 0f;
-
         }
 
     }
