@@ -37,13 +37,14 @@ namespace DGWnd.UI {
             this.mnuWArrange = new System.Windows.Forms.ToolStripMenuItem();
             this.stripWnds = new System.Windows.Forms.ToolStrip();
             this.stripBtns = new System.Windows.Forms.ToolStrip();
+            this.btnLog = new System.Windows.Forms.ToolStripButton();
+            this.btnClearSqlCache = new System.Windows.Forms.ToolStripButton();
             this.btnDataDefinitionList = new System.Windows.Forms.ToolStripButton();
+            this.btnLoader = new System.Windows.Forms.ToolStripButton();
             this.btnStockGraph = new System.Windows.Forms.ToolStripButton();
             this.btnWebDownloader = new System.Windows.Forms.ToolStripButton();
             this.btnMemoryInUsed = new System.Windows.Forms.ToolStripButton();
             this.btnDependentObjectManager = new System.Windows.Forms.ToolStripButton();
-            this.btnLog = new System.Windows.Forms.ToolStripButton();
-            this.btnClearSqlCache = new System.Windows.Forms.ToolStripButton();
             this.btnTestGraph = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.stripBtns.SuspendLayout();
@@ -152,6 +153,7 @@ namespace DGWnd.UI {
             this.stripBtns.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.stripBtns.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnDataDefinitionList,
+            this.btnLoader,
             this.btnStockGraph,
             this.btnWebDownloader,
             this.btnMemoryInUsed,
@@ -167,6 +169,22 @@ namespace DGWnd.UI {
             this.stripBtns.Text = "toolStrip1";
             this.stripBtns.ItemAdded += new System.Windows.Forms.ToolStripItemEventHandler(this.mainMenu_ItemAdded);
             // 
+            // btnLog
+            // 
+            this.btnLog.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnLog.Name = "btnLog";
+            this.btnLog.Size = new System.Drawing.Size(55, 22);
+            this.btnLog.Text = "Журнал";
+            this.btnLog.Click += new System.EventHandler(this.btnLog_Click);
+            // 
+            // btnClearSqlCache
+            // 
+            this.btnClearSqlCache.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnClearSqlCache.Name = "btnClearSqlCache";
+            this.btnClearSqlCache.Size = new System.Drawing.Size(93, 22);
+            this.btnClearSqlCache.Text = "Clear Sql Cache";
+            this.btnClearSqlCache.Click += new System.EventHandler(this.btnClearSqlCache_Click);
+            // 
             // btnDataDefinitionList
             // 
             this.btnDataDefinitionList.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -176,6 +194,16 @@ namespace DGWnd.UI {
             this.btnDataDefinitionList.Size = new System.Drawing.Size(86, 22);
             this.btnDataDefinitionList.Text = "Список даних";
             this.btnDataDefinitionList.Click += new System.EventHandler(this.btnDataDefinitionList_Click);
+            // 
+            // btnLoader
+            // 
+            this.btnLoader.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnLoader.Image = ((System.Drawing.Image)(resources.GetObject("btnLoader.Image")));
+            this.btnLoader.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnLoader.Name = "btnLoader";
+            this.btnLoader.Size = new System.Drawing.Size(47, 22);
+            this.btnLoader.Text = "Loader";
+            this.btnLoader.Click += new System.EventHandler(this.btnLoader_Click);
             // 
             // btnStockGraph
             // 
@@ -216,22 +244,6 @@ namespace DGWnd.UI {
             this.btnDependentObjectManager.Size = new System.Drawing.Size(100, 22);
             this.btnDependentObjectManager.Text = "Залежні об`єкти";
             this.btnDependentObjectManager.Click += new System.EventHandler(this.btnDependentObjectManager_Click);
-            // 
-            // btnLog
-            // 
-            this.btnLog.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnLog.Name = "btnLog";
-            this.btnLog.Size = new System.Drawing.Size(55, 22);
-            this.btnLog.Text = "Журнал";
-            this.btnLog.Click += new System.EventHandler(this.btnLog_Click);
-            // 
-            // btnClearSqlCache
-            // 
-            this.btnClearSqlCache.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnClearSqlCache.Name = "btnClearSqlCache";
-            this.btnClearSqlCache.Size = new System.Drawing.Size(93, 22);
-            this.btnClearSqlCache.Text = "Clear Sql Cache";
-            this.btnClearSqlCache.Click += new System.EventHandler(this.btnClearSqlCache_Click);
             // 
             // btnTestGraph
             // 
@@ -298,5 +310,6 @@ namespace DGWnd.UI {
     private System.Windows.Forms.ToolStripButton btnClearSqlCache;
         private System.Windows.Forms.ToolStripButton btnStockGraph;
         private System.Windows.Forms.ToolStripButton btnTestGraph;
-    }
+    private System.Windows.Forms.ToolStripButton btnLoader;
+  }
 }
