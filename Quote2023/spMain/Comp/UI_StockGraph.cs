@@ -36,36 +36,26 @@ namespace spMain.Comp
             this._stockGraph._UIGraphChange();
             this.UpdateToolStrip();
         }
+        private void _btnAutosize_Click(object sender, EventArgs e) => this._stockGraph._Autosize();
+        private void _btnSaveAsFile_Click(object sender, EventArgs e) => this._stockGraph.SaveAs();
+        private void btnSAveAsImageFile_Click(object sender, EventArgs e) => this._stockGraph.SaveAsBitmap();
+        private void _btnPrint_Click(object sender, EventArgs e) => this._stockGraph._DoPrintPreview();
+        private void _btnCopyToClipboard_Click(object sender, EventArgs e) => this._stockGraph.Copy(true);
+        private void _btnSaveDataToFile_Click(object sender, EventArgs e) => this._stockGraph._DoSaveDataToFile();
 
-        private void _btnAutosize_Click(object sender, EventArgs e)
+        private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            this._stockGraph._Autosize();
+            this._stockGraph.log.Add("Before Message");
+            MessageBox.Show(csUtils.MemoryUsedInBytes.ToString("N0"));
+            this._stockGraph.log.Add("After Message");
         }
 
-        private void _btnSaveAsFile_Click(object sender, EventArgs e)
+        private void toolStripButton3_Click(object sender, EventArgs e)
         {
-            this._stockGraph.SaveAs();
+            Dictionary<int, string> x = this._stockGraph._uiGraph.Panes[0].Indicators[0]._timeLog;
+            this._stockGraph.log.Clear();
         }
 
-        private void btnSAveAsImageFile_Click(object sender, EventArgs e)
-        {
-            this._stockGraph.SaveAsBitmap();
-        }
-
-        private void _btnPrint_Click(object sender, EventArgs e)
-        {
-            this._stockGraph._DoPrintPreview();
-        }
-
-        private void _btnCopyToClipboard_Click(object sender, EventArgs e)
-        {
-            this._stockGraph.Copy(true);
-        }
-
-        private void _btnDetach_Click(object sender, EventArgs e)
-        {
-
-        }
 
         // =====================  Private section =============================
         private void UpdateToolStrip()
@@ -80,24 +70,6 @@ namespace spMain.Comp
                 if (this._btnPrint.Enabled != this._stockGraph._IsDataExists) this._btnPrint.Enabled = this._stockGraph._IsDataExists;
                 if (this._btnSaveAsFile.Enabled != this._stockGraph._IsDataExists) this._btnSaveAsFile.Enabled = this._stockGraph._IsDataExists;
             }
-        }
-
-        private void _btnSaveDataToFile_Click(object sender, EventArgs e)
-        {
-            this._stockGraph._DoSaveDataToFile();
-        }
-
-        private void toolStripButton2_Click(object sender, EventArgs e)
-        {
-            this._stockGraph.log.Add("Before Message");
-            MessageBox.Show(csUtils.MemoryUsedInBytes.ToString("N0"));
-            this._stockGraph.log.Add("After Message");
-        }
-
-        private void toolStripButton3_Click(object sender, EventArgs e)
-        {
-            Dictionary<int, string> x = this._stockGraph._uiGraph.Panes[0].Indicators[0]._timeLog;
-            this._stockGraph.log.Clear();
         }
 
     }
