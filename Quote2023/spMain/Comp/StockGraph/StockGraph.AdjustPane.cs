@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using spMain.QData.DataFormat;
 using ZedGraph;
 
 namespace spMain.Comp
@@ -38,8 +39,8 @@ namespace spMain.Comp
         {
             // pane.YAxis.IsVisible = _yScaleLeftVisible;
             // pane.Y2Axis.IsVisible = true;
-            pane.YAxis.IsVisible = _yScaleLeftVisible && !_IsSaveFileLayout;
-            pane.Y2Axis.IsVisible = !_IsSaveFileLayout;
+            pane.YAxis.IsVisible = _yScaleLeftVisible && !_IsSnapshotLayout;
+            pane.Y2Axis.IsVisible = !_IsSnapshotLayout;
 
             pane.Title.IsVisible = false;
             pane.Legend.IsVisible = false;
@@ -71,7 +72,7 @@ namespace spMain.Comp
             pane.XAxis.Scale.MinorStep = 1;
             pane.XAxis.MinorGrid.IsVisible = false;
             pane.XAxis.MajorGrid.IsVisible = true;
-            // pane.XAxis.MajorGrid.IsVisible = !_IsSaveFileLayout;
+            // pane.XAxis.MajorGrid.IsVisible = !_IsSnapshotLayout;
             pane.XAxis.Scale.MajorStep = 10;
 
             pane.IsBoundedRanges = true;// Влияет на автоматическое изменение шкалы при Zoom/Scroll
@@ -90,17 +91,35 @@ namespace spMain.Comp
             pane.YAxis.Scale.LabelGap = 0;
             pane.Y2Axis.Scale.LabelGap = 0;
             pane.XAxis.Scale.LabelGap = 0;
+
             pane.XAxis.Scale.MinAuto = false;
-            pane.YAxis.Scale.MinAuto = true;
-            pane.Y2Axis.Scale.MinAuto = true;
             pane.XAxis.Scale.MaxAuto = false;
+            pane.YAxis.Scale.MinAuto = true;
             pane.YAxis.Scale.MaxAuto = true;
+            pane.Y2Axis.Scale.MinAuto = true;
             pane.Y2Axis.Scale.MaxAuto = true;
 
             pane.YAxis.Scale.MinGrace = 0.05;
             pane.YAxis.Scale.MaxGrace = 0.05;
             pane.Y2Axis.Scale.MinGrace = 0.05;
             pane.Y2Axis.Scale.MaxGrace = 0.05;
+
+            if (_IsSnapshotLayout)
+            {
+                var data = _uiGraph.Panes[0].Indicators[0]._dataInd._data;
+                var min = double.MaxValue;
+                var max = double.MinValue;
+                for (var k = 0; k < data.Count; k++)
+                {
+                    var p = (Quote)data[k];
+                    if (p.High > max) max = p.High;
+                    if (p.Low < min) min = p.Low;
+                }
+                this.MasterPane.PaneList[0].YAxis.Scale.Max = max;
+                this.MasterPane.PaneList[0].YAxis.Scale.Min = min;
+                this.MasterPane.PaneList[0].Y2Axis.Scale.Max = max;
+                this.MasterPane.PaneList[0].Y2Axis.Scale.Min = min;
+            }
 
             // MinorTic
             pane.XAxis.MinorTic.IsInside = false;
@@ -132,15 +151,15 @@ namespace spMain.Comp
             pane.Y2Axis.MajorGrid.Color = Color.Gray;
             pane.YAxis.MajorGrid.IsVisible = true;
             pane.Y2Axis.MajorGrid.IsVisible = true;
-            // pane.YAxis.MajorGrid.IsVisible = !_IsSaveFileLayout;
-            // pane.Y2Axis.MajorGrid.IsVisible = !_IsSaveFileLayout;
+            // pane.YAxis.MajorGrid.IsVisible = !_IsSnapshotLayout;
+            // pane.Y2Axis.MajorGrid.IsVisible = !_IsSnapshotLayout;
 
             pane.XAxis.MajorGrid.Color = Color.Gray;
             pane.XAxis.MajorGrid.IsVisible = true;
-            // pane.XAxis.MajorGrid.IsVisible = !_IsSaveFileLayout;
+            // pane.XAxis.MajorGrid.IsVisible = !_IsSnapshotLayout;
             pane.XAxis.IsVisible = false;
 
-            if (!_IsSaveFileLayout)
+            if (!_IsSnapshotLayout)
             {
                 if (IsFirstPane) pane.Margin.Bottom = _xLabelFont.GetHeight() + 2; // space for labels
                 else pane.Margin.Bottom = 0.5f;

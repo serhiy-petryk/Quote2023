@@ -7,17 +7,17 @@ namespace spMain.Comp
     public partial class frmUIStockGraph : Form
     {
         private UIGraph _initialGraph;
-        private bool _isSaveFileLayout;
+        private bool _isSnapshotLayout;
         public frmUIStockGraph()
         {
             InitializeComponent();
         }
 
-        public frmUIStockGraph(UIGraph graph, bool isSaveFileLayout) : base()
+        public frmUIStockGraph(UIGraph graph, bool isSnapshotLayout) : base()
         {
             InitializeComponent();
             _initialGraph = graph;
-            _isSaveFileLayout = isSaveFileLayout;
+            _isSnapshotLayout = isSnapshotLayout;
         }
 
         private void frmUIStockGraph_Load(object sender, EventArgs e)
@@ -26,7 +26,7 @@ namespace spMain.Comp
             {
                 if (_initialGraph != null)
                 {
-                    uI_StockGraph1._SetUIGraph(_initialGraph, _isSaveFileLayout);
+                    uI_StockGraph1._SetUIGraph(_initialGraph, _isSnapshotLayout);
                     if (!_initialGraph.DataAdapter.IsStream)
                         uI_StockGraph1._Autosize();
                     _initialGraph = null;
@@ -38,7 +38,7 @@ namespace spMain.Comp
                     BeginInvoke(new MethodInvoker(Close));
                 else
                 {
-                    uI_StockGraph1._SetUIGraph((QData.UI.UIGraph)o, _isSaveFileLayout);
+                    uI_StockGraph1._SetUIGraph((QData.UI.UIGraph)o, _isSnapshotLayout);
                     uI_StockGraph1._Autosize();
                 }
             }

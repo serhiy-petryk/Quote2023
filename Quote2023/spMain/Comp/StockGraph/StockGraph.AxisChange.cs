@@ -17,9 +17,9 @@ namespace spMain.Comp {
     Font _xLabelFont = new Font("Tahoma", 8f);
     List<PaneHeader> _paneHeaders = null;
 
-    public bool _IsSaveFileLayout = false;
-    double _graceLeft => _IsSaveFileLayout ? 1.0 : 1.0;
-    double _graceRight => _IsSaveFileLayout ? 1.0 : 3.0;
+    public bool _IsSnapshotLayout = false;
+    double _graceLeft => _IsSnapshotLayout ? 1.0 : 1.0;
+    double _graceRight => _IsSnapshotLayout ? 1.0 : 3.0;
 
     public override void AxisChange() {
       if (!this.DesignMode) {
@@ -54,7 +54,7 @@ namespace spMain.Comp {
 
     void AxisChangeAfter() {
       if (this._IsDataExists) {
-        if (_IsSaveFileLayout)
+        if (_IsSnapshotLayout)
           return;
 
         this.HeaderShowLabels();

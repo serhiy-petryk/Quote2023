@@ -9,12 +9,18 @@ namespace spMain.Comp {
     public UI_StockGraph(){
       InitializeComponent();
       this.UpdateToolStrip();
-    }
+
+      CheckBox cb = new CheckBox();
+      cb.Text = "test";
+      // cb.CheckStateChanged += (s, ex) = &gt; this.Text = cb.CheckState.ToString();
+      ToolStripControlHost host = new ToolStripControlHost(cb);
+      _toolStrip.Items.Insert(0, host);
+        }
 
     // =====================  Public section =============================
-    public void _SetUIGraph(QData.UI.UIGraph uiGraph, bool isSaveFileLayout)
+    public void _SetUIGraph(QData.UI.UIGraph uiGraph, bool isSnapshotLayout)
     {
-      this._stockGraph._IsSaveFileLayout = isSaveFileLayout;
+      this._stockGraph._IsSnapshotLayout = isSnapshotLayout;
       this._stockGraph._uiGraph = uiGraph;
       this._stockGraph._UIGraphApply();
       this.UpdateToolStrip();
