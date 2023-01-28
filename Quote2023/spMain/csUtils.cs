@@ -8,6 +8,38 @@ namespace spMain
 {
     public static class csUtils
     {
+        public static UIGraph GetGraphToSave(string symbol, DateTime date)
+        {
+            var graph = new UIGraph
+            {
+                DataAdapter = QData.Data.DataManager.dataProviders[typeof(Yahoo_Minute)],
+                TimeInterval = new TimeInterval(60),
+                Description = "Yahoo Minute"
+            };
+
+            var pane = new UIPane();
+            var dbInd = DBIndicator.GetDBIndByID("framedquote");
+            dbInd.Check();
+            var indicator = new UIIndicator { Type = dbInd };
+            indicator.Check();
+            pane.Indicators.Add(indicator);
+
+            var input = graph.GetDataInputById("symbol");
+            if (input != null)
+                input._value = symbol;
+
+            input = graph.GetDataInputById("date");
+            if (input != null)
+                input._value = date;
+
+            input = graph.GetDataInputById("days");
+            if (input != null)
+                input._value = 1;
+
+            graph.Panes.Add(pane);
+            return graph;
+        }
+
         public static UIGraph GetStandardGraph(string symbol, DateTime date, int days)
         {
             var graph = new UIGraph
@@ -20,24 +52,24 @@ namespace spMain
             var pane = new UIPane();
             var dbInd = DBIndicator.GetDBIndByID("framedquote");
             dbInd.Check();
-            var indicator = new UIIndicator {Type = dbInd};
+            var indicator = new UIIndicator { Type = dbInd };
             indicator.Check();
             pane.Indicators.Add(indicator);
 
             dbInd = DBIndicator.GetDBIndByID("ma");
             dbInd.Check();
-            indicator = new UIIndicator {Type = dbInd};
+            indicator = new UIIndicator { Type = dbInd };
             indicator.Check();
             pane.Indicators.Add(indicator);
 
             var input = graph.GetDataInputById("symbol");
             if (input != null)
-              input._value = symbol;
+                input._value = symbol;
 
             input = graph.GetDataInputById("date");
             if (input != null)
-              input._value = date;
-            
+                input._value = date;
+
             input = graph.GetDataInputById("days");
             if (input != null)
                 input._value = days;
@@ -47,7 +79,7 @@ namespace spMain
             pane = new UIPane();
             dbInd = DBIndicator.GetDBIndByID("volume");
             dbInd.Check();
-            indicator = new UIIndicator{Type = dbInd};
+            indicator = new UIIndicator { Type = dbInd };
             indicator.Check();
             pane.Indicators.Add(indicator);
 

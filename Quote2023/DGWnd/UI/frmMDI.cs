@@ -216,7 +216,12 @@ namespace DGWnd.UI
         private void btnTestGraph_Click(object sender, EventArgs e)
         {
             var graph = spMain.csUtils.GetStandardGraph("MSFT", new DateTime(2022, 12, 12), 10);
-            AttachNewChildForm(new frmUIStockGraph(graph));
+            AttachNewChildForm(new frmUIStockGraph(graph, false));
+        }
+        private void btnGraphToSave_Click(object sender, EventArgs e)
+        {
+            var graph = spMain.csUtils.GetGraphToSave("AA", new DateTime(2022, 12, 12));
+            AttachNewChildForm(new frmUIStockGraph(graph, true));
         }
 
 

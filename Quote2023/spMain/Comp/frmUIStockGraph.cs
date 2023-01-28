@@ -12,7 +12,7 @@ namespace spMain.Comp
             InitializeComponent();
         }
 
-        public frmUIStockGraph(UIGraph graph) : base()
+        public frmUIStockGraph(UIGraph graph, bool isFileLayout) : base()
         {
             InitializeComponent();
             _initialGraph = graph;

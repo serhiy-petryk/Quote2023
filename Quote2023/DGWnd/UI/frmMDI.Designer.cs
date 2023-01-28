@@ -46,6 +46,7 @@ namespace DGWnd.UI {
             this.btnMemoryInUsed = new System.Windows.Forms.ToolStripButton();
             this.btnDependentObjectManager = new System.Windows.Forms.ToolStripButton();
             this.btnTestGraph = new System.Windows.Forms.ToolStripButton();
+            this.btnGraphToSave = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.stripBtns.SuspendLayout();
             this.SuspendLayout();
@@ -160,7 +161,8 @@ namespace DGWnd.UI {
             this.btnDependentObjectManager,
             this.btnLog,
             this.btnClearSqlCache,
-            this.btnTestGraph});
+            this.btnTestGraph,
+            this.btnGraphToSave});
             this.stripBtns.Location = new System.Drawing.Point(3, 24);
             this.stripBtns.Name = "stripBtns";
             this.stripBtns.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -255,6 +257,16 @@ namespace DGWnd.UI {
             this.btnTestGraph.Text = "Test Graph";
             this.btnTestGraph.Click += new System.EventHandler(this.btnTestGraph_Click);
             // 
+            // btnGraphToSave
+            // 
+            this.btnGraphToSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnGraphToSave.Image = ((System.Drawing.Image)(resources.GetObject("btnGraphToSave.Image")));
+            this.btnGraphToSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnGraphToSave.Name = "btnGraphToSave";
+            this.btnGraphToSave.Size = new System.Drawing.Size(83, 22);
+            this.btnGraphToSave.Text = "Graph to save";
+            this.btnGraphToSave.Click += new System.EventHandler(this.btnGraphToSave_Click);
+            // 
             // frmMDI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -311,5 +323,6 @@ namespace DGWnd.UI {
         private System.Windows.Forms.ToolStripButton btnStockGraph;
         private System.Windows.Forms.ToolStripButton btnTestGraph;
     private System.Windows.Forms.ToolStripButton btnLoader;
-  }
+        private System.Windows.Forms.ToolStripButton btnGraphToSave;
+    }
 }

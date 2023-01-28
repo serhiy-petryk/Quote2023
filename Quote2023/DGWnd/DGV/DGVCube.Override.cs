@@ -81,7 +81,7 @@ namespace DGWnd.DGV
                 {
                   var days = ddate.DayOfWeek == DayOfWeek.Monday ? 4 : 2;
                   var graph = spMain.csUtils.GetStandardGraph(symbol, ddate, days);
-                  ((UI.frmMDI) mainForm).AttachNewChildForm(new frmUIStockGraph(graph));
+                  ((UI.frmMDI) mainForm).AttachNewChildForm(new frmUIStockGraph(graph, false));
                 }
               }
             }
