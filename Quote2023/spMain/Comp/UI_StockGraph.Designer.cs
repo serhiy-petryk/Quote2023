@@ -34,9 +34,8 @@ namespace spMain.Comp {
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this._toolStrip = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this._cbAutosizeOnOpen = new System.Windows.Forms.CheckBox();
             this._stockGraph = new spMain.Comp.StockGraph();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this._toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -129,24 +128,23 @@ namespace spMain.Comp {
             this._btnAutosize,
             this._btnSaveDataToFile,
             this.toolStripButton2,
-            this.toolStripButton3,
-            this.toolStripButton1});
+            this.toolStripButton3});
             this._toolStrip.Location = new System.Drawing.Point(0, 0);
             this._toolStrip.Name = "_toolStrip";
             this._toolStrip.Size = new System.Drawing.Size(713, 25);
             this._toolStrip.TabIndex = 0;
             this._toolStrip.Text = "toolStrip1";
             // 
-            // toolStripButton1
+            // _cbAutosizeOnOpen
             // 
-            this.toolStripButton1.Checked = true;
-            this.toolStripButton1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(98, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
+            this._cbAutosizeOnOpen.AutoSize = true;
+            this._cbAutosizeOnOpen.BackColor = System.Drawing.Color.Transparent;
+            this._cbAutosizeOnOpen.Location = new System.Drawing.Point(316, 206);
+            this._cbAutosizeOnOpen.Name = "_cbAutosizeOnOpen";
+            this._cbAutosizeOnOpen.Size = new System.Drawing.Size(110, 17);
+            this._cbAutosizeOnOpen.TabIndex = 3;
+            this._cbAutosizeOnOpen.Text = "Autosize on Open";
+            this._cbAutosizeOnOpen.UseVisualStyleBackColor = false;
             // 
             // _stockGraph
             // 
@@ -167,21 +165,11 @@ namespace spMain.Comp {
             this._stockGraph.TabIndex = 1;
             this._stockGraph.UseExtendedPrintDialog = true;
             // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(316, 206);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(80, 17);
-            this.checkBox1.TabIndex = 3;
-            this.checkBox1.Text = "checkBox1";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
             // UI_StockGraph
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this._cbAutosizeOnOpen);
             this.Controls.Add(this._stockGraph);
             this.Controls.Add(this._toolStrip);
             this.Name = "UI_StockGraph";
@@ -204,7 +192,6 @@ namespace spMain.Comp {
     private System.Windows.Forms.ToolStripButton toolStripButton2;
     private System.Windows.Forms.ToolStripButton toolStripButton3;
     private System.Windows.Forms.ToolStrip _toolStrip;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox _cbAutosizeOnOpen;
     }
 }
