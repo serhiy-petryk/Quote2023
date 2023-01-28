@@ -19,21 +19,27 @@ namespace spMain.Comp {
       this.UpdateToolStrip();
     }
 
-    public void _ShowAllPoints() => this._stockGraph._ShowAllPoints();
+    public void _Autosize() => this._stockGraph._Autosize();
+    public void _CopyToClipboard() => this._stockGraph.Copy(false);
 
     // =====================  Clicks =================================
-    private void _btnDataSelect_Click(object sender, EventArgs e)
+        private void _btnDataSelect_Click(object sender, EventArgs e)
     {
       this._stockGraph._UIGraphChange();
       this.UpdateToolStrip();
     }
 
-    private void _btnShowAllPoints_Click(object sender, EventArgs e) {
-      this._stockGraph._ShowAllPoints();
+    private void _btnAutosize_Click(object sender, EventArgs e) {
+      this._stockGraph._Autosize();
     }
 
     private void _btnSaveAsFile_Click(object sender, EventArgs e) {
       this._stockGraph.SaveAs();
+    }
+
+    private void btnSAveAsImageFile_Click(object sender, EventArgs e)
+    {
+      this._stockGraph.SaveAsBitmap();
     }
 
     private void _btnPrint_Click(object sender, EventArgs e) {
@@ -54,7 +60,7 @@ namespace spMain.Comp {
         String.IsNullOrEmpty(this._stockGraph._uiGraph.GraphDescription) ? "Click me to choose data" : this._stockGraph._uiGraph.GraphDescription);
 
       if (!this.DesignMode) {
-        if (this._btnShowAllPoints.Enabled != this._stockGraph._IsDataExists) this._btnShowAllPoints.Enabled = this._stockGraph._IsDataExists;
+        if (this._btnAutosize.Enabled != this._stockGraph._IsDataExists) this._btnAutosize.Enabled = this._stockGraph._IsDataExists;
         if (this._btnCopyToClipboard.Enabled != this._stockGraph._IsDataExists) this._btnCopyToClipboard.Enabled = this._stockGraph._IsDataExists;
         if (this._btnPrint.Enabled != this._stockGraph._IsDataExists) this._btnPrint.Enabled = this._stockGraph._IsDataExists;
         if (this._btnSaveAsFile.Enabled != this._stockGraph._IsDataExists) this._btnSaveAsFile.Enabled = this._stockGraph._IsDataExists;
@@ -76,5 +82,5 @@ namespace spMain.Comp {
       this._stockGraph.log.Clear();
     }
 
-  }
+    }
 }

@@ -123,7 +123,7 @@ namespace spMain.Comp {
       this.MasterPane.GraphObjList.Clear();
     }
 
-    public void _ShowAllPoints() {
+    public void _Autosize() {
       foreach (GraphPane pane in this.MasterPane.PaneList) {
         pane.XAxis.Scale.Max = this._dates.Count + _graceRight;
         pane.XAxis.Scale.Min = -this._graceLeft;

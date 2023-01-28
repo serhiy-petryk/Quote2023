@@ -26,8 +26,9 @@ namespace spMain.Comp
                 {
                     uI_StockGraph1._SetUIGraph(_initialGraph);
                     if (!_initialGraph.DataAdapter.IsStream)
-                        uI_StockGraph1._ShowAllPoints();
+                        uI_StockGraph1._Autosize();
                     _initialGraph = null;
+                    // BeginInvoke(new MethodInvoker(Close));
                     return;
                 }
 
@@ -37,9 +38,15 @@ namespace spMain.Comp
                 else
                 {
                     uI_StockGraph1._SetUIGraph((QData.UI.UIGraph)o);
-                    uI_StockGraph1._ShowAllPoints();
+                    uI_StockGraph1._Autosize();
+                    // BeginInvoke(new MethodInvoker(Close));
                 }
             }
+        }
+
+        private void frmUIStockGraph_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // uI_StockGraph1._CopyToClipboard();
         }
     }
 }
