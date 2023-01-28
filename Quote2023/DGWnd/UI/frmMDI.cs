@@ -192,7 +192,7 @@ namespace DGWnd.UI {
     private void btnLog_Click(object sender, EventArgs e) => AttachNewChildForm(new UI.frmLog());
     private void btnTestGraph_Click(object sender, EventArgs e)
     {
-      var graph = spMain.csUtils.GetStandardGraph("MSFT", new DateTime(2022, 12, 12));
+      var graph = spMain.csUtils.GetStandardGraph("MSFT", new DateTime(2022, 12, 12), 10);
       AttachNewChildForm(new frmUIStockGraph(graph));
     }
 

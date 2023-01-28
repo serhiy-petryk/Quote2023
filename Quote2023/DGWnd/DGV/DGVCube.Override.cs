@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using DGCore.UserSettings;
 using Microsoft.VisualBasic;
+using spMain.Comp;
 
 namespace DGWnd.DGV
 {
@@ -67,7 +68,25 @@ namespace DGWnd.DGV
         if (data.GetType().Name != "DGVList_GroupItem`1")
         {
           var done = false;
-          if (((IUserSettingProperties) this).SettingKey == "houses")
+          if (((IUserSettingProperties)this).SettingKey.IndexOf("quote", StringComparison.InvariantCultureIgnoreCase) != -1)
+          {
+            if (columnName == "DATE")
+            {
+              var symbol = data.GetType().GetProperty("SYMBOL").GetValue(data).ToString();
+              var date = data.GetType().GetProperty("DATE").GetValue(data);
+              if (date is DateTime ddate)
+              {
+                var mainForm = this.TopLevelControl;
+                if (mainForm is UI.frmMDI)
+                {
+                  var days = ddate.DayOfWeek == DayOfWeek.Monday ? 4 : 2;
+                  var graph = spMain.csUtils.GetStandardGraph(symbol, ddate, days);
+                  ((UI.frmMDI) mainForm).AttachNewChildForm(new frmUIStockGraph(graph));
+                }
+              }
+            }
+          }
+          else if (((IUserSettingProperties) this).SettingKey == "houses")
           {
               if (columnName == "COMMENT")
               {

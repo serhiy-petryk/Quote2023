@@ -8,7 +8,7 @@ namespace spMain
 {
     public static class csUtils
     {
-        public static UIGraph GetStandardGraph(string symbol, DateTime date)
+        public static UIGraph GetStandardGraph(string symbol, DateTime date, int days)
         {
             var graph = new UIGraph
             {
@@ -40,7 +40,7 @@ namespace spMain
             
             input = graph.GetDataInputById("days");
             if (input != null)
-                input._value = 10;
+                input._value = days;
 
             graph.Panes.Add(pane);
 
