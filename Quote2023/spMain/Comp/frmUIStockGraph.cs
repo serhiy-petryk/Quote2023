@@ -1,4 +1,7 @@
 using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Windows.Forms;
 using spMain.QData.UI;
 
@@ -27,8 +30,25 @@ namespace spMain.Comp
                 if (_initialGraph != null)
                 {
                     uI_StockGraph1._SetUIGraph(_initialGraph, _isSnapshotLayout);
-                    if (!_initialGraph.DataAdapter.IsStream)
                     _initialGraph = null;
+                    if (_isSnapshotLayout)
+                    {
+                        Control stockGraphControl = null;
+                        foreach (var c in uI_StockGraph1.Controls)
+                            if (c is StockGraph graph)
+                                stockGraphControl = graph;
+
+                        if (stockGraphControl != null)
+                        {
+                            stockGraphControl.Dock = DockStyle.None;
+                            stockGraphControl.Size = new Size(90, 60);
+                            uI_StockGraph1._CopyToClipboard();
+                            if (Clipboard.ContainsImage())
+                                Clipboard.GetImage().Save(@"E:\Temp\test.png", ImageFormat.Png);
+
+                            // BeginInvoke(new MethodInvoker(Close));
+                        }
+                    }
                     return;
                 }
 
