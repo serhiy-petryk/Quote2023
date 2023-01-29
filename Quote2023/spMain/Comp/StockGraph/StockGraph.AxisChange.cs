@@ -18,8 +18,8 @@ namespace spMain.Comp {
     List<PaneHeader> _paneHeaders = null;
 
     public bool _IsSnapshotLayout = false;
-    double _graceLeft => _IsSnapshotLayout ? 1.0 : 1.0;
-    double _graceRight => _IsSnapshotLayout ? 1.0 : 3.0;
+    double _graceLeft => _IsSnapshotLayout ? 0.0 : 1.0;
+    double _graceRight => _IsSnapshotLayout ? 0.0 : 1.0;
 
     public override void AxisChange() {
       if (!this.DesignMode) {
