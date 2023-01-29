@@ -55,12 +55,6 @@ namespace spMain.Comp
             }
         }
 
-        void item_Click(object sender, EventArgs e)
-        {
-            //      this.DoMyPrint();
-            this._DoPrintPreview();
-        }
-
         public void InitMy()
         {
             this.MasterPane.Title.IsVisible = true;

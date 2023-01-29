@@ -78,6 +78,8 @@
     <Compile Include="MultiThreading.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Quote\Actions.cs" />
+    <Compile Include="Quote\Helpers\CsHelper.cs" />
     <Compile Include="Quote\UI\Loader.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -426,6 +428,9 @@
       <Project>{a37cb74e-2627-4748-95a0-88838e69d5b6}</Project>
       <Name>WebDownloader</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Quote\Actions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -28,7 +28,6 @@ namespace spMain.Comp
             this.UpdateToolStrip();
         }
 
-        public void _Autosize() => this._stockGraph._Autosize();
         public void _CopyToClipboard() => this._stockGraph.Copy(false);
 
         // =====================  Clicks =================================

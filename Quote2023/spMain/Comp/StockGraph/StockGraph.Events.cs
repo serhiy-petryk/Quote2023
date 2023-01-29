@@ -173,6 +173,12 @@ namespace spMain.Comp
           this._contextMenuOpen = true;
         }*/
 
+        void item_Click(object sender, EventArgs e)
+        {
+            //      this.DoMyPrint();
+            this._DoPrintPreview();
+        }
+
         // ==============================  Other events ================================
         void StockGraph_Resize(object sender, EventArgs e)
         {

@@ -32,14 +32,18 @@ namespace DGWnd.Quote.UI
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnAddIntradaySnapshots = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.btnAddIntradayImages = new System.Windows.Forms.Button();
+            this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
             // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusLabel});
             this.statusStrip1.Location = new System.Drawing.Point(0, 291);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(563, 22);
@@ -59,7 +63,7 @@ namespace DGWnd.Quote.UI
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.btnAddIntradayImages);
+            this.tabPage1.Controls.Add(this.btnAddIntradaySnapshots);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -67,6 +71,16 @@ namespace DGWnd.Quote.UI
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Loader";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // btnAddIntradaySnapshots
+            // 
+            this.btnAddIntradaySnapshots.Location = new System.Drawing.Point(18, 17);
+            this.btnAddIntradaySnapshots.Name = "btnAddIntradaySnapshots";
+            this.btnAddIntradaySnapshots.Size = new System.Drawing.Size(150, 38);
+            this.btnAddIntradaySnapshots.TabIndex = 0;
+            this.btnAddIntradaySnapshots.Text = "Add Intraday snapshots into DayEoddataSummary table";
+            this.btnAddIntradaySnapshots.UseVisualStyleBackColor = true;
+            this.btnAddIntradaySnapshots.Click += new System.EventHandler(this.btnAddIntradaySnapshots_Click);
             // 
             // tabPage2
             // 
@@ -78,15 +92,11 @@ namespace DGWnd.Quote.UI
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // btnAddIntradayImages
+            // statusLabel
             // 
-            this.btnAddIntradayImages.Location = new System.Drawing.Point(18, 17);
-            this.btnAddIntradayImages.Name = "btnAddIntradayImages";
-            this.btnAddIntradayImages.Size = new System.Drawing.Size(150, 38);
-            this.btnAddIntradayImages.TabIndex = 0;
-            this.btnAddIntradayImages.Text = "Add Intraday images into DayEoddataSummary table";
-            this.btnAddIntradayImages.UseVisualStyleBackColor = true;
-            this.btnAddIntradayImages.Click += new System.EventHandler(this.btnAddIntradayImages_Click);
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Size = new System.Drawing.Size(118, 17);
+            this.statusLabel.Text = "toolStripStatusLabel1";
             // 
             // Loader
             // 
@@ -97,6 +107,8 @@ namespace DGWnd.Quote.UI
             this.Controls.Add(this.statusStrip1);
             this.Name = "Loader";
             this.Text = "Loader";
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -109,7 +121,8 @@ namespace DGWnd.Quote.UI
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.Button btnAddIntradayImages;
+        private System.Windows.Forms.Button btnAddIntradaySnapshots;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.ToolStripStatusLabel statusLabel;
     }
 }

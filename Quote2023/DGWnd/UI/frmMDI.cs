@@ -220,7 +220,7 @@ namespace DGWnd.UI
         }
         private void btnGraphToSave_Click(object sender, EventArgs e)
         {
-            var graph = spMain.csUtils.GetGraphToSave("AA", new DateTime(2022, 12, 12));
+            var graph = spMain.csUtils.GetGraphToSave("AA", new DateTime(2022, 12, 09), 2);
             AttachNewChildForm(new frmUIStockGraph(graph, true));
         }
 

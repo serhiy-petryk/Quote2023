@@ -66,7 +66,7 @@ namespace spMain
             }
             if (di != null)
             {
-                CsHelper.SynRunCmd(@"setDiskOn.bat", di.FullName);
+                SynRunCmd(@"setDiskOn.bat", di.FullName);
                 //      MessageBox.Show(@"T:\" + sb.ToString() + "- OK: GetPath");
                 return @"T:\" + sb.ToString();
             }
@@ -137,5 +137,20 @@ namespace spMain
             ThreadPool.GetMaxThreads(out t1, out t2);
             ThreadPool.GetMinThreads(out t1, out t2);
         }
+
+        private static int SynRunCmd(string cmdLine, string workingDirectory)
+        {
+            ProcessStartInfo psi = new ProcessStartInfo("cmd.exe", "/C " + cmdLine);
+            psi.WorkingDirectory = workingDirectory;
+            psi.CreateNoWindow = true;
+            psi.UseShellExecute = false;
+            Process pr = Process.Start(psi);
+            pr.WaitForExit();
+            int i = pr.ExitCode;
+            pr.Close();
+            return i;
+        }
+
+
     }
 }

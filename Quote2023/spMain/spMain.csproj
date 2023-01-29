@@ -148,7 +148,6 @@
     <Compile Include="cs\UtilsFile.cs" />
     <Compile Include="cs\UtilsReflection.cs" />
     <Compile Include="cs\WinAPI.cs" />
-    <Compile Include="Helpers\CsHelper.cs" />
     <Compile Include="Helpers\ZipReader.cs" />
     <Compile Include="Models\MinuteYahoo.cs" />
     <Compile Include="Program.cs" />
