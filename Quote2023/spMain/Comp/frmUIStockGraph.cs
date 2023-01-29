@@ -28,7 +28,6 @@ namespace spMain.Comp
                 {
                     uI_StockGraph1._SetUIGraph(_initialGraph, _isSnapshotLayout);
                     if (!_initialGraph.DataAdapter.IsStream)
-                        uI_StockGraph1._Autosize();
                     _initialGraph = null;
                     return;
                 }
@@ -37,10 +36,7 @@ namespace spMain.Comp
                 if (o == null)
                     BeginInvoke(new MethodInvoker(Close));
                 else
-                {
-                    uI_StockGraph1._SetUIGraph((QData.UI.UIGraph)o, _isSnapshotLayout);
-                    uI_StockGraph1._Autosize();
-                }
+                    uI_StockGraph1._SetUIGraph((QData.UI.UIGraph) o, _isSnapshotLayout);
             }
         }
     }

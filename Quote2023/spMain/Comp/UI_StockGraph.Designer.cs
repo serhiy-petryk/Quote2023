@@ -34,7 +34,6 @@ namespace spMain.Comp {
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this._toolStrip = new System.Windows.Forms.ToolStrip();
-            this._cbAutosizeOnOpen = new System.Windows.Forms.CheckBox();
             this._stockGraph = new spMain.Comp.StockGraph();
             this._toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -135,17 +134,6 @@ namespace spMain.Comp {
             this._toolStrip.TabIndex = 0;
             this._toolStrip.Text = "toolStrip1";
             // 
-            // _cbAutosizeOnOpen
-            // 
-            this._cbAutosizeOnOpen.AutoSize = true;
-            this._cbAutosizeOnOpen.BackColor = System.Drawing.Color.Transparent;
-            this._cbAutosizeOnOpen.Location = new System.Drawing.Point(316, 206);
-            this._cbAutosizeOnOpen.Name = "_cbAutosizeOnOpen";
-            this._cbAutosizeOnOpen.Size = new System.Drawing.Size(110, 17);
-            this._cbAutosizeOnOpen.TabIndex = 3;
-            this._cbAutosizeOnOpen.Text = "Autosize on Open";
-            this._cbAutosizeOnOpen.UseVisualStyleBackColor = false;
-            // 
             // _stockGraph
             // 
             this._stockGraph.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -169,7 +157,6 @@ namespace spMain.Comp {
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this._cbAutosizeOnOpen);
             this.Controls.Add(this._stockGraph);
             this.Controls.Add(this._toolStrip);
             this.Name = "UI_StockGraph";
@@ -192,6 +179,5 @@ namespace spMain.Comp {
     private System.Windows.Forms.ToolStripButton toolStripButton2;
     private System.Windows.Forms.ToolStripButton toolStripButton3;
     private System.Windows.Forms.ToolStrip _toolStrip;
-        private System.Windows.Forms.CheckBox _cbAutosizeOnOpen;
     }
 }

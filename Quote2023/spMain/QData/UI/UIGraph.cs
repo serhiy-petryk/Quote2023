@@ -72,15 +72,13 @@ namespace spMain.QData.UI {
         this._panes = (List<UIPane>)x[2];
         this._adapterInputs = (List<Data.DataInput>)x[3];
         this._description = x[4].ToString();
+        if (x.Length > 5) AutosizeOnOpen = (bool)x[5];
       }
     }
     void ISerializable.GetObjectData(SerializationInfo info, StreamingContext ctxt) {
-      object[] x1 = new object[] { 
-        (this._dataAdapter==null? null : this._dataAdapter.GetType()), 
-        this._timeInterval, this._panes, this._adapterInputs, this._description};
       csFastSerializer.Utils.Serialize(info, new object[] { 
         (this._dataAdapter==null? null : this._dataAdapter.GetType()), 
-        this._timeInterval, this._panes, this._adapterInputs, this._description});
+        this._timeInterval, this._panes, this._adapterInputs, this._description, AutosizeOnOpen});
     }
 
     // =======================  Properties ===========================
@@ -121,6 +119,9 @@ namespace spMain.QData.UI {
         }
       }
     }
+
+    // [RefreshProperties(RefreshProperties.All)]
+    public bool AutosizeOnOpen { get; set; } = true;
 
     [RefreshProperties(RefreshProperties.All)]
     public List<UIPane> Panes {

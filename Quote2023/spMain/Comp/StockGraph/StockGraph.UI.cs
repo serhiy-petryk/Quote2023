@@ -71,6 +71,8 @@ namespace spMain.Comp {
         if (this._uiGraph.DataAdapter.IsStream) {
           csTimerManager.Register(this, _timerIntervalInMiliSecs, UpdateData);
         }
+        if (_uiGraph.AutosizeOnOpen)
+            _Autosize();
       }
     }
 

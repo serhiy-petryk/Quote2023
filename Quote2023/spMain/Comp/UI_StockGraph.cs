@@ -13,9 +13,10 @@ namespace spMain.Comp
             InitializeComponent();
             this.UpdateToolStrip();
 
-            var host = new ToolStripControlHost(_cbAutosizeOnOpen);
-            var k = _toolStrip.Items.IndexOf(_btnAutosize);
-            _toolStrip.Items.Insert(k + 1, host);
+            // Tip!! Example! Add checkbox to ToolStrip
+            // var host = new ToolStripControlHost(_cbAutosizeOnOpen);
+            // var k = _toolStrip.Items.IndexOf(_btnAutosize);
+            // _toolStrip.Items.Insert(k + 1, host);
         }
 
         // =====================  Public section =============================
