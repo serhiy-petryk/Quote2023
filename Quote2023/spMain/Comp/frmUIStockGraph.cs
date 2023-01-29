@@ -36,12 +36,15 @@ namespace spMain.Comp
                         Control stockGraphControl = null;
                         foreach (var c in uI_StockGraph1.Controls)
                             if (c is StockGraph graph)
+                            {
                                 stockGraphControl = graph;
+                                break;
+                            }
 
                         if (stockGraphControl != null)
                         {
                             stockGraphControl.Dock = DockStyle.None;
-                            stockGraphControl.Size = new Size(90, 60);
+                            stockGraphControl.Size = new Size(160, 100);
                             uI_StockGraph1._CopyToClipboard();
                             if (Clipboard.ContainsImage())
                                 Clipboard.GetImage().Save(@"E:\Temp\test.png", ImageFormat.Png);
