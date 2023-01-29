@@ -83,9 +83,7 @@ namespace spMain.Comp {
       }
     }
 
-    bool StockGraph_MouseMoveEvent(ZedGraphControl sender, MouseEventArgs e) {
-      return true;
-    }
+    bool StockGraph_MouseMoveEvent(ZedGraphControl sender, MouseEventArgs e) => e.Button != MouseButtons.Left;
 
     // ======================  Other Mouse Events ===========================
     void StockGraph_MouseLeave(object sender, EventArgs e) {
