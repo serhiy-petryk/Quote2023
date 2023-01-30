@@ -5,16 +5,27 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using DGWnd.Quote.Helpers;
+using DGWnd.Quote.Models;
+using DGWnd.UI;
+using Newtonsoft.Json;
+using spMain.Comp;
 using spMain.Helpers;
 
 namespace DGWnd.Quote
 {
     public static class Actions
     {
-        public static void AddIntradaySnapshoysInDb(Action<string> showStatusAction, string[] zipFiles)
+        public static void AddIntradaySnapshoysInDb(Action<string> showStatusAction, string[] zipFiles, frmMDI host)
         {
-            var liveSymbolsAndDates = new Dictionary<Tuple<string, DateTime>, object>();
+            var aa1 = System.Windows.Forms.Application.OpenForms;
 
+            var liveSymbolsAndDates = new Dictionary<Tuple<string, DateTime>, object>();
+            var liveSymbols = new Dictionary<string, object>();
+            var toLoadSymbolsAndDate = new Dictionary<Tuple<string, DateTime>, Models.IntradaySnapshot>();
+
+            showStatusAction($"AddIntradaySnapshoysInDb. Loading data from database ...");
             using (var conn = new SqlConnection(Settings.DbConnectionString))
             {
                 using (var cmd = conn.CreateCommand())
@@ -37,18 +48,58 @@ namespace DGWnd.Quote
                 }
             }
 
+            liveSymbols = liveSymbolsAndDates.Select(a => a.Key.Item1).Distinct().ToDictionary(a => a, a => (object)null);
+
+            var cnt = 0;
             foreach (var zipFile in zipFiles)
             {
-                showStatusAction($"MinuteYahoo_GetQuotesFromZipFiles is working for {Path.GetFileName(zipFile)}");
+                showStatusAction($"AddIntradaySnapshoysInDb is working for {Path.GetFileName(zipFile)}");
                 using (var zip = new ZipReader(zipFile))
                     foreach (var item in zip)
                         if (item.Length > 0 && item.FileNameWithoutExtension.ToUpper().StartsWith("YMIN-"))
                         {
                             var symbol = item.FileNameWithoutExtension.Substring(5);
+                            if (!liveSymbols.ContainsKey(symbol))
+                                continue;
 
+                            cnt++;
+                            if ((cnt % 100) == 0)
+                                showStatusAction($"AddIntradaySnapshoysInDb is working for {Path.GetFileName(zipFile)}. Total file processed: {cnt:N0}");
+
+                            var o = JsonConvert.DeserializeObject<spMain.Models.MinuteYahoo>(item.Content);
+                            var dates = o.GetQuotes(symbol).Select(a => a.date.Date).Distinct();
+                            foreach (var date in dates)
+                            {
+                                var key = new Tuple<string, DateTime>(symbol, date);
+                                if (liveSymbolsAndDates.ContainsKey(key))
+                                    toLoadSymbolsAndDate.Add(key, null);
+                            }
+
+                            //if (toLoadSymbolsAndDate.Count > 3000)
+                              //  break;
                         }
             }
 
+            cnt = 0;
+            foreach (var key in toLoadSymbolsAndDate.Keys.ToArray())
+            {
+                cnt++;
+                var graph = spMain.csUtils.GetGraphToSave(key.Item1, key.Item2, 1);
+                host.AttachNewChildForm(new frmUIStockGraph(graph, true));
+                using (var ms = new MemoryStream())
+                {
+                    Clipboard.GetImage()?.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    toLoadSymbolsAndDate[key] = new IntradaySnapshot
+                        {Symbol = key.Item1, Date = key.Item2, Snapshot = ms.ToArray()};
+                }
+                if ((cnt % 10) == 0)
+                    showStatusAction($"AddIntradaySnapshoysInDb. {cnt:N0} snapshots created");
+                Application.DoEvents();
+            }
+
+            showStatusAction($"AddIntradaySnapshoysInDb. Save images to database ...");
+           DbHelper.SaveToDbTable(toLoadSymbolsAndDate.Values, "IntradaySnapshots", "Symbol", "Date", "Snapshot");
+            showStatusAction($"AddIntradaySnapshoysInDb finished!");
         }
     }
 }

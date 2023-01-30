@@ -44,13 +44,13 @@ namespace spMain.Comp
                         if (stockGraphControl != null)
                         {
                             stockGraphControl.Dock = DockStyle.None;
-                            stockGraphControl.Size = new Size(160, 100);
+                            stockGraphControl.Size = new Size(100, 60);
                             uI_StockGraph1._CopyToClipboard();
                             if (Clipboard.ContainsImage())
                                 Clipboard.GetImage().Save(@"E:\Temp\test.png", ImageFormat.Png);
 
-                            // BeginInvoke(new MethodInvoker(Close));
                         }
+                        BeginInvoke(new MethodInvoker(Close));
                     }
                     return;
                 }

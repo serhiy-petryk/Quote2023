@@ -37,16 +37,17 @@ namespace DGWnd.UI {
             this.mnuWArrange = new System.Windows.Forms.ToolStripMenuItem();
             this.stripWnds = new System.Windows.Forms.ToolStrip();
             this.stripBtns = new System.Windows.Forms.ToolStrip();
-            this.btnLog = new System.Windows.Forms.ToolStripButton();
-            this.btnClearSqlCache = new System.Windows.Forms.ToolStripButton();
             this.btnDataDefinitionList = new System.Windows.Forms.ToolStripButton();
             this.btnLoader = new System.Windows.Forms.ToolStripButton();
             this.btnStockGraph = new System.Windows.Forms.ToolStripButton();
             this.btnWebDownloader = new System.Windows.Forms.ToolStripButton();
             this.btnMemoryInUsed = new System.Windows.Forms.ToolStripButton();
             this.btnDependentObjectManager = new System.Windows.Forms.ToolStripButton();
+            this.btnLog = new System.Windows.Forms.ToolStripButton();
+            this.btnClearSqlCache = new System.Windows.Forms.ToolStripButton();
             this.btnTestGraph = new System.Windows.Forms.ToolStripButton();
             this.btnGraphToSave = new System.Windows.Forms.ToolStripButton();
+            this.btnTestSaveSnapshots = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.stripBtns.SuspendLayout();
             this.SuspendLayout();
@@ -162,7 +163,8 @@ namespace DGWnd.UI {
             this.btnLog,
             this.btnClearSqlCache,
             this.btnTestGraph,
-            this.btnGraphToSave});
+            this.btnGraphToSave,
+            this.btnTestSaveSnapshots});
             this.stripBtns.Location = new System.Drawing.Point(3, 24);
             this.stripBtns.Name = "stripBtns";
             this.stripBtns.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -170,22 +172,6 @@ namespace DGWnd.UI {
             this.stripBtns.TabIndex = 28;
             this.stripBtns.Text = "toolStrip1";
             this.stripBtns.ItemAdded += new System.Windows.Forms.ToolStripItemEventHandler(this.mainMenu_ItemAdded);
-            // 
-            // btnLog
-            // 
-            this.btnLog.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnLog.Name = "btnLog";
-            this.btnLog.Size = new System.Drawing.Size(55, 22);
-            this.btnLog.Text = "Журнал";
-            this.btnLog.Click += new System.EventHandler(this.btnLog_Click);
-            // 
-            // btnClearSqlCache
-            // 
-            this.btnClearSqlCache.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnClearSqlCache.Name = "btnClearSqlCache";
-            this.btnClearSqlCache.Size = new System.Drawing.Size(93, 22);
-            this.btnClearSqlCache.Text = "Clear Sql Cache";
-            this.btnClearSqlCache.Click += new System.EventHandler(this.btnClearSqlCache_Click);
             // 
             // btnDataDefinitionList
             // 
@@ -247,6 +233,22 @@ namespace DGWnd.UI {
             this.btnDependentObjectManager.Text = "Залежні об`єкти";
             this.btnDependentObjectManager.Click += new System.EventHandler(this.btnDependentObjectManager_Click);
             // 
+            // btnLog
+            // 
+            this.btnLog.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnLog.Name = "btnLog";
+            this.btnLog.Size = new System.Drawing.Size(55, 22);
+            this.btnLog.Text = "Журнал";
+            this.btnLog.Click += new System.EventHandler(this.btnLog_Click);
+            // 
+            // btnClearSqlCache
+            // 
+            this.btnClearSqlCache.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnClearSqlCache.Name = "btnClearSqlCache";
+            this.btnClearSqlCache.Size = new System.Drawing.Size(93, 22);
+            this.btnClearSqlCache.Text = "Clear Sql Cache";
+            this.btnClearSqlCache.Click += new System.EventHandler(this.btnClearSqlCache_Click);
+            // 
             // btnTestGraph
             // 
             this.btnTestGraph.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -266,6 +268,16 @@ namespace DGWnd.UI {
             this.btnGraphToSave.Size = new System.Drawing.Size(83, 22);
             this.btnGraphToSave.Text = "Graph to save";
             this.btnGraphToSave.Click += new System.EventHandler(this.btnGraphToSave_Click);
+            // 
+            // btnTestSaveSnapshots
+            // 
+            this.btnTestSaveSnapshots.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnTestSaveSnapshots.Image = ((System.Drawing.Image)(resources.GetObject("btnTestSaveSnapshots.Image")));
+            this.btnTestSaveSnapshots.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnTestSaveSnapshots.Name = "btnTestSaveSnapshots";
+            this.btnTestSaveSnapshots.Size = new System.Drawing.Size(117, 22);
+            this.btnTestSaveSnapshots.Text = "Test Save Snapshots";
+            this.btnTestSaveSnapshots.Click += new System.EventHandler(this.btnTestSaveSnapshots_Click);
             // 
             // frmMDI
             // 
@@ -324,5 +336,6 @@ namespace DGWnd.UI {
         private System.Windows.Forms.ToolStripButton btnTestGraph;
     private System.Windows.Forms.ToolStripButton btnLoader;
         private System.Windows.Forms.ToolStripButton btnGraphToSave;
+        private System.Windows.Forms.ToolStripButton btnTestSaveSnapshots;
     }
 }

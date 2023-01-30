@@ -381,8 +381,8 @@
       "StatQuote (buffer)": {"cs": "dbQuote2022","sql": "select * from Bfr_StatQuote", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } },
       "StatQuote (15 min)": {"cs": "dbQuote2022","sql": "select * from StatQuote_15", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } },
       "StatQuote (30 min)": {"cs": "dbQuote2022","sql": "select * from StatQuote_30", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } },
-      "StatQuote (45 min)": {"cs": "dbQuote2022","sql": "select * from StatQuote_45", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } }
-
+      "StatQuote (45 min)": {"cs": "dbQuote2022","sql": "select * from StatQuote_45", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } },
+      "Intraday Quote": {"cs": "dbQuote2022","sql": "select * from IntradaySnapshots", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } }
     }, 
     "Chalkable": {
       "District DB": {

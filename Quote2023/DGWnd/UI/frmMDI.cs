@@ -2,6 +2,8 @@ using System;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
+using DGWnd.Quote;
+using DGWnd.Quote.Helpers;
 using DGWnd.Quote.UI;
 using spMain.Comp;
 
@@ -237,6 +239,19 @@ namespace DGWnd.UI
                 cmd.ExecuteNonQuery();
             }
             MessageBox.Show(@"Sql Cache was cleared");
+        }
+
+        private void ShowStatus(string message)
+        {
+//            lock (_lock) statusLabel.Text = message;
+  //          Application.DoEvents();
+        }
+
+        private void btnTestSaveSnapshots_Click(object sender, EventArgs e)
+        {
+            var mainForm = this.TopLevelControl as frmMDI;
+            if (CsHelper.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip", true) is string[] files && files.Length > 0)
+                Actions.AddIntradaySnapshoysInDb(ShowStatus, files, mainForm);
         }
     }
 }

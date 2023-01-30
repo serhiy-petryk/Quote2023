@@ -34,7 +34,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FastMember, Version=1.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FastMember.1.5.0\lib\net461\FastMember.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -80,6 +87,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Quote\Actions.cs" />
     <Compile Include="Quote\Helpers\CsHelper.cs" />
+    <Compile Include="Quote\Helpers\DbHelper.cs" />
+    <Compile Include="Quote\Models\IntradaySnapshot.cs" />
     <Compile Include="Quote\UI\Loader.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -239,6 +248,7 @@
     <Compile Include="WiP\DGVFormattedValue.cs" />
     <Compile Include="WiP\ItemStateElement_notused.cs" />
     <Content Include="error.ModifiedCollection.txt" />
+    <None Include="packages.config" />
     <None Include="Resources\windows_32x321.png" />
     <None Include="Resources\unchecked1.bmp" />
     <None Include="Resources\UnCheckBox11.PNG" />
@@ -429,8 +439,6 @@
       <Name>WebDownloader</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Quote\Actions\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

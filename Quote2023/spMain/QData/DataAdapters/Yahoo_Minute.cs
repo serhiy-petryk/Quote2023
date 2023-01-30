@@ -60,9 +60,11 @@ namespace spMain.QData.DataAdapters
             }
 
             var keys = fileKeys.OrderBy(a => a.Item1).ToArray();
+            if (keys.Length == 0) return;
+
             var validFiles = new List<string>();
             if (startDate <= keys[0].Item1 || endDate <= keys[0].Item1)
-                validFiles.Add(keys[keys.Length - 1].Item2);
+                validFiles.Add(keys[0].Item2);
             for (var k = 1; k < keys.Length; k++)
             {
                 var minDate = keys[k - 1].Item1;

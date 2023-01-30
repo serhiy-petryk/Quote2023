@@ -70,7 +70,7 @@ namespace DGWnd.DGV
           var done = false;
           if (((IUserSettingProperties)this).SettingKey.IndexOf("quote", StringComparison.InvariantCultureIgnoreCase) != -1)
           {
-            if (columnName == "DATE")
+            if (columnName == "DATE" || columnName == "SNAPSHOT")
             {
               var symbol = data.GetType().GetProperty("SYMBOL").GetValue(data).ToString();
               var date = data.GetType().GetProperty("DATE").GetValue(data);
