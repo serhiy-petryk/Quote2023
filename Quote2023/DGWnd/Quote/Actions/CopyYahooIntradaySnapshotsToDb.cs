@@ -20,7 +20,6 @@ namespace DGWnd.Quote.Actions
         public static void CopySnapshots(string[] zipFiles, Action<string> showStatus)
         {
             var liveSymbolsAndDates = new Dictionary<Tuple<string, DateTime>, object>();
-            var toLoadSymbolsAndDate = new Dictionary<Tuple<string, DateTime>, DGWnd.Quote.Models.IntradaySnapshot>();
 
             showStatus($"CopySnapshots. Loading data from database ...");
             using (var conn = new SqlConnection(DGWnd.Settings.DbConnectionString))
@@ -28,20 +27,10 @@ namespace DGWnd.Quote.Actions
                 using (var cmd = conn.CreateCommand())
                 {
                     conn.Open();
-                    cmd.CommandText = "SELECT * from SymbolsAndDatesLive WHERE Date>'2022-09-01'";
+                    cmd.CommandText = "SELECT a.* from SymbolsAndDatesLive a left join IntradaySnapshots b on a.Symbol=b.Symbol and a.Date=b.Date WHERE b.Symbol is null AND a.Date>'2022-10-01'";
                     using (var rdr = cmd.ExecuteReader())
                         while (rdr.Read())
                             liveSymbolsAndDates.Add(new Tuple<string, DateTime>((string)rdr["Symbol"], (DateTime)rdr["Date"]), null);
-
-
-                    cmd.CommandText = "SELECT * from IntradaySnapshots";
-                    using (var rdr = cmd.ExecuteReader())
-                        while (rdr.Read())
-                        {
-                            var key = new Tuple<string, DateTime>((string)rdr["Symbol"], (DateTime)rdr["Date"]);
-                            if (liveSymbolsAndDates.ContainsKey(key))
-                                liveSymbolsAndDates.Remove(key);
-                        }
                 }
             }
 
@@ -51,6 +40,7 @@ namespace DGWnd.Quote.Actions
             foreach (var zipFile in zipFiles)
             {
                 showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Get symbols & date to copy.");
+                var toLoadSymbolsAndDate = new Dictionary<Tuple<string, DateTime>, DGWnd.Quote.Models.IntradaySnapshot>();
                 using (var zip = new ZipReader(zipFile))
                     foreach (var item in zip)
                         if (item.Length > 0 && item.FileNameWithoutExtension.ToUpper().StartsWith("YMIN-"))
