@@ -130,8 +130,7 @@ namespace DGWnd.Quote.UI
                     foreach (var key in keys)
                     {
                         cnt++;
-                        if (cnt % 10 == 0)
-                            ShowStatus($"CopySnapshots. {cnt:N0} from {keys.Length:N0} snapshots created");
+                        ShowStatus($"CopySnapshots. {cnt:N0} from {keys.Length:N0} snapshots created");
 
                         var graph = spMain.csUtils.GetGraphToSave(key.Item1, key.Item2, 1);
                         uiStockGraph._SetUIGraph(graph, true);
