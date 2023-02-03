@@ -33,7 +33,7 @@ namespace spMain.QData.DataAdapters
 
         public override IList GetData(List<object> inputs, int lastDataOffset, out int newDataOffset)
         {
-            var symbol = (string)inputs[0];
+            var symbol = ((string)inputs[0]).Trim().ToUpper();
             var endDate = (DateTime)inputs[1];
             var days = (int)inputs[2];
             var date = endDate.AddDays(-(days - 1));

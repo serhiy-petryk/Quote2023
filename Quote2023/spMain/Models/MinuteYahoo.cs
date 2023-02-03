@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using spMain.QData.DataFormat;
 
@@ -7,7 +9,78 @@ namespace spMain.Models
 {
     public class MinuteYahoo
     {
+        // Settings
+        private const string BaseFolder = @"E:\Quote\";
+        private const string MinuteYahooDataFolder = BaseFolder + @"WebData\Minute\Yahoo\Data\";
+        private const string MinuteYahooCorrectionFiles = MinuteYahooDataFolder + "YahooMinuteCorrections.txt";
+
+        private class QuoteCorrection
+        {
+            public double[] PriceValues;
+            // public int? VolumeFactor;
+            public double? Split;
+            public bool Remove = false;
+            public bool PriceChecked = false;
+            public bool SplitChecked = false;
+        }
+
         public cChart Chart { get; set; }
+
+        private static Dictionary<string, Dictionary<DateTime, QuoteCorrection>> _allCorrections = null;
+
+        private static Dictionary<DateTime, QuoteCorrection> GetCorrections(string symbol)
+        {
+            if (_allCorrections == null)
+            {
+                _allCorrections = new Dictionary<string, Dictionary<DateTime, QuoteCorrection>>();
+                var lines = File.ReadAllLines(MinuteYahooCorrectionFiles)
+                    .Where(a => !string.IsNullOrEmpty(a) && !a.Trim().StartsWith("#"));
+                foreach (var line in lines)
+                {
+                    var ss = line.Split('\t');
+                    var symbolKey = ss[0].Trim().ToUpper();
+                    if (!_allCorrections.ContainsKey(symbolKey))
+                        _allCorrections.Add(symbolKey, new Dictionary<DateTime, QuoteCorrection>());
+
+                    var a1 = _allCorrections[symbolKey];
+                    var date = DateTime.Parse(ss[1], CultureInfo.InvariantCulture);
+                    if (!a1.ContainsKey(date))
+                        a1.Add(date, new QuoteCorrection());
+
+                    var a2 = a1[date];
+                    switch (ss[2].Trim().ToUpper())
+                    {
+                        case "REMOVE":
+                        case "DELETE":
+                            a2.Remove = true;
+                            break;
+                        case "PRICE":
+                            a2.PriceValues = new double[4];
+                            for (var k = 0; k < 4; k++)
+                                a2.PriceValues[k] = double.Parse(ss[k + 3].Trim(), CultureInfo.InvariantCulture);
+                            break;
+                        case "SPLIT":
+                            var f1 = double.Parse(ss[3].Trim(), CultureInfo.InvariantCulture);
+                            var f2 = double.Parse(ss[4].Trim(), CultureInfo.InvariantCulture);
+                            a2.Split = f1 / f2;
+                            break;
+                        case "PRICECHECKED":
+                            a2.PriceChecked = true;
+                            break;
+                        case "SPLITCHECKED":
+                            a2.SplitChecked = true;
+                            break;
+                        /*case "VOLUME":
+                            a2.VolumeFactor = int.Parse(ss[3].Trim());
+                            break;*/
+                        default:
+                            throw new Exception($"Check MinuteYahoo correction file: {MinuteYahooCorrectionFiles}. '{ss[2]}' is invalid action");
+                    }
+                }
+            }
+
+            return _allCorrections.ContainsKey(symbol) ? _allCorrections[symbol] : null;
+        }
 
         public static DateTime TimeStampToDateTime(long timeStamp, IEnumerable<cTradingPeriod> periods)
         {
@@ -17,9 +90,15 @@ namespace spMain.Models
             throw new Exception("Check TimeStampToDateTime procedure in Quote2022.Models.MinuteYahoo");
         }
 
+        private string _metaSymbol => Chart.Result[0].Meta.Symbol;
+        private Dictionary<DateTime, QuoteCorrection> _corrections;
         public List<Quote> GetQuotes(string symbol)
         {
+            if (_metaSymbol != symbol)
+                throw new Exception($"MinuteYahoo error. Different symbol. Filename symbol is '{symbol}, file context symbol is '{_metaSymbol}'");
+
             var quotes = new List<Quote>();
+            _corrections = GetCorrections(symbol);
             if (Chart.Result[0].TimeStamp == null)
             {
                 if (Chart.Result[0].Indicators.Quote[0].Close != null)
@@ -44,16 +123,9 @@ namespace spMain.Models
                     Chart.Result[0].Indicators.Quote[0].Close[k].HasValue &&
                     Chart.Result[0].Indicators.Quote[0].Volume[k].HasValue)
                 {
-                    quotes.Add(new Quote()
-                    {
-//                         Symbol = symbol,
-                        Date = TimeStampToDateTime(Chart.Result[0].TimeStamp[k], periods),
-                        Open = Chart.Result[0].Indicators.Quote[0].Open[k].Value,
-                        High = Chart.Result[0].Indicators.Quote[0].High[k].Value,
-                        Low = Chart.Result[0].Indicators.Quote[0].Low[k].Value,
-                        Close = Chart.Result[0].Indicators.Quote[0].Close[k].Value,
-                        Volume = Chart.Result[0].Indicators.Quote[0].Volume[k].Value
-                    });
+                    var q = GetQuote(TimeStampToDateTime(Chart.Result[0].TimeStamp[k], periods), Chart.Result[0].Indicators.Quote[0], k);
+                    if (q != null)
+                        quotes.Add(q);
                 }
                 else if (!Chart.Result[0].Indicators.Quote[0].Open[k].HasValue &&
                          !Chart.Result[0].Indicators.Quote[0].High[k].HasValue &&
@@ -61,7 +133,6 @@ namespace spMain.Models
                          !Chart.Result[0].Indicators.Quote[0].Close[k].HasValue &&
                          !Chart.Result[0].Indicators.Quote[0].Volume[k].HasValue)
                 {
-
                 }
                 else
                     throw new Exception($"Please, check quote data for {Chart.Result[0].TimeStamp[k]} timestamp (k={k})");
@@ -69,9 +140,54 @@ namespace spMain.Models
 
             if (quotes.Count > 0 && quotes[quotes.Count - 1].Date.TimeOfDay == new TimeSpan(16, 0, 0))
                 quotes.RemoveAt(quotes.Count - 1);
-            return quotes;
 
-            float ConvertToFloat(double o) => Convert.ToSingle(o);
+            return quotes;
+        }
+
+        private Quote GetQuote(DateTime timed, cQuote fileQuote, int quoteNo)
+        {
+            var qCorr = _corrections != null && _corrections.ContainsKey(timed) ? _corrections[timed] : new QuoteCorrection();
+            var split = _corrections != null && _corrections.ContainsKey(timed.Date) ? _corrections[timed.Date].Split : null;
+
+            if (qCorr.Remove) return null;
+
+            var q = new Quote() { Date = timed, Volume = fileQuote.Volume[quoteNo].Value };
+            if (qCorr.PriceValues == null)
+            {
+                if (split.HasValue)
+                {
+                    q.Open = Math.Round(fileQuote.Open[quoteNo].Value * split.Value, 4);
+                    q.High = Math.Round(fileQuote.High[quoteNo].Value * split.Value, 4);
+                    q.Low = Math.Round(fileQuote.Low[quoteNo].Value * split.Value, 4);
+                    q.Close = Math.Round(fileQuote.Close[quoteNo].Value * split.Value, 4);
+                }
+                else
+                {
+                    q.Open = Math.Round(fileQuote.Open[quoteNo].Value, 4);
+                    q.High = Math.Round(fileQuote.High[quoteNo].Value, 4);
+                    q.Low = Math.Round(fileQuote.Low[quoteNo].Value, 4);
+                    q.Close = Math.Round(fileQuote.Close[quoteNo].Value, 4);
+                }
+            }
+            else
+            {
+                if (split.HasValue)
+                {
+                    q.Open = Math.Round(qCorr.PriceValues[0] * split.Value, 4);
+                    q.High = Math.Round(qCorr.PriceValues[1] * split.Value, 4);
+                    q.Low = Math.Round(qCorr.PriceValues[2] * split.Value, 4);
+                    q.Close = Math.Round(qCorr.PriceValues[3] * split.Value, 4);
+                }
+                else
+                {
+                    q.Open = qCorr.PriceValues[0];
+                    q.High = qCorr.PriceValues[1];
+                    q.Low = qCorr.PriceValues[2];
+                    q.Close = qCorr.PriceValues[3];
+                }
+            }
+
+            return q;
         }
 
         #region ===============  SubClasses  ==================

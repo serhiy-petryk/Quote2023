@@ -58,7 +58,7 @@ namespace DGWnd.Quote
                     foreach (var item in zip)
                         if (item.Length > 0 && item.FileNameWithoutExtension.ToUpper().StartsWith("YMIN-"))
                         {
-                            var symbol = item.FileNameWithoutExtension.Substring(5);
+                            var symbol = item.FileNameWithoutExtension.Substring(5).ToUpper();
                             if (!liveSymbols.ContainsKey(symbol))
                                 continue;
 
