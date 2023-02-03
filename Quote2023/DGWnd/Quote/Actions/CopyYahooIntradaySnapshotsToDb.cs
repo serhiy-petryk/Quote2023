@@ -50,7 +50,7 @@ namespace DGWnd.Quote.Actions
             var cnt = 0;
             foreach (var zipFile in zipFiles)
             {
-                showStatus($"CopySnapshots is working for {Path.GetFileName(zipFile)}");
+                showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Get symbols & date to copy.");
                 using (var zip = new ZipReader(zipFile))
                     foreach (var item in zip)
                         if (item.Length > 0 && item.FileNameWithoutExtension.ToUpper().StartsWith("YMIN-"))
@@ -61,7 +61,7 @@ namespace DGWnd.Quote.Actions
 
                             cnt++;
                             if ((cnt % 100) == 0)
-                                showStatus($"CopySnapshots is working for {Path.GetFileName(zipFile)}. Total file processed: {cnt:N0}");
+                                showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Total files in zip processed: {cnt:N0}");
 
                             var o = JsonConvert.DeserializeObject<spMain.Models.MinuteYahoo>(item.Content);
                             var dates = o.GetQuotes(symbol).Select(a => a.date.Date).Distinct();
@@ -72,67 +72,68 @@ namespace DGWnd.Quote.Actions
                                     toLoadSymbolsAndDate.Add(key, null);
                             }
                         }
-            }
 
-            if (toLoadSymbolsAndDate.Count > 0)
-            {
-                Debug.Print($"CopySnapshots. {toLoadSymbolsAndDate.Count} items to save");
-                showStatus($"CopySnapshots. Found {toLoadSymbolsAndDate.Count} quotes to save snapshots");
-                using (var frm = new frmUIStockGraph(null, true))
+                if (toLoadSymbolsAndDate.Count > 0)
                 {
-                    frm.Visible = false;
-                    UI_StockGraph uiStockGraph = null;
-
-                    foreach (var c in frm.Controls)
-                        if (c is UI_StockGraph c1)
-                        {
-                            uiStockGraph = c1;
-                            break;
-                        }
-                    if (uiStockGraph != null)
+                    Debug.Print($"CopySnapshots. File {Path.GetFileName(zipFile)}. {toLoadSymbolsAndDate.Count} items to save");
+                    showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Found {toLoadSymbolsAndDate.Count} quotes to save snapshots");
+                    using (var frm = new frmUIStockGraph(null, true))
                     {
-                        foreach (var c in uiStockGraph.Controls)
-                            if (c is StockGraph stockGraph)
+                        frm.Visible = false;
+                        UI_StockGraph uiStockGraph = null;
+
+                        foreach (var c in frm.Controls)
+                            if (c is UI_StockGraph c1)
                             {
-                                var stockGraphControl = (Control)c;
-                                stockGraphControl.Dock = DockStyle.None;
-                                stockGraphControl.Size = new Size(100, 60);
+                                uiStockGraph = c1;
                                 break;
                             }
-                    }
-
-                    cnt = 0;
-                    var keys = toLoadSymbolsAndDate.Keys.ToArray();
-                    toLoadSymbolsAndDate.Clear();
-                    foreach (var key in keys)
-                    {
-                        cnt++;
-                        showStatus($"CopySnapshots. {cnt:N0} from {keys.Length:N0} snapshots created");
-
-                        var graph = spMain.csUtils.GetGraphToSave(key.Item1, key.Item2, 1);
-                        uiStockGraph._SetUIGraph(graph, true);
-                        var image = uiStockGraph._GetImage();
-
-                        using (var ms = new MemoryStream())
+                        if (uiStockGraph != null)
                         {
-                            image.Save(ms, ImageFormat.Png);
-                            toLoadSymbolsAndDate.Add(key,
-                                new IntradaySnapshot { Symbol = key.Item1, Date = key.Item2, Snapshot = ms.ToArray() });
+                            foreach (var c in uiStockGraph.Controls)
+                                if (c is StockGraph stockGraph)
+                                {
+                                    var stockGraphControl = (Control)c;
+                                    stockGraphControl.Dock = DockStyle.None;
+                                    stockGraphControl.Size = new Size(100, 60);
+                                    break;
+                                }
                         }
 
-                        if (cnt % 100 == 0)
+                        cnt = 0;
+                        var keys = toLoadSymbolsAndDate.Keys.ToArray();
+                        toLoadSymbolsAndDate.Clear();
+                        foreach (var key in keys)
                         {
-                            showStatus($"CopySnapshots. Save snapshots to database ...");
-                            DbHelper.SaveToDbTable(toLoadSymbolsAndDate.Values, "IntradaySnapshots", "Symbol", "Date", "Snapshot");
-                            toLoadSymbolsAndDate.Clear();
-                        }
+                            cnt++;
+                            showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. {cnt:N0} from {keys.Length:N0} snapshots created");
 
+                            var graph = spMain.csUtils.GetGraphToSave(key.Item1, key.Item2, 1);
+                            uiStockGraph._SetUIGraph(graph, true);
+                            var image = uiStockGraph._GetImage();
+
+                            using (var ms = new MemoryStream())
+                            {
+                                image.Save(ms, ImageFormat.Png);
+                                toLoadSymbolsAndDate.Add(key,
+                                    new IntradaySnapshot { Symbol = key.Item1, Date = key.Item2, Snapshot = ms.ToArray() });
+                            }
+
+                            if (cnt % 100 == 0)
+                            {
+                                showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Save snapshots to database ...");
+                                DbHelper.SaveToDbTable(toLoadSymbolsAndDate.Values, "IntradaySnapshots", "Symbol", "Date", "Snapshot");
+                                toLoadSymbolsAndDate.Clear();
+                            }
+
+                        }
                     }
                 }
-            }
 
-            showStatus($"CopySnapshots. Save snapshots to database ...");
-            DbHelper.SaveToDbTable(toLoadSymbolsAndDate.Values, "IntradaySnapshots", "Symbol", "Date", "Snapshot");
+                showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Save snapshots to database ...");
+                DbHelper.SaveToDbTable(toLoadSymbolsAndDate.Values, "IntradaySnapshots", "Symbol", "Date", "Snapshot");
+                toLoadSymbolsAndDate.Clear();
+            }
 
             showStatus($"CopySnapshots. Finished!");
         }

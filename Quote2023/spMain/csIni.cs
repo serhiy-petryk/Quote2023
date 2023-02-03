@@ -62,7 +62,7 @@ namespace spMain
             {
                 sb.Insert(0, di.Name + @"\");
                 di = di.Parent;
-                if (File.Exists(di.FullName + @"\setDiskOn.bat")) break;
+                if (di != null && File.Exists(di.FullName + @"\setDiskOn.bat")) break;
             }
             if (di != null)
             {
