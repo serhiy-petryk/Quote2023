@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using DGWnd.Quote.Helpers;
 using DGWnd.Quote.Models;
@@ -17,36 +13,17 @@ using Newtonsoft.Json;
 using spMain.Comp;
 using spMain.Helpers;
 
-namespace DGWnd.Quote.UI
+namespace DGWnd.Quote.Actions
 {
-    public partial class frmCopySnapshotsToDb : Form
+    public static class CopyYahooIntradaySnapshotsToDb
     {
-        private object _lock = new object();
-
-        public frmCopySnapshotsToDb()
-        {
-            InitializeComponent();
-        }
-
-        private void ShowStatus(string message)
-        {
-            lock (_lock) statusLabel.Text = message;
-            Application.DoEvents();
-        }
-
-        private void btnSelectFiles_Click(object sender, EventArgs e)
-        {
-            if (CsHelper.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip", true) is string[] files && files.Length > 0)
-                CopySnapshots(files);
-        }
-
-        private void CopySnapshots(string[] zipFiles)
+        public static void CopySnapshots(string[] zipFiles, Action<string> showStatus)
         {
             var liveSymbolsAndDates = new Dictionary<Tuple<string, DateTime>, object>();
-            var toLoadSymbolsAndDate = new Dictionary<Tuple<string, DateTime>, Models.IntradaySnapshot>();
+            var toLoadSymbolsAndDate = new Dictionary<Tuple<string, DateTime>, DGWnd.Quote.Models.IntradaySnapshot>();
 
-            ShowStatus($"CopySnapshots. Loading data from database ...");
-            using (var conn = new SqlConnection(Settings.DbConnectionString))
+            showStatus($"CopySnapshots. Loading data from database ...");
+            using (var conn = new SqlConnection(DGWnd.Settings.DbConnectionString))
             {
                 using (var cmd = conn.CreateCommand())
                 {
@@ -73,7 +50,7 @@ namespace DGWnd.Quote.UI
             var cnt = 0;
             foreach (var zipFile in zipFiles)
             {
-                ShowStatus($"CopySnapshots is working for {Path.GetFileName(zipFile)}");
+                showStatus($"CopySnapshots is working for {Path.GetFileName(zipFile)}");
                 using (var zip = new ZipReader(zipFile))
                     foreach (var item in zip)
                         if (item.Length > 0 && item.FileNameWithoutExtension.ToUpper().StartsWith("YMIN-"))
@@ -84,7 +61,7 @@ namespace DGWnd.Quote.UI
 
                             cnt++;
                             if ((cnt % 100) == 0)
-                                ShowStatus($"CopySnapshots is working for {Path.GetFileName(zipFile)}. Total file processed: {cnt:N0}");
+                                showStatus($"CopySnapshots is working for {Path.GetFileName(zipFile)}. Total file processed: {cnt:N0}");
 
                             var o = JsonConvert.DeserializeObject<spMain.Models.MinuteYahoo>(item.Content);
                             var dates = o.GetQuotes(symbol).Select(a => a.date.Date).Distinct();
@@ -100,7 +77,7 @@ namespace DGWnd.Quote.UI
             if (toLoadSymbolsAndDate.Count > 0)
             {
                 Debug.Print($"CopySnapshots. {toLoadSymbolsAndDate.Count} items to save");
-                ShowStatus($"CopySnapshots. Found {toLoadSymbolsAndDate.Count} quotes to save snapshots");
+                showStatus($"CopySnapshots. Found {toLoadSymbolsAndDate.Count} quotes to save snapshots");
                 using (var frm = new frmUIStockGraph(null, true))
                 {
                     frm.Visible = false;
@@ -130,7 +107,7 @@ namespace DGWnd.Quote.UI
                     foreach (var key in keys)
                     {
                         cnt++;
-                        ShowStatus($"CopySnapshots. {cnt:N0} from {keys.Length:N0} snapshots created");
+                        showStatus($"CopySnapshots. {cnt:N0} from {keys.Length:N0} snapshots created");
 
                         var graph = spMain.csUtils.GetGraphToSave(key.Item1, key.Item2, 1);
                         uiStockGraph._SetUIGraph(graph, true);
@@ -140,12 +117,12 @@ namespace DGWnd.Quote.UI
                         {
                             image.Save(ms, ImageFormat.Png);
                             toLoadSymbolsAndDate.Add(key,
-                                new IntradaySnapshot {Symbol = key.Item1, Date = key.Item2, Snapshot = ms.ToArray()});
+                                new IntradaySnapshot { Symbol = key.Item1, Date = key.Item2, Snapshot = ms.ToArray() });
                         }
 
                         if (cnt % 100 == 0)
                         {
-                            ShowStatus($"CopySnapshots. Save snapshots to database ...");
+                            showStatus($"CopySnapshots. Save snapshots to database ...");
                             DbHelper.SaveToDbTable(toLoadSymbolsAndDate.Values, "IntradaySnapshots", "Symbol", "Date", "Snapshot");
                             toLoadSymbolsAndDate.Clear();
                         }
@@ -154,10 +131,11 @@ namespace DGWnd.Quote.UI
                 }
             }
 
-            ShowStatus($"CopySnapshots. Save snapshots to database ...");
+            showStatus($"CopySnapshots. Save snapshots to database ...");
             DbHelper.SaveToDbTable(toLoadSymbolsAndDate.Values, "IntradaySnapshots", "Symbol", "Date", "Snapshot");
 
-            ShowStatus($"CopySnapshots. Finished!");
+            showStatus($"CopySnapshots. Finished!");
         }
+
     }
 }

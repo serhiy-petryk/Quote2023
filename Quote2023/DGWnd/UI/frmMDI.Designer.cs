@@ -45,7 +45,6 @@ namespace DGWnd.UI {
             this.btnDependentObjectManager = new System.Windows.Forms.ToolStripButton();
             this.btnLog = new System.Windows.Forms.ToolStripButton();
             this.btnClearSqlCache = new System.Windows.Forms.ToolStripButton();
-            this.btnSaveIntradayQuoteSnapshotsToDb = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.stripBtns.SuspendLayout();
             this.SuspendLayout();
@@ -159,8 +158,7 @@ namespace DGWnd.UI {
             this.btnMemoryInUsed,
             this.btnDependentObjectManager,
             this.btnLog,
-            this.btnClearSqlCache,
-            this.btnSaveIntradayQuoteSnapshotsToDb});
+            this.btnClearSqlCache});
             this.stripBtns.Location = new System.Drawing.Point(3, 24);
             this.stripBtns.Name = "stripBtns";
             this.stripBtns.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -245,16 +243,6 @@ namespace DGWnd.UI {
             this.btnClearSqlCache.Text = "Clear Sql Cache";
             this.btnClearSqlCache.Click += new System.EventHandler(this.btnClearSqlCache_Click);
             // 
-            // btnSaveIntradayQuoteSnapshotsToDb
-            // 
-            this.btnSaveIntradayQuoteSnapshotsToDb.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnSaveIntradayQuoteSnapshotsToDb.Image = ((System.Drawing.Image)(resources.GetObject("btnSaveIntradayQuoteSnapshotsToDb.Image")));
-            this.btnSaveIntradayQuoteSnapshotsToDb.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnSaveIntradayQuoteSnapshotsToDb.Name = "btnSaveIntradayQuoteSnapshotsToDb";
-            this.btnSaveIntradayQuoteSnapshotsToDb.Size = new System.Drawing.Size(206, 22);
-            this.btnSaveIntradayQuoteSnapshotsToDb.Text = "Save Intraday Quote Snapshots to DB";
-            this.btnSaveIntradayQuoteSnapshotsToDb.Click += new System.EventHandler(this.btnSaveIntradayQuoteSnapshotsToDb_Click);
-            // 
             // frmMDI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -310,6 +298,5 @@ namespace DGWnd.UI {
     private System.Windows.Forms.ToolStripButton btnClearSqlCache;
         private System.Windows.Forms.ToolStripButton btnStockGraph;
     private System.Windows.Forms.ToolStripButton btnLoader;
-        private System.Windows.Forms.ToolStripButton btnSaveIntradayQuoteSnapshotsToDb;
     }
 }

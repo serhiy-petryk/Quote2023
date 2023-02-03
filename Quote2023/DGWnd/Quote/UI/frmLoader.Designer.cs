@@ -34,17 +34,19 @@ namespace DGWnd.Quote.UI
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btnSaveIntradaySnapshotsToDb = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 291);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 337);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(563, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(806, 22);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -62,15 +64,16 @@ namespace DGWnd.Quote.UI
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(563, 291);
+            this.tabControl1.Size = new System.Drawing.Size(806, 337);
             this.tabControl1.TabIndex = 1;
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnSaveIntradaySnapshotsToDb);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(555, 265);
+            this.tabPage1.Size = new System.Drawing.Size(798, 311);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Loader";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -85,18 +88,29 @@ namespace DGWnd.Quote.UI
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // Loader
+            // btnSaveIntradaySnapshotsToDb
+            // 
+            this.btnSaveIntradaySnapshotsToDb.Location = new System.Drawing.Point(470, 17);
+            this.btnSaveIntradaySnapshotsToDb.Name = "btnSaveIntradaySnapshotsToDb";
+            this.btnSaveIntradaySnapshotsToDb.Size = new System.Drawing.Size(234, 23);
+            this.btnSaveIntradaySnapshotsToDb.TabIndex = 0;
+            this.btnSaveIntradaySnapshotsToDb.Text = "Save Intraday Quote Snapshots to DB";
+            this.btnSaveIntradaySnapshotsToDb.UseVisualStyleBackColor = true;
+            this.btnSaveIntradaySnapshotsToDb.Click += new System.EventHandler(this.btnSaveIntradaySnapshotsToDb_Click);
+            // 
+            // frmLoader
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(563, 313);
+            this.ClientSize = new System.Drawing.Size(806, 359);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.statusStrip1);
-            this.Name = "Loader";
+            this.Name = "frmLoader";
             this.Text = "Loader";
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -109,5 +123,6 @@ namespace DGWnd.Quote.UI
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.ToolStripStatusLabel statusLabel;
+        private System.Windows.Forms.Button btnSaveIntradaySnapshotsToDb;
     }
 }

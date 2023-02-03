@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using DGWnd.Quote.Helpers;
 using DGWnd.UI;
+using spMain.Comp;
 
 namespace DGWnd.Quote.UI
 {
@@ -24,6 +25,12 @@ namespace DGWnd.Quote.UI
         {
             lock (_lock) statusLabel.Text = message;
             Application.DoEvents();
+        }
+
+        private void btnSaveIntradaySnapshotsToDb_Click(object sender, EventArgs e)
+        {
+            if (CsHelper.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip", true) is string[] files && files.Length > 0)
+                Quote.Actions.CopyYahooIntradaySnapshotsToDb.CopySnapshots(files, ShowStatus);
         }
     }
 }
