@@ -28,18 +28,15 @@ namespace spMain.Comp
                 this.IsShowCursorValues = false;
                 this.IsZoomOnMouseCenter = false;
 
-                this.MouseMove += new MouseEventHandler(StockGraph_MouseMove);
                 this.MouseMoveEvent += new ZedMouseEventHandler(StockGraph_MouseMoveEvent);
 
                 //      this.MouseDown += new MouseEventHandler(StockGraph_MouseDown);
                 this.MouseDownEvent += new ZedMouseEventHandler(StockGraph_MouseDownEvent);
                 this.MouseUpEvent += new ZedMouseEventHandler(StockGraph_MouseUpEvent);
 
-                this.MouseLeave += new EventHandler(StockGraph_MouseLeave);
                 this.ScrollEvent += new ScrollEventHandler(StockGraph_ScrollEvent);
                 this.ScrollDoneEvent += new ScrollDoneHandler(StockGraph_ScrollDoneEvent);
                 this.ZoomEvent += new ZoomEventHandler(StockGraph_ZoomEvent);
-                this.Resize += new EventHandler(StockGraph_Resize);
                 foreach (Control c in this.Controls)
                 {
                     if (c is HScrollBar)
@@ -50,7 +47,6 @@ namespace spMain.Comp
                     else if (c is VScrollBar) _vScrollBar = (VScrollBar)c;
                 }
                 this.ContextMenuBuilder += new ContextMenuBuilderEventHandler(StockGraph_ContextMenuBuilder);
-                this.Disposed += new EventHandler(StockGraph_Disposed);
             }
         }
 

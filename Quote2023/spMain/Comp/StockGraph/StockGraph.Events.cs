@@ -71,8 +71,10 @@ namespace spMain.Comp
             }
         }
 
-        void StockGraph_MouseMove(object sender, MouseEventArgs e)
+        protected override void OnMouseMove(MouseEventArgs e)
         {
+            base.OnMouseMove(e);
+
             Point p = this.PointToClient(Cursor.Position);
             if (_drawLineObj != null)
             {
@@ -106,8 +108,9 @@ namespace spMain.Comp
         bool StockGraph_MouseMoveEvent(ZedGraphControl sender, MouseEventArgs e) => e.Button != MouseButtons.Left;
 
         // ======================  Other Mouse Events ===========================
-        void StockGraph_MouseLeave(object sender, EventArgs e)
+        protected override void OnMouseLeave(EventArgs e)
         {
+            base.OnMouseLeave(e);
             this.CursorRestorePicture();
         }
 
@@ -180,17 +183,17 @@ namespace spMain.Comp
         }
 
         // ==============================  Other events ================================
-        void StockGraph_Resize(object sender, EventArgs e)
+        protected override void OnResize(EventArgs e)
         {
+            base.OnResize(e);
             this.AxisChange();
             this.Invalidate();
         }
 
-        void StockGraph_Disposed(object sender, EventArgs e)
+        protected override void Dispose(bool disposing)
         {
-            this.Disposed -= new EventHandler(StockGraph_Disposed);
             this.UIGraphClear();
+            base.Dispose(disposing);
         }
-
     }
 }
