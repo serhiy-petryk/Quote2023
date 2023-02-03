@@ -85,15 +85,20 @@
     <Compile Include="MultiThreading.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Quote\Actions.cs" />
     <Compile Include="Quote\Helpers\CsHelper.cs" />
     <Compile Include="Quote\Helpers\DbHelper.cs" />
     <Compile Include="Quote\Models\IntradaySnapshot.cs" />
-    <Compile Include="Quote\UI\Loader.cs">
+    <Compile Include="Quote\UI\frmCopySnapshotsToDb.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Quote\UI\Loader.Designer.cs">
-      <DependentUpon>Loader.cs</DependentUpon>
+    <Compile Include="Quote\UI\frmCopySnapshotsToDb.Designer.cs">
+      <DependentUpon>frmCopySnapshotsToDb.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Quote\UI\frmLoader.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Quote\UI\frmLoader.Designer.cs">
+      <DependentUpon>frmLoader.cs</DependentUpon>
     </Compile>
     <Compile Include="Refactoring-2019-12.cs" />
     <Compile Include="Refactoring-2019-12.WiP.cs" />
@@ -326,8 +331,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Quote\UI\Loader.resx">
-      <DependentUpon>Loader.cs</DependentUpon>
+    <EmbeddedResource Include="Quote\UI\frmCopySnapshotsToDb.resx">
+      <DependentUpon>frmCopySnapshotsToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Quote\UI\frmLoader.resx">
+      <DependentUpon>frmLoader.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Test\DGV_FindAndReplace\FindAndReplaceForm.Original.resx">
       <DependentUpon>FindAndReplaceForm.Original.cs</DependentUpon>

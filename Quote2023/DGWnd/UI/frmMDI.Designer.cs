@@ -45,9 +45,7 @@ namespace DGWnd.UI {
             this.btnDependentObjectManager = new System.Windows.Forms.ToolStripButton();
             this.btnLog = new System.Windows.Forms.ToolStripButton();
             this.btnClearSqlCache = new System.Windows.Forms.ToolStripButton();
-            this.btnTestGraph = new System.Windows.Forms.ToolStripButton();
-            this.btnGraphToSave = new System.Windows.Forms.ToolStripButton();
-            this.btnTestSaveSnapshots = new System.Windows.Forms.ToolStripButton();
+            this.btnSaveIntradayQuoteSnapshotsToDb = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.stripBtns.SuspendLayout();
             this.SuspendLayout();
@@ -162,9 +160,7 @@ namespace DGWnd.UI {
             this.btnDependentObjectManager,
             this.btnLog,
             this.btnClearSqlCache,
-            this.btnTestGraph,
-            this.btnGraphToSave,
-            this.btnTestSaveSnapshots});
+            this.btnSaveIntradayQuoteSnapshotsToDb});
             this.stripBtns.Location = new System.Drawing.Point(3, 24);
             this.stripBtns.Name = "stripBtns";
             this.stripBtns.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -249,35 +245,15 @@ namespace DGWnd.UI {
             this.btnClearSqlCache.Text = "Clear Sql Cache";
             this.btnClearSqlCache.Click += new System.EventHandler(this.btnClearSqlCache_Click);
             // 
-            // btnTestGraph
+            // btnSaveIntradayQuoteSnapshotsToDb
             // 
-            this.btnTestGraph.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnTestGraph.Image = ((System.Drawing.Image)(resources.GetObject("btnTestGraph.Image")));
-            this.btnTestGraph.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnTestGraph.Name = "btnTestGraph";
-            this.btnTestGraph.Size = new System.Drawing.Size(68, 22);
-            this.btnTestGraph.Text = "Test Graph";
-            this.btnTestGraph.Click += new System.EventHandler(this.btnTestGraph_Click);
-            // 
-            // btnGraphToSave
-            // 
-            this.btnGraphToSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnGraphToSave.Image = ((System.Drawing.Image)(resources.GetObject("btnGraphToSave.Image")));
-            this.btnGraphToSave.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnGraphToSave.Name = "btnGraphToSave";
-            this.btnGraphToSave.Size = new System.Drawing.Size(83, 22);
-            this.btnGraphToSave.Text = "Graph to save";
-            this.btnGraphToSave.Click += new System.EventHandler(this.btnGraphToSave_Click);
-            // 
-            // btnTestSaveSnapshots
-            // 
-            this.btnTestSaveSnapshots.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnTestSaveSnapshots.Image = ((System.Drawing.Image)(resources.GetObject("btnTestSaveSnapshots.Image")));
-            this.btnTestSaveSnapshots.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnTestSaveSnapshots.Name = "btnTestSaveSnapshots";
-            this.btnTestSaveSnapshots.Size = new System.Drawing.Size(117, 22);
-            this.btnTestSaveSnapshots.Text = "Test Save Snapshots";
-            this.btnTestSaveSnapshots.Click += new System.EventHandler(this.btnTestSaveSnapshots_Click);
+            this.btnSaveIntradayQuoteSnapshotsToDb.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnSaveIntradayQuoteSnapshotsToDb.Image = ((System.Drawing.Image)(resources.GetObject("btnSaveIntradayQuoteSnapshotsToDb.Image")));
+            this.btnSaveIntradayQuoteSnapshotsToDb.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSaveIntradayQuoteSnapshotsToDb.Name = "btnSaveIntradayQuoteSnapshotsToDb";
+            this.btnSaveIntradayQuoteSnapshotsToDb.Size = new System.Drawing.Size(206, 22);
+            this.btnSaveIntradayQuoteSnapshotsToDb.Text = "Save Intraday Quote Snapshots to DB";
+            this.btnSaveIntradayQuoteSnapshotsToDb.Click += new System.EventHandler(this.btnSaveIntradayQuoteSnapshotsToDb_Click);
             // 
             // frmMDI
             // 
@@ -333,9 +309,7 @@ namespace DGWnd.UI {
     private System.Windows.Forms.ToolStripButton btnWebDownloader;
     private System.Windows.Forms.ToolStripButton btnClearSqlCache;
         private System.Windows.Forms.ToolStripButton btnStockGraph;
-        private System.Windows.Forms.ToolStripButton btnTestGraph;
     private System.Windows.Forms.ToolStripButton btnLoader;
-        private System.Windows.Forms.ToolStripButton btnGraphToSave;
-        private System.Windows.Forms.ToolStripButton btnTestSaveSnapshots;
+        private System.Windows.Forms.ToolStripButton btnSaveIntradayQuoteSnapshotsToDb;
     }
 }

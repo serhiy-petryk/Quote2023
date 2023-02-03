@@ -12,10 +12,10 @@ using DGWnd.UI;
 
 namespace DGWnd.Quote.UI
 {
-    public partial class Loader : Form
+    public partial class frmLoader : Form
     {
         private object _lock = new object();
-        public Loader()
+        public frmLoader()
         {
             InitializeComponent();
         }
@@ -24,14 +24,6 @@ namespace DGWnd.Quote.UI
         {
             lock (_lock) statusLabel.Text = message;
             Application.DoEvents();
-        }
-
-        private void btnAddIntradaySnapshots_Click(object sender, EventArgs e)
-        {
-            var mainForm = this.TopLevelControl as frmMDI;
-            if (CsHelper.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip", true) is string[] files && files.Length > 0)
-                Actions.AddIntradaySnapshoysInDb(ShowStatus, files, mainForm);
-
         }
     }
 }

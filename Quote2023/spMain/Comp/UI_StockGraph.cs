@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace spMain.Comp
@@ -29,6 +30,7 @@ namespace spMain.Comp
         }
 
         public void _CopyToClipboard() => this._stockGraph.Copy(false);
+        public Image _GetImage() => this._stockGraph.MasterPane.GetImage();
 
         // =====================  Clicks =================================
         private void _btnDataSelect_Click(object sender, EventArgs e)

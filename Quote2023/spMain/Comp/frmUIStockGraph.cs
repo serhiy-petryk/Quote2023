@@ -10,15 +10,14 @@ namespace spMain.Comp
     public partial class frmUIStockGraph : Form
     {
         private UIGraph _initialGraph;
-        private bool _isSnapshotLayout;
+        private readonly bool _isSnapshotLayout = false;
         public frmUIStockGraph()
         {
             InitializeComponent();
         }
 
-        public frmUIStockGraph(UIGraph graph, bool isSnapshotLayout) : base()
+        public frmUIStockGraph(UIGraph graph, bool isSnapshotLayout) : this()
         {
-            InitializeComponent();
             _initialGraph = graph;
             _isSnapshotLayout = isSnapshotLayout;
         }
@@ -27,39 +26,14 @@ namespace spMain.Comp
         {
             if (!csIni.isDesignMode)
             {
-                if (_initialGraph != null)
-                {
-                    uI_StockGraph1._SetUIGraph(_initialGraph, _isSnapshotLayout);
-                    _initialGraph = null;
-                    if (_isSnapshotLayout)
-                    {
-                        Control stockGraphControl = null;
-                        foreach (var c in uI_StockGraph1.Controls)
-                            if (c is StockGraph graph)
-                            {
-                                stockGraphControl = graph;
-                                break;
-                            }
+                if (_initialGraph == null)
+                    _initialGraph = cs.PGfrmObjectEditor._GetObject(new spMain.QData.UI.UIGraph(),
+                        QData.UI.UIGraph._serializationFileName, true) as QData.UI.UIGraph;
 
-                        if (stockGraphControl != null)
-                        {
-                            stockGraphControl.Dock = DockStyle.None;
-                            stockGraphControl.Size = new Size(100, 60);
-                            uI_StockGraph1._CopyToClipboard();
-                            if (Clipboard.ContainsImage())
-                                Clipboard.GetImage().Save(@"E:\Temp\test.png", ImageFormat.Png);
-
-                        }
-                        BeginInvoke(new MethodInvoker(Close));
-                    }
-                    return;
-                }
-
-                var o = cs.PGfrmObjectEditor._GetObject(new spMain.QData.UI.UIGraph(), QData.UI.UIGraph._serializationFileName, true);
-                if (o == null)
+                if (_initialGraph == null)
                     BeginInvoke(new MethodInvoker(Close));
                 else
-                    uI_StockGraph1._SetUIGraph((QData.UI.UIGraph) o, _isSnapshotLayout);
+                    uI_StockGraph1._SetUIGraph(_initialGraph, _isSnapshotLayout);
             }
         }
     }

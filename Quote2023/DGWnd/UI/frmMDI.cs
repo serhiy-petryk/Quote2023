@@ -180,6 +180,7 @@ namespace DGWnd.UI
                 if (frmID == item.Name)
                 {
                     x1.Close();
+                    x1.Dispose();
                     break;
                 }
             }
@@ -208,24 +209,14 @@ namespace DGWnd.UI
         #endregion    ///////////////////////////////  END ///////////////////////////
 
         private void btnDataDefinitionList_Click(object sender, EventArgs e) => AttachNewChildForm(new UI.frmDataDefinition());
-        private void btnLoader_Click(object sender, EventArgs e) => AttachNewChildForm(new Loader());
+        private void btnLoader_Click(object sender, EventArgs e) => AttachNewChildForm(new frmLoader());
         private void mnuExit_Click(object sender, EventArgs e) => Application.Exit();
         private void btnStockGraph_Click(object sender, EventArgs e) => AttachNewChildForm(new spMain.Comp.frmUIStockGraph());
         private void btnWebDownloader_Click(object sender, EventArgs e) => AttachNewChildForm(new WebDownloader.frmWebDownloader());
         private void btnMemoryInUsed_Click(object sender, EventArgs e) => MessageBox.Show($@"Програма займає {DGCore.Utils.Tips.MemoryUsedInBytes:N0} байт памяті");
         private void btnDependentObjectManager_Click(object sender, EventArgs e) => AttachNewChildForm(new UI.frmDependentObjectManager());
         private void btnLog_Click(object sender, EventArgs e) => AttachNewChildForm(new UI.frmLog());
-        private void btnTestGraph_Click(object sender, EventArgs e)
-        {
-            var graph = spMain.csUtils.GetStandardGraph("MSFT", new DateTime(2022, 12, 12), 10);
-            AttachNewChildForm(new frmUIStockGraph(graph, false));
-        }
-        private void btnGraphToSave_Click(object sender, EventArgs e)
-        {
-            var graph = spMain.csUtils.GetGraphToSave("AA", new DateTime(2022, 12, 09), 2);
-            AttachNewChildForm(new frmUIStockGraph(graph, true));
-        }
-
+        private void btnSaveIntradayQuoteSnapshotsToDb_Click(object sender, EventArgs e) => AttachNewChildForm(new frmCopySnapshotsToDb());
 
         private void btnClearSqlCache_Click(object sender, EventArgs e)
         {
@@ -239,19 +230,6 @@ namespace DGWnd.UI
                 cmd.ExecuteNonQuery();
             }
             MessageBox.Show(@"Sql Cache was cleared");
-        }
-
-        private void ShowStatus(string message)
-        {
-//            lock (_lock) statusLabel.Text = message;
-  //          Application.DoEvents();
-        }
-
-        private void btnTestSaveSnapshots_Click(object sender, EventArgs e)
-        {
-            var mainForm = this.TopLevelControl as frmMDI;
-            if (CsHelper.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip", true) is string[] files && files.Length > 0)
-                Actions.AddIntradaySnapshoysInDb(ShowStatus, files, mainForm);
         }
     }
 }
