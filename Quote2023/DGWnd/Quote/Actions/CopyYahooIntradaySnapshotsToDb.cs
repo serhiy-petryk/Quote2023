@@ -70,26 +70,6 @@ namespace DGWnd.Quote.Actions
                     using (var frm = new frmUIStockGraph(null, true))
                     {
                         frm.Visible = false;
-                        UI_StockGraph uiStockGraph = null;
-
-                        foreach (var c in frm.Controls)
-                            if (c is UI_StockGraph c1)
-                            {
-                                uiStockGraph = c1;
-                                break;
-                            }
-                        if (uiStockGraph != null)
-                        {
-                            foreach (var c in uiStockGraph.Controls)
-                                if (c is StockGraph stockGraph)
-                                {
-                                    var stockGraphControl = (Control)c;
-                                    stockGraphControl.Dock = DockStyle.None;
-                                    stockGraphControl.Size = new Size(100, 60);
-                                    break;
-                                }
-                        }
-
                         cnt = 0;
                         var keys = toLoadSymbolsAndDate.Keys.ToArray();
                         toLoadSymbolsAndDate.Clear();
@@ -99,8 +79,8 @@ namespace DGWnd.Quote.Actions
                             showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. {cnt:N0} from {keys.Length:N0} snapshots created");
 
                             var graph = spMain.csUtils.GetGraphToSave(key.Item1, key.Item2, 1);
-                            uiStockGraph._SetUIGraph(graph, true);
-                            var image = uiStockGraph._GetImage();
+                            frm._SetUIGraph(graph, true);
+                            var image = frm._GetImage();
 
                             using (var ms = new MemoryStream())
                             {
