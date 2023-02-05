@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using spMain.QData.Common;
 using spMain.QData.DataAdapters;
 using spMain.QData.DataDB;
@@ -88,13 +89,13 @@ namespace spMain
             return graph;
         }
 
-        public static string StringFromObject(object o)
+        public static string StringFromObject(object o, CultureInfo culture = null)
         {
             if (o == null) return "";
             if (o is DateTime) return StringFromDateTime((DateTime)o);
-            else if (o is double) return ((double)o).ToString(csIni.fiNumberUS);
-            else if (o is decimal) return ((decimal)o).ToString(csIni.fiNumberUS);
-            else if (o is float) return ((float)o).ToString(csIni.fiNumberUS);
+            else if (o is double) return ((double)o).ToString(culture ?? csIni.ciUS);
+            else if (o is decimal) return ((decimal)o).ToString(culture ?? csIni.ciUS);
+            else if (o is float) return ((float)o).ToString(culture ?? csIni.ciUS);
             else return o.ToString();
         }
 

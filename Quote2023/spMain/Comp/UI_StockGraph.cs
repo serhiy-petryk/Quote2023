@@ -8,7 +8,6 @@ namespace spMain.Comp
 
     public partial class UI_StockGraph : UserControl
     {
-
         public UI_StockGraph()
         {
             InitializeComponent();

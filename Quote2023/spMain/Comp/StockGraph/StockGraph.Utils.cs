@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Printing;
+using System.Globalization;
 using ZedGraph;
 
 namespace spMain.Comp {
@@ -43,7 +44,7 @@ namespace spMain.Comp {
                   // Save data
                   for (int i = 0; i < data.Length; i++) {
                     for (int i1 = 0; i1 < data[i].Count; i1++) {
-                      sw.Write((i1 == 0 ? "" : "\t") + csUtils.StringFromObject(data[i][i1]));
+                      sw.Write((i1 == 0 ? "" : "\t") + csUtils.StringFromObject(data[i][i1], CultureInfo.CurrentCulture));
                     }
                     sw.Write(Environment.NewLine);
                   }

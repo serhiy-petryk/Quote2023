@@ -46,10 +46,10 @@ namespace spMain.QData.DataFormat {
       }
     }
     public override string ToString() {
-      return date.ToString("yyyy-MM-dd") + "\t" + open.ToString("R", csIni.fiNumberUS) + "\t" +
-        high.ToString("R", csIni.fiNumberUS) + "\t" + low.ToString("R", csIni.fiNumberUS) + "\t" +
-        close.ToString("R", csIni.fiNumberUS) + "\t" + volume.ToString("R", csIni.fiNumberUS) + "\t" +
-        adjClose.ToString("R", csIni.fiNumberUS) + "\t" +base.Type;
+      return date.ToString("yyyy-MM-dd") + "\t" + open.ToString("R") + "\t" +
+        high.ToString("R") + "\t" + low.ToString("R") + "\t" +
+        close.ToString("R") + "\t" + volume.ToString("R") + "\t" +
+        adjClose.ToString("R") + "\t" +base.Type;
     }
   }
 
@@ -222,8 +222,7 @@ namespace spMain.QData.DataFormat {
       return csUtils.StringFromDateTime(this.date) + '\t' + GetValueString();
     }
     string GetValueString() {
-      return open.ToString(csIni.fiNumberUS) + '\t' + high.ToString(csIni.fiNumberUS) + '\t' + this.low.ToString(csIni.fiNumberUS) + '\t' +
-        this.close.ToString(csIni.fiNumberUS) + '\t' + this.volume.ToString();
+      return open.ToString() + '\t' + high.ToString() + '\t' + this.low.ToString() + '\t' + this.close.ToString() + '\t' + this.volume.ToString();
     }
 
     public static bool operator ==(Quote q1, Quote q2) {
