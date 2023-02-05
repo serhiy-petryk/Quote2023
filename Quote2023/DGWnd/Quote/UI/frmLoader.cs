@@ -29,7 +29,7 @@ namespace DGWnd.Quote.UI
 
         private void btnSaveIntradaySnapshotsToDb_Click(object sender, EventArgs e)
         {
-            if (CsHelper.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip", true) is string[] files && files.Length > 0)
+            if (CsHelper.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip") is string[] files && files.Length > 0)
                 Quote.Actions.CopyYahooIntradaySnapshotsToDb.CopySnapshots(files, ShowStatus);
         }
     }
