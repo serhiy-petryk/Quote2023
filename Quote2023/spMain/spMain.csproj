@@ -171,6 +171,7 @@
     <Compile Include="QData\DataAdapters\MBT\QDChunk.MbtTick.cs" />
     <Compile Include="QData\DataAdapters\MBT\QDChunk.MbtTickHttp.cs" />
     <Compile Include="QData\DataAdapters\MBT\QDChunk.Quote.cs" />
+    <Compile Include="QData\DataAdapters\AlphaVantage_Minute.cs" />
     <Compile Include="QData\DataAdapters\Yahoo_Minute.cs" />
     <Compile Include="QData\DataAdapters\MBT_Minute.cs" />
     <Compile Include="QData\DataAdapters\MBT_TimeSales.cs" />

@@ -40,7 +40,8 @@ namespace spMain
         public readonly static DateTimeFormatInfo fiDateUS = ciUS.DateTimeFormat;
         public readonly static NumberFormatInfo fiNumberUS = ciUS.NumberFormat;
 
-        public const string YahooMinuteDataFolder = @"E:\Quote\WebData\Minute\Yahoo\Data\";
+        public const string MinuteYahooDataFolder = @"E:\Quote\WebData\Minute\Yahoo\Data\";
+        public const string MinuteAlphaVantageDataFolder = @"E:\Quote\WebData\Minute\AlphaVantage\Data\";
 
         static csIni()
         {
