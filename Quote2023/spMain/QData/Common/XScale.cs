@@ -416,7 +416,8 @@ namespace spMain.QData.Common {
               if (tmp3.TimeOfDay < endTS && nextDate.TimeOfDay > endTS) {
                 nextDate = tmp3.Date + endTS;
               }
-              if ((nextDate > newDate) || (nextDate == newDate && nextDate.TimeOfDay == endTS)) break;
+              // if ((nextDate > newDate) || (nextDate == newDate && nextDate.TimeOfDay == endTS)) break;
+              if (nextDate > newDate) break;
               dates.Add(nextDate);
               tmp3 = nextDate;
             }
