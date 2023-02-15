@@ -45,6 +45,7 @@ namespace DGWnd.UI {
             this.btnDependentObjectManager = new System.Windows.Forms.ToolStripButton();
             this.btnLog = new System.Windows.Forms.ToolStripButton();
             this.btnClearSqlCache = new System.Windows.Forms.ToolStripButton();
+            this.btnProxyChecker = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.stripBtns.SuspendLayout();
             this.SuspendLayout();
@@ -158,7 +159,8 @@ namespace DGWnd.UI {
             this.btnMemoryInUsed,
             this.btnDependentObjectManager,
             this.btnLog,
-            this.btnClearSqlCache});
+            this.btnClearSqlCache,
+            this.btnProxyChecker});
             this.stripBtns.Location = new System.Drawing.Point(3, 24);
             this.stripBtns.Name = "stripBtns";
             this.stripBtns.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -243,6 +245,16 @@ namespace DGWnd.UI {
             this.btnClearSqlCache.Text = "Clear Sql Cache";
             this.btnClearSqlCache.Click += new System.EventHandler(this.btnClearSqlCache_Click);
             // 
+            // btnProxyChecker
+            // 
+            this.btnProxyChecker.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnProxyChecker.Image = ((System.Drawing.Image)(resources.GetObject("btnProxyChecker.Image")));
+            this.btnProxyChecker.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnProxyChecker.Name = "btnProxyChecker";
+            this.btnProxyChecker.Size = new System.Drawing.Size(86, 22);
+            this.btnProxyChecker.Text = "Proxy Checker";
+            this.btnProxyChecker.Click += new System.EventHandler(this.btnProxyChecker_Click);
+            // 
             // frmMDI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -298,5 +310,6 @@ namespace DGWnd.UI {
     private System.Windows.Forms.ToolStripButton btnClearSqlCache;
         private System.Windows.Forms.ToolStripButton btnStockGraph;
     private System.Windows.Forms.ToolStripButton btnLoader;
+        private System.Windows.Forms.ToolStripButton btnProxyChecker;
     }
 }
