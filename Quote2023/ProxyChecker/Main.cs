@@ -10,10 +10,10 @@ using System.Windows.Forms;
 
 namespace ProxyChecker
 {
-    public partial class Form1 : Form
+    public partial class Main : Form
     {
         private bool isClosing;
-        public Form1()
+        public Main()
         {
             InitializeComponent();
             System.Windows.Forms.Control.CheckForIllegalCrossThreadCalls = false;

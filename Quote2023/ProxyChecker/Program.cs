@@ -18,7 +18,7 @@ namespace ProxyChecker
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             
-            Application.Run(new Form1());
+            Application.Run(new Main());
         }
     }
 }

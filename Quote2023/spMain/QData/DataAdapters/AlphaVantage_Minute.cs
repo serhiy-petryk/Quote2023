@@ -15,7 +15,6 @@ namespace spMain.QData.DataAdapters
     [Serializable]
     class AlphaVantage_Minute : Data.DataAdapter
     {
-
         public override bool IsStream => false;
 
         public override string CheckDataInputs(List<spMain.QData.Data.DataInput> inputs) => null;
