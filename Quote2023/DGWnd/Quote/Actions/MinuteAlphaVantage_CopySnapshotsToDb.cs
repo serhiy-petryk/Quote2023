@@ -65,7 +65,7 @@ namespace DGWnd.Quote.Actions
 
                     if (!liveSymbolsByDate.ContainsKey(dateKey)) continue;
 
-                    showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Get symbols & date to copy.");
+                    showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Get symbols and dates to copy.");
                     var toLoadSymbols = liveSymbolsByDate[dateKey]
                         .ToDictionary(a => a, a => (DGWnd.Quote.Models.IntradaySnapshot) null);
 
@@ -98,7 +98,7 @@ namespace DGWnd.Quote.Actions
                                     }
                                 }
 
-                                if (cnt % 100 == 0)
+                                if (toLoadSymbolsAndDate.Count >= 100)
                                 {
                                     showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Save snapshots to database ...");
                                     DbHelper.SaveToDbTable(toLoadSymbolsAndDate.Values, "dbQuote2023..IntradaySnapshots", "Symbol", "Date", "Snapshot");
@@ -117,9 +117,13 @@ namespace DGWnd.Quote.Actions
                             }
 
 
-                    showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Save snapshots to database ...");
-                    DbHelper.SaveToDbTable(toLoadSymbolsAndDate.Values, "dbQuote2023..IntradaySnapshots", "Symbol", "Date", "Snapshot");
-                    toLoadSymbolsAndDate.Clear();
+                    if (toLoadSymbolsAndDate.Count > 0)
+                    {
+                        showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Save snapshots to database ...");
+                        DbHelper.SaveToDbTable(toLoadSymbolsAndDate.Values, "dbQuote2023..IntradaySnapshots", "Symbol",
+                            "Date", "Snapshot");
+                        toLoadSymbolsAndDate.Clear();
+                    }
                 }
             }
 
