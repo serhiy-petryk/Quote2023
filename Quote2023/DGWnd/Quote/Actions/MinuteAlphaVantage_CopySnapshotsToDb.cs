@@ -19,8 +19,12 @@ namespace DGWnd.Quote.Actions
 {
     public static class MinuteAlphaVantage_CopySnapshotsToDb
     {
+        public static bool StopFlag;
+
         public static void CopySnapshots(string[] zipFiles, Action<string> showStatus)
         {
+            StopFlag = false;
+
             var liveSymbolsAndDates = new List<Tuple<string, DateTime>>();
             var symbolsXref = new Dictionary<string, string>();
 
@@ -48,10 +52,10 @@ namespace DGWnd.Quote.Actions
             var fileCnt = 0;
             // var dataToSave = new List<Tuple<string, DateTime, byte[]>>();
             var toLoadSymbolsAndDate = new Dictionary<Tuple<string, DateTime>, DGWnd.Quote.Models.IntradaySnapshot>();
-            using (var frm = new frmUIStockGraph(null, true))
+            // using (var frm = new frmUIStockGraph(null, true))
             {
+                var frm = new frmUIStockGraph(null, true);
                 frm.Visible = false;
-                frm._SetSnapshotSize();
 
                 foreach (var zipFile in zipFiles)
                 {
@@ -99,6 +103,16 @@ namespace DGWnd.Quote.Actions
                                     showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Save snapshots to database ...");
                                     DbHelper.SaveToDbTable(toLoadSymbolsAndDate.Values, "dbQuote2023..IntradaySnapshots", "Symbol", "Date", "Snapshot");
                                     toLoadSymbolsAndDate.Clear();
+
+                                    frm.Dispose();
+                                    if (StopFlag)
+                                    {
+                                        showStatus($"CopySnapshots. Interrupted!");
+                                        return;
+                                    }
+
+                                    frm = new frmUIStockGraph(null, true);
+                                    frm.Visible = false;
                                 }
                             }
 

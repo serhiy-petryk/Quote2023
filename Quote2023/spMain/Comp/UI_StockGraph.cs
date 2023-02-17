@@ -22,7 +22,13 @@ namespace spMain.Comp
         // =====================  Public section =============================
         public void _SetUIGraph(QData.UI.UIGraph uiGraph, bool isSnapshotLayout)
         {
-            this._stockGraph._IsSnapshotLayout = isSnapshotLayout;
+            if (this._stockGraph._IsSnapshotLayout != isSnapshotLayout)
+            {
+                this._stockGraph._IsSnapshotLayout = isSnapshotLayout;
+                _stockGraph.Dock = DockStyle.None;
+                _stockGraph.Size = new Size(100, 60);
+            }
+
             this._stockGraph._uiGraph = uiGraph;
             this._stockGraph._UIGraphApply();
             this.UpdateToolStrip();
@@ -30,11 +36,6 @@ namespace spMain.Comp
 
         public void _CopyToClipboard() => this._stockGraph.Copy(false);
         public Image _GetImage() => this._stockGraph.MasterPane.GetImage();
-        public void _SetSnapshotSize()
-        {
-            _stockGraph.Dock = DockStyle.None;
-            _stockGraph.Size = new Size(100, 60);
-        }
 
         // =====================  Clicks =================================
         private void _btnDataSelect_Click(object sender, EventArgs e)

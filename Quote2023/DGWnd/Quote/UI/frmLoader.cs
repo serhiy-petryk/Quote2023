@@ -39,5 +39,10 @@ namespace DGWnd.Quote.UI
             // Quote.Actions.MinuteYahoo_CopySnapshotsToDb.CopySnapshots(files, ShowStatus);
             btnSaveIntradaySnapshotsToDb.Enabled = true;
         }
+
+        private void btnStopSavingIntradaySnapshotsToDb_Click(object sender, EventArgs e)
+        {
+            Quote.Actions.MinuteAlphaVantage_CopySnapshotsToDb.StopFlag = true;
+        }
     }
 }

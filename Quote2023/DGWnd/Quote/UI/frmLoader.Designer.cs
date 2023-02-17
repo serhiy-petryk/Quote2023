@@ -33,8 +33,9 @@ namespace DGWnd.Quote.UI
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.btnSaveIntradaySnapshotsToDb = new System.Windows.Forms.Button();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btnStopSavingIntradaySnapshotsToDb = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -69,6 +70,7 @@ namespace DGWnd.Quote.UI
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.btnStopSavingIntradaySnapshotsToDb);
             this.tabPage1.Controls.Add(this.btnSaveIntradaySnapshotsToDb);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
@@ -77,16 +79,6 @@ namespace DGWnd.Quote.UI
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Loader";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(555, 265);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // btnSaveIntradaySnapshotsToDb
             // 
@@ -97,6 +89,26 @@ namespace DGWnd.Quote.UI
             this.btnSaveIntradaySnapshotsToDb.Text = "Save Intraday Quote Snapshots to DB";
             this.btnSaveIntradaySnapshotsToDb.UseVisualStyleBackColor = true;
             this.btnSaveIntradaySnapshotsToDb.Click += new System.EventHandler(this.btnSaveIntradaySnapshotsToDb_Click);
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(798, 311);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // btnStopSavingIntradaySnapshotsToDb
+            // 
+            this.btnStopSavingIntradaySnapshotsToDb.Location = new System.Drawing.Point(470, 60);
+            this.btnStopSavingIntradaySnapshotsToDb.Name = "btnStopSavingIntradaySnapshotsToDb";
+            this.btnStopSavingIntradaySnapshotsToDb.Size = new System.Drawing.Size(234, 23);
+            this.btnStopSavingIntradaySnapshotsToDb.TabIndex = 1;
+            this.btnStopSavingIntradaySnapshotsToDb.Text = "Stop saving Intraday Quote Snapshots to DB";
+            this.btnStopSavingIntradaySnapshotsToDb.UseVisualStyleBackColor = true;
+            this.btnStopSavingIntradaySnapshotsToDb.Click += new System.EventHandler(this.btnStopSavingIntradaySnapshotsToDb_Click);
             // 
             // frmLoader
             // 
@@ -124,5 +136,6 @@ namespace DGWnd.Quote.UI
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.ToolStripStatusLabel statusLabel;
         private System.Windows.Forms.Button btnSaveIntradaySnapshotsToDb;
+        private System.Windows.Forms.Button btnStopSavingIntradaySnapshotsToDb;
     }
 }

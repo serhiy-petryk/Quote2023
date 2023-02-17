@@ -80,7 +80,6 @@ namespace spMain.Comp
             // End of scrolling
         }
 
-
         private void InitializeComponent()
         {
             this.SuspendLayout();

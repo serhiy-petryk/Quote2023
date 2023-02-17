@@ -23,10 +23,7 @@ namespace spMain.Comp
         }
 
         public Image _GetImage() => uI_StockGraph1._GetImage();
-        public void _SetSnapshotSize() => uI_StockGraph1._SetSnapshotSize();
-
-        public void _SetUIGraph(QData.UI.UIGraph uiGraph, bool isSnapshotLayout) =>
-            uI_StockGraph1._SetUIGraph(uiGraph, isSnapshotLayout);
+        public void _SetUIGraph(QData.UI.UIGraph uiGraph, bool isSnapshotLayout) => uI_StockGraph1._SetUIGraph(uiGraph, isSnapshotLayout);
 
         private void frmUIStockGraph_Load(object sender, EventArgs e)
         {
