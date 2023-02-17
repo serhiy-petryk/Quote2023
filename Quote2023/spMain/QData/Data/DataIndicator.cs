@@ -115,6 +115,9 @@ namespace spMain.QData.Data {
         }
         DataManager.RemoveDataIndicator(this);
       }
+
+      _dates.Clear();
+      _data.Clear();
     }
 
     public List<DateTime> GetDateArray() {

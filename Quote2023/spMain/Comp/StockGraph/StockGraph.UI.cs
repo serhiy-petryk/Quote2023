@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 using ZedGraph;
 
 namespace spMain.Comp {
@@ -121,8 +122,20 @@ namespace spMain.Comp {
       if (this._uiGraph != null) {
         this._uiGraph.ClearDataSources();
       }
+
+      _dates?.Clear();
+
       this.MasterPane.PaneList.Clear();
       this.MasterPane.GraphObjList.Clear();
+
+      this.MouseMoveEvent -= new ZedMouseEventHandler(StockGraph_MouseMoveEvent);
+      this.MouseDownEvent -= new ZedMouseEventHandler(StockGraph_MouseDownEvent);
+      this.MouseUpEvent -= new ZedMouseEventHandler(StockGraph_MouseUpEvent);
+      this.ScrollEvent -= new ScrollEventHandler(StockGraph_ScrollEvent);
+      this.ScrollDoneEvent -= new ScrollDoneHandler(StockGraph_ScrollDoneEvent);
+      this.ZoomEvent -= new ZoomEventHandler(StockGraph_ZoomEvent);
+      this._hScrollBar.MouseWheel -= new MouseEventHandler(sb_MouseWheel);
+      this.ContextMenuBuilder -= new ContextMenuBuilderEventHandler(StockGraph_ContextMenuBuilder);
     }
 
     public void _Autosize() {
