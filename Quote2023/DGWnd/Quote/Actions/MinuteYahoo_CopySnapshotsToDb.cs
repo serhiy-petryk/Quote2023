@@ -15,7 +15,7 @@ using spMain.Helpers;
 
 namespace DGWnd.Quote.Actions
 {
-    public static class CopyYahooIntradaySnapshotsToDb
+    public static class MinuteYahoo_CopySnapshotsToDb
     {
         public static void CopySnapshots(string[] zipFiles, Action<string> showStatus)
         {
@@ -27,7 +27,7 @@ namespace DGWnd.Quote.Actions
                 using (var cmd = conn.CreateCommand())
                 {
                     conn.Open();
-                    cmd.CommandText = "SELECT a.* from vSymbolsAndDatesLive a left join IntradaySnapshots b on a.Symbol=b.Symbol and a.Date=b.Date WHERE b.Symbol is null AND a.Date>'2022-10-01'";
+                    cmd.CommandText = "SELECT a.* from vSymbolsAndDatesLive a left join dbQuote2023..IntradaySnapshots b on a.Symbol=b.Symbol and a.Date=b.Date WHERE b.Symbol is null AND a.Date>'2022-10-01'";
                     using (var rdr = cmd.ExecuteReader())
                         while (rdr.Read())
                             liveSymbolsAndDates.Add(new Tuple<string, DateTime>((string)rdr["Symbol"], (DateTime)rdr["Date"]), null);
@@ -92,7 +92,7 @@ namespace DGWnd.Quote.Actions
                             if (cnt % 100 == 0)
                             {
                                 showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Save snapshots to database ...");
-                                DbHelper.SaveToDbTable(toLoadSymbolsAndDate.Values, "IntradaySnapshots", "Symbol", "Date", "Snapshot");
+                                DbHelper.SaveToDbTable(toLoadSymbolsAndDate.Values, "dbQuote2023..IntradaySnapshots", "Symbol", "Date", "Snapshot");
                                 toLoadSymbolsAndDate.Clear();
                             }
 
@@ -101,7 +101,7 @@ namespace DGWnd.Quote.Actions
                 }
 
                 showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Save snapshots to database ...");
-                DbHelper.SaveToDbTable(toLoadSymbolsAndDate.Values, "IntradaySnapshots", "Symbol", "Date", "Snapshot");
+                DbHelper.SaveToDbTable(toLoadSymbolsAndDate.Values, "dbQuote2023..IntradaySnapshots", "Symbol", "Date", "Snapshot");
                 toLoadSymbolsAndDate.Clear();
             }
 

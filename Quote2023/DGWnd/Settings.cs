@@ -7,5 +7,6 @@
         private const string BaseFolder = @"E:\Quote\";
 
         internal const string MinuteYahooDataFolder = BaseFolder + @"WebData\Minute\Yahoo\Data\";
+        internal const string MinuteAlphaVantageDataFolder = BaseFolder + @"WebData\Minute\AlphaVantage\Data\";
     }
 }

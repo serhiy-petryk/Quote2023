@@ -85,7 +85,8 @@
     <Compile Include="MultiThreading.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Quote\Actions\CopyYahooIntradaySnapshotsToDb.cs" />
+    <Compile Include="Quote\Actions\MinuteAlphaVantage_CopySnapshotsToDb.cs" />
+    <Compile Include="Quote\Actions\MinuteYahoo_CopySnapshotsToDb.cs" />
     <Compile Include="Quote\Helpers\CsHelper.cs" />
     <Compile Include="Quote\Helpers\DbHelper.cs" />
     <Compile Include="Quote\Models\IntradaySnapshot.cs" />

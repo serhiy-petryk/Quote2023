@@ -383,7 +383,7 @@
       "StatQuote (30 min)": {"cs": "dbQuote2022","sql": "select * from StatQuote_30", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } },
       "StatQuote (45 min)": {"cs": "dbQuote2022","sql": "select * from StatQuote_45", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } },
       "Intraday Yahoo Quote": {"cs": "dbQuote2022","sql": "select * from vIntradayYahooQuotes", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } },
-      "Intraday Snapshots": {"cs": "dbQuote2022","sql": "select * from IntradaySnapshots", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } }
+      "Intraday Snapshots": {"cs": "dbQuote2022","sql": "select * from dbQuote2023.dbo.IntradaySnapshots", "columns": { "SYMBOL": { "lookup": "quoteSymbols" } } }
     }, 
     "Chalkable": {
       "District DB": {

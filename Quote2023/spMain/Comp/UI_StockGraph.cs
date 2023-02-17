@@ -30,6 +30,11 @@ namespace spMain.Comp
 
         public void _CopyToClipboard() => this._stockGraph.Copy(false);
         public Image _GetImage() => this._stockGraph.MasterPane.GetImage();
+        public void _SetSnapshotSize()
+        {
+            _stockGraph.Dock = DockStyle.None;
+            _stockGraph.Size = new Size(100, 60);
+        }
 
         // =====================  Clicks =================================
         private void _btnDataSelect_Click(object sender, EventArgs e)

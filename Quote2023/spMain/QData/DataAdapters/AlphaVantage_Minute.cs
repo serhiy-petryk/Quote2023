@@ -13,7 +13,7 @@ namespace spMain.QData.DataAdapters
 {
 
     [Serializable]
-    class AlphaVantage_Minute : Data.DataAdapter
+    public class AlphaVantage_Minute : Data.DataAdapter
     {
         public override bool IsStream => false;
 
@@ -46,7 +46,7 @@ namespace spMain.QData.DataAdapters
             return data;
         }
 
-        void LoadData(string symbol, DateTime endDate, int days, bool showOnlyTradingHours, List<Quote> data)
+        public void LoadData(string symbol, DateTime endDate, int days, bool showOnlyTradingHours, List<Quote> data)
         {
             // Get valid file names
             var files = new List<string>();

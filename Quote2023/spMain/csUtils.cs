@@ -9,6 +9,42 @@ namespace spMain
 {
     public static class csUtils
     {
+        public static UIGraph GetAlphaVantageGraphToSave(string symbol, DateTime date, int days)
+        {
+            var graph = new UIGraph
+            {
+                DataAdapter = QData.Data.DataManager.dataProviders[typeof(AlphaVantage_Minute)],
+                TimeInterval = new TimeInterval(60),
+                Description = "AlphaVantage Minute"
+            };
+
+            var pane = new UIPane();
+            var dbInd = DBIndicator.GetDBIndByID("framedquote");
+            dbInd.Check();
+            var indicator = new UIIndicator { Type = dbInd };
+            indicator.Check();
+            pane.Indicators.Add(indicator);
+
+            var input = graph.GetDataInputById("symbol");
+            if (input != null)
+                input._value = symbol;
+
+            input = graph.GetDataInputById("date");
+            if (input != null)
+                input._value = date;
+
+            input = graph.GetDataInputById("days");
+            if (input != null)
+                input._value = days;
+
+            input = graph.GetDataInputById("showOnlyTradingHours");
+            if (input != null)
+                input._value = true;
+
+            graph.Panes.Add(pane);
+            return graph;
+        }
+
         public static UIGraph GetGraphToSave(string symbol, DateTime date, int days)
         {
             var graph = new UIGraph
