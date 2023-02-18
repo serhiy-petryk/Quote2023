@@ -116,7 +116,7 @@ namespace spMain.QData.Data {
         DataManager.RemoveDataIndicator(this);
       }
 
-      _dates.Clear();
+      _dates?.Clear();
       _data.Clear();
     }
 
