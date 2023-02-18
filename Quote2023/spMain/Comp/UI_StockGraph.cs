@@ -28,7 +28,9 @@ namespace spMain.Comp
                 _stockGraph.Dock = DockStyle.None;
                 _stockGraph.Size = new Size(100, 60);
             }
-
+            // Clear all data
+            this._stockGraph._uiGraph?.ClearDataSources();
+            // Set new data
             this._stockGraph._uiGraph = uiGraph;
             this._stockGraph._UIGraphApply();
             this.UpdateToolStrip();
