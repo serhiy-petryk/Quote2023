@@ -117,7 +117,7 @@ namespace spMain.QData.Data {
       }
 
       _dates?.Clear();
-      _data.Clear();
+      _data?.Clear();
     }
 
     public List<DateTime> GetDateArray() {
