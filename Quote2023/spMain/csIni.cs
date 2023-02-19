@@ -19,8 +19,26 @@ namespace spMain
     {
         public const string DbConnectionString = "Data Source=localhost;Initial Catalog=dbQuote2022;Integrated Security=True;Connect Timeout=150;";
 
-        public static Dictionary<string, Type> typeXref;
-        public static Dictionary<string, object[]> typeDataSet;// Dictionary<id, values>
+        public static Dictionary<string, Type> typeXref = new Dictionary<string, Type>
+        {
+            {"integer", typeof(int)}, {"smoothtype", typeof(QData.Common.General.SmoothType)},
+            {"string", typeof(string)}, {"timeinterval", typeof(QData.Common.TimeInterval)}, {"double", typeof(double)},
+            {"color", typeof(System.Drawing.Color)}, {"quote", typeof(QData.DataFormat.Quote)},
+            {"quotevalue", typeof(QData.DataFormat.Quote.ValueProperty)}, {"boolean", typeof(bool)},
+            {"dbindicator", typeof(QData.DataDB.DBIndicator)}
+        };
+
+        public static Dictionary<string, object[]> typeDataSet = new Dictionary<string, object[]>
+        {
+            {
+                "system.string",
+                new object[]
+                {
+                    "Does not work", "Close", "Open", "High", "Low", "Volume", "Volume Buy", "Volume Sell",
+                    "Volume Buy&Sell", "True Range"
+                }
+            }
+        };
 
         public static readonly bool isDesignMode = (Process.GetCurrentProcess().ProcessName.ToLower() == "devenv" ||
                                                     Process.GetCurrentProcess().ProcessName.ToLower() == "vcsexpress");
@@ -51,7 +69,7 @@ namespace spMain
             LogFolderClear();
             IniHttp();
             GetPathExe();
-            UpdateMDB();
+            // UpdateMDB();
         }
 
         public static string GetPathExe()
@@ -83,8 +101,27 @@ namespace spMain
         {
             if (typeXref == null)
             {
-                typeXref = new Dictionary<string, Type>();
-                typeDataSet = new Dictionary<string, object[]>();
+                typeXref = new Dictionary<string, Type>
+                {
+                    {"integer", typeof(int)}, {"smoothtype", typeof(QData.Common.General.SmoothType)},
+                    {"string", typeof(string)}, {"timeinterval", typeof(QData.Common.TimeInterval)},
+                    {"double", typeof(double)}, {"color", typeof(System.Drawing.Color)},
+                    {"quote", typeof(QData.DataFormat.Quote)},
+                    {"quotevalue", typeof(QData.DataFormat.Quote.ValueProperty)}, {"boolean", typeof(bool)},
+                    {"dbindicator", typeof(QData.DataDB.DBIndicator)}
+                };
+                typeDataSet = new Dictionary<string, object[]>
+                {
+                    {
+                        "system.string",
+                        new object[]
+                        {
+                            "Does not work", "Close", "Open", "High", "Low", "Volume", "Volume Buy", "Volume Sell",
+                            "Volume Buy&Sell", "True Range"
+                        }
+                    }
+                };
+
                 DataTable dt = csUtilsData.GetDataTable("select * from TypeXref", csIni.pathMdbBaseFileName);
                 foreach (DataRow dr in dt.Rows)
                 {
