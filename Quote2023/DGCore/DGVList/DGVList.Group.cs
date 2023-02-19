@@ -436,7 +436,7 @@ namespace DGCore.DGVList
       if (string.IsNullOrEmpty(TextFastFilter) || _getColumnHelpers == null)
         return;
 
-      _formattedValueObjects = _getColumnHelpers();
+      _formattedValueObjects = _getColumnHelpers().Where(a=>a.PropertyDescriptor.PropertyType != typeof(byte[])).ToArray();
       if (_formattedValueObjects.Length == 0)
         return;
 
