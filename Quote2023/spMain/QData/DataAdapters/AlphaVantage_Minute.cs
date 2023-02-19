@@ -4,7 +4,6 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using Newtonsoft.Json;
 using spMain.QData.Common;
 using spMain.QData.DataFormat;
 using spMain.Quote2023.Helpers;
@@ -52,7 +51,7 @@ namespace spMain.QData.DataAdapters
             var files = new List<string>();
             for (var k = 0; k < days; k++)
             {
-                var filename = csIni.MinuteAlphaVantageDataFolder + "MAV_" + endDate.AddDays(-k).ToString("yyyyMMdd") + ".zip";
+                var filename = Settings.MinuteAlphaVantageDataFolder + "MAV_" + endDate.AddDays(-k).ToString("yyyyMMdd") + ".zip";
                 if (File.Exists(filename))
                     files.Add(filename);
             }

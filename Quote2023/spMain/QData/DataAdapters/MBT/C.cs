@@ -7,7 +7,7 @@ using spMain.QData.DataFormat;
 namespace spMain.QData.DataAdapters.MBT {
   public class C {
 
-    public const string pathDBQDefault = @"T:\Data\DBQ\";
+    public const string pathDBQDefault = Settings.pathData + @"DBQ\";
     const string connTemplate = @"Provider=Microsoft.Jet.OleDb.4.0;Data Source={0}";
 
     internal const long maxUInt32 = UInt32.MaxValue;

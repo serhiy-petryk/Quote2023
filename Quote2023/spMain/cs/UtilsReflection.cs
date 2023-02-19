@@ -92,28 +92,28 @@ namespace spMain {
     }
 
     public static void SetField(object obj, string sFieldName, object oValue) {
-      obj.GetType().InvokeMember(sFieldName, BindingFlags.SetField, null, obj, new object[] { oValue }, csIni.ciUS);
+      obj.GetType().InvokeMember(sFieldName, BindingFlags.SetField, null, obj, new object[] { oValue }, Settings.ciUS);
     }
     public static object GetField(object obj, string sFieldName) {
-      return obj.GetType().InvokeMember(sFieldName, BindingFlags.GetField, null, obj, null, csIni.ciUS);
+      return obj.GetType().InvokeMember(sFieldName, BindingFlags.GetField, null, obj, null, Settings.ciUS);
     }
     public static void SetProperty(object obj, string sProperty, object oValue) {
       obj.GetType().InvokeMember(sProperty, BindingFlags.SetProperty | BindingFlags.Instance |
-        BindingFlags.Public | BindingFlags.NonPublic, null, obj, new object[] { oValue }, csIni.ciUS);
+        BindingFlags.Public | BindingFlags.NonPublic, null, obj, new object[] { oValue }, Settings.ciUS);
       //      obj.GetType().InvokeMember(sProperty, BindingFlags.SetProperty, null, obj, new object[] { oValue }, csIni.ciUS);
     }
     public static object GetProperty(object obj, string sProperty) {
       return obj.GetType().InvokeMember(sProperty, BindingFlags.GetProperty | BindingFlags.Instance |
-        BindingFlags.Public | BindingFlags.NonPublic, null, obj, null, csIni.ciUS);
+        BindingFlags.Public | BindingFlags.NonPublic, null, obj, null, Settings.ciUS);
       //return obj.GetType().InvokeMember(sProperty, BindingFlags.GetProperty, null, obj, null, csIni.ciUS);
     }
     public static object InvokeMethod(object obj, string sProperty, object[] oParam) {
-      return obj.GetType().InvokeMember(sProperty, BindingFlags.InvokeMethod, null, obj, oParam, csIni.ciUS);
+      return obj.GetType().InvokeMember(sProperty, BindingFlags.InvokeMethod, null, obj, oParam, Settings.ciUS);
     }
     public static object InvokeMethod(object obj, string sProperty, object oValue) {
       object[] oParam = new object[1];
       oParam[0] = oValue;
-      return obj.GetType().InvokeMember(sProperty, BindingFlags.InvokeMethod, null, obj, oParam, csIni.ciUS);
+      return obj.GetType().InvokeMember(sProperty, BindingFlags.InvokeMethod, null, obj, oParam, Settings.ciUS);
     }
   }
 }

@@ -13,7 +13,6 @@ namespace spMain
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            var s = csIni.GetPathExe();
 
             Application.Run(new Comp.frmUIStockGraph());
         }

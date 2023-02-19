@@ -1,7 +1,5 @@
 using System;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Windows.Forms;
 using spMain.QData.UI;
 
@@ -27,7 +25,7 @@ namespace spMain.Comp
 
         private void frmUIStockGraph_Load(object sender, EventArgs e)
         {
-            if (!csIni.isDesignMode)
+            if (!Settings.isDesignMode)
             {
                 if (_initialGraph == null)
                     _initialGraph = cs.PGfrmObjectEditor._GetObject(new spMain.QData.UI.UIGraph(),

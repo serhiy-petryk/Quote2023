@@ -9,7 +9,7 @@ namespace spMain.QData.DataAdapters {
 
   [Serializable]
   class MBT_Minute : Data.DataAdapter {
-    public const string dbFileTemplate = csIni.pathData + @"DBQ\mdb.min\{0}.min.mbthttp.mdb";
+    public const string dbFileTemplate = Settings.pathData + @"DBQ\mdb.min\{0}.min.mbthttp.mdb";
 
     public override bool IsStream {
       get { return false; }

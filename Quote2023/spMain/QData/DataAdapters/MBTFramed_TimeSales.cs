@@ -10,7 +10,7 @@ namespace spMain.QData.DataAdapters {
 
   [Serializable]
   class MBTFramed_TimeSales : Data.DataAdapter {
-    public const string dbFileTemplate = csIni.pathData + @"DBQ\mdb.ts\{0}.ts.mbthttp.mdb";
+    public const string dbFileTemplate = Settings.pathData + @"DBQ\mdb.ts\{0}.ts.mbthttp.mdb";
 
     public override bool IsStream {
       get { return false; }

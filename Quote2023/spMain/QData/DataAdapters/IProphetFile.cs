@@ -8,7 +8,7 @@ namespace spMain.QData.DataAdapters {
   
   [Serializable]
   class IProphetFile: Data.DataAdapter {
-    public const string pathIntradayData = csIni.pathData + @"Loader\Prophet\IParsed\Y{y}\D{d}\PIP#{s}.txt";
+    public const string pathIntradayData = Settings.pathData + @"Loader\Prophet\IParsed\Y{y}\D{d}\PIP#{s}.txt";
 
     public override bool IsStream {
       get { return false; }
@@ -67,12 +67,12 @@ namespace spMain.QData.DataAdapters {
       return files;
     }
 
-        void LoadFromFile(string filename, List<Quote> data) {
+    void LoadFromFile(string filename, List<Quote> data) {
       string[] ss = File.ReadAllLines(filename);
       string[] ss1 = ss[0].Split('|');
       if (ss[0].ToLower().StartsWith("intradayprophet") && ss1.Length > 2) {
         string symbol = ss1[1].Trim().ToUpper();
-        DateTime date = DateTime.Parse(ss1[2], csIni.fiDateUA);
+        DateTime date = DateTime.Parse(ss1[2], Settings.fiDateUA);
         if (ss[ss.Length - 1].ToLower() == "end") {
           //        Common.Quote[] quotes = new Common.Quote[ss.Length - 3];
           for (int i = 2; i < ss.Length - 1; i++) {
@@ -80,11 +80,11 @@ namespace spMain.QData.DataAdapters {
             if (ss1.Length == 6) {
               TimeSpan ts = TimeSpan.Parse(ss1[0]);
               DateTime qDate = date + ts;
-              double open = double.Parse(ss1[1], csIni.fiNumberUS);
-              double high = double.Parse(ss1[2], csIni.fiNumberUS);
-              double low = double.Parse(ss1[3], csIni.fiNumberUS);
-              double close = double.Parse(ss1[4], csIni.fiNumberUS);
-              double volume = double.Parse(ss1[5], csIni.fiNumberUS);
+              double open = double.Parse(ss1[1], Settings.fiNumberUS);
+              double high = double.Parse(ss1[2], Settings.fiNumberUS);
+              double low = double.Parse(ss1[3], Settings.fiNumberUS);
+              double close = double.Parse(ss1[4], Settings.fiNumberUS);
+              double volume = double.Parse(ss1[5], Settings.fiNumberUS);
               Quote quote = new Quote(qDate, open, high, low, close, volume);
               data.Add(quote);
 //              data.Data_Change(data.Data_GetCount(), new object[] { quote });

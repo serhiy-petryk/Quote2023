@@ -131,9 +131,9 @@ namespace spMain
         {
             if (o == null) return "";
             if (o is DateTime) return StringFromDateTime((DateTime)o);
-            else if (o is double) return ((double)o).ToString(culture ?? csIni.ciUS);
-            else if (o is decimal) return ((decimal)o).ToString(culture ?? csIni.ciUS);
-            else if (o is float) return ((float)o).ToString(culture ?? csIni.ciUS);
+            else if (o is double) return ((double)o).ToString(culture ?? Settings.ciUS);
+            else if (o is decimal) return ((decimal)o).ToString(culture ?? Settings.ciUS);
+            else if (o is float) return ((float)o).ToString(culture ?? Settings.ciUS);
             else return o.ToString();
         }
 
@@ -154,7 +154,7 @@ namespace spMain
             }
             else if (o is double)
             {
-                return NormilizeDecimalString(((double)o).ToString("R", csIni.fiNumberUS), csIni.fiNumberUS.NumberDecimalSeparator);
+                return NormilizeDecimalString(((double)o).ToString("R", Settings.fiNumberUS), Settings.fiNumberUS.NumberDecimalSeparator);
             }
             else return o.ToString();
         }

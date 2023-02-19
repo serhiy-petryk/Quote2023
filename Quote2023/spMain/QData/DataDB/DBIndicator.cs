@@ -51,7 +51,7 @@ namespace spMain.QData.DataDB {
 
     static void LoadFromMDB() {
       if (_allIndicators == null) {
-        DataTable dt = csUtilsData.GetDataTable("select * from dbindicators where valid<>0", csIni.pathMdbBaseFileName);
+        DataTable dt = csUtilsData.GetDataTable("select * from dbindicators where valid<>0", Settings.pathMdbBaseFileName);
         _allIndicators = new Dictionary<string, DBIndicator>();
         for (int i = 0; i < dt.Rows.Count; i++) {
           DBIndicator item = new DBIndicator(dt.Rows[i]);
@@ -125,7 +125,7 @@ namespace spMain.QData.DataDB {
         this._name = dr["name"].ToString();
         if (String.IsNullOrEmpty(this._name)) this._name = this._id;// correct the name of indicator
         // Value data type
-        this._valueDataType =  csIni.typeXref[dr["ValueDataType"].ToString().ToLower()];
+        this._valueDataType =  Settings.typeXref[dr["ValueDataType"].ToString().ToLower()];
         this._dp = csUtilsData.GetIntFromDataField(dr["dp"], 0);
         this.SetPossibleCurveStyles();
         this.SetDefCurveStyleAndColor(dr["defCurve"].ToString());
@@ -140,14 +140,14 @@ namespace spMain.QData.DataDB {
         }
         // inputs
         OleDbParameter par = new OleDbParameter("@indID", dr["id"]);
-        DataTable dt = csUtilsData.GetDataTable("select * from DBIndicatorInputs where indID=@indID order by sortID", csIni.pathMdbBaseFileName, new OleDbParameter[] { par });
+        DataTable dt = csUtilsData.GetDataTable("select * from DBIndicatorInputs where indID=@indID order by sortID", Settings.pathMdbBaseFileName, new OleDbParameter[] { par });
         foreach (DataRow dr1 in dt.Rows) {
           string id1 = dr1["inputID"].ToString().ToLower();
           string prompt = dr1["prompt"].ToString();
           string sDefValue = dr1["defValue"].ToString();
           string sDescription = dr1["description"].ToString();
           object defValue = null;
-          Type type = csIni.typeXref[dr1["type"].ToString().ToLower()];
+          Type type = Settings.typeXref[dr1["type"].ToString().ToLower()];
           TypeConverter tc = TypeDescriptor.GetConverter(type);
           if (tc == null) {
             defValue = Convert.ChangeType(sDefValue, type);

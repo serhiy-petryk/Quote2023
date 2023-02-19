@@ -13,7 +13,7 @@ namespace spMain.Quote2023.Models
             if (_symbolsXrefs == null)
             {
                 _symbolsXrefs=new Dictionary<string, SymbolsXref>();
-                using (var conn = new SqlConnection(csIni.DbConnectionString))
+                using (var conn = new SqlConnection(Settings.DbConnectionString))
                 using (var cmd = conn.CreateCommand())
                 {
                     conn.Open();

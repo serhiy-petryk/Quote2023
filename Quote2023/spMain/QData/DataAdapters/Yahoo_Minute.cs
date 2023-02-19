@@ -49,7 +49,7 @@ namespace spMain.QData.DataAdapters
         void LoadData(string symbol, DateTime startDate, DateTime endDate, List<Quote> data)
         {
             // Get valid file names
-            var files = Directory.GetFiles(csIni.MinuteYahooDataFolder, "*_20??????.zip");
+            var files = Directory.GetFiles(Settings.MinuteYahooDataFolder, "*_20??????.zip");
             if (files.Length == 0) return;
 
             var fileKeys = new List<Tuple<DateTime, string>>();

@@ -10,7 +10,7 @@ namespace spMain.QData.DataAdapters {
   [Serializable]
   class HistoryMdb : Data.DataAdapter {
 //    public const string filename = csIni.pathData + @"hData.mdb";
-    public const string filename = csIni.pathData + @"\DBQ\Day\Day.Yahoo.mdb";
+    public const string filename = Settings.pathData + @"\DBQ\Day\Day.Yahoo.mdb";
     
 
     public override bool IsStream {

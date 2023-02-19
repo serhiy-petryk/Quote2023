@@ -11,7 +11,7 @@ namespace spMain.QData.UI {
   [Serializable]
   public class UIGraph : cs.IPG_AdjustProperties, ISerializable, cs.IPG_ValidateSupport {
 
-    public static readonly string _serializationFileName = csIni.pathExe + @"srl\uiGraph.srl";
+    public static readonly string _serializationFileName = Settings.pathSerialization + @"uiGraph.srl";
 
     #region IPG_ValidateSupport Members
 

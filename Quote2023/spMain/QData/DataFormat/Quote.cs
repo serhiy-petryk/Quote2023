@@ -38,7 +38,7 @@ namespace spMain.QData.DataFormat {
     public string Events {
       get {
         if (adjClose == close) return null;
-        else return (Math.Round( adjClose * 100,2)).ToString("R", csIni.fiNumberUS);
+        else return (Math.Round( adjClose * 100,2)).ToString("R", Settings.fiNumberUS);
       }
       set {
         if (String.IsNullOrEmpty(value)) adjClose = close;

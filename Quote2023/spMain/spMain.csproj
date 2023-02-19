@@ -99,7 +99,7 @@
     <Compile Include="Comp\UI_StockGraph.Designer.cs">
       <DependentUpon>UI_StockGraph.cs</DependentUpon>
     </Compile>
-    <Compile Include="csIni.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="csUtils.cs" />
     <Compile Include="cs\ColorEditor\ColorButton.cs">
       <SubType>UserControl</SubType>
