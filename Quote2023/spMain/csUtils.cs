@@ -81,9 +81,9 @@ namespace spMain
         {
             var graph = new UIGraph
             {
-                DataAdapter = QData.Data.DataManager.dataProviders[typeof(Yahoo_Minute)],
+                DataAdapter = QData.Data.DataManager.dataProviders[typeof(AlphaVantage_Minute)],
                 TimeInterval = new TimeInterval(60),
-                Description = "Yahoo Minute"
+                Description = "AlphaVantage Minute"
             };
 
             var pane = new UIPane();
@@ -110,6 +110,8 @@ namespace spMain
             input = graph.GetDataInputById("days");
             if (input != null)
                 input._value = days;
+
+            graph.GetDataInputById("showOnlyTradingHours")._value = true;
 
             graph.Panes.Add(pane);
 

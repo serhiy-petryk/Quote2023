@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using spMain.QData.DataFormat;
 
-namespace spMain.Models
+namespace spMain.Quote2023.Models
 {
     public class MinuteYahoo
     {

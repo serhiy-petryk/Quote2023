@@ -12,12 +12,13 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using spMain.csColorEditor;
-using spMain.Helpers;
 
 namespace spMain
 {
     class csIni
     {
+        public const string DbConnectionString = "Data Source=localhost;Initial Catalog=dbQuote2022;Integrated Security=True;Connect Timeout=150;";
+
         public static Dictionary<string, Type> typeXref;
         public static Dictionary<string, object[]> typeDataSet;// Dictionary<id, values>
 

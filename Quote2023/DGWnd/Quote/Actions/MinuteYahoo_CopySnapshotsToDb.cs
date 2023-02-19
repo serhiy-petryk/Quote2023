@@ -11,7 +11,8 @@ using DGWnd.Quote.Helpers;
 using DGWnd.Quote.Models;
 using Newtonsoft.Json;
 using spMain.Comp;
-using spMain.Helpers;
+using spMain.Quote2023.Helpers;
+using spMain.Quote2023.Models;
 
 namespace DGWnd.Quote.Actions
 {
@@ -53,7 +54,7 @@ namespace DGWnd.Quote.Actions
                             if ((cnt % 100) == 0)
                                 showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Total files in zip processed: {cnt:N0}");
 
-                            var o = JsonConvert.DeserializeObject<spMain.Models.MinuteYahoo>(item.Content);
+                            var o = JsonConvert.DeserializeObject<MinuteYahoo>(item.Content);
                             var dates = o.GetQuotes(symbol).Select(a => a.date.Date).Distinct();
                             foreach (var date in dates)
                             {

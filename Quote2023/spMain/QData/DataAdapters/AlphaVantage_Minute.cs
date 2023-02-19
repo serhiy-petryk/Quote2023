@@ -5,9 +5,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using Newtonsoft.Json;
-using spMain.Helpers;
 using spMain.QData.Common;
 using spMain.QData.DataFormat;
+using spMain.Quote2023.Helpers;
 
 namespace spMain.QData.DataAdapters
 {
@@ -58,7 +58,8 @@ namespace spMain.QData.DataAdapters
             }
             if (files.Count == 0) return;
 
-            var key = symbol + "_";
+            var alphaSymbol = Quote2023.Models.SymbolsXref.GetSymbolsXref(symbol)?.AlphaVantageSymbol ?? symbol;
+            var key = alphaSymbol + "_";
             for (var k = files.Count - 1; k >= 0; k--)
             {
                 using (var zip = new ZipReader(files[k]))

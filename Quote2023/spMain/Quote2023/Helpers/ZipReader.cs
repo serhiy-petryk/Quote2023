@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 
-namespace spMain.Helpers
+namespace spMain.Quote2023.Helpers
 {
     public class ZipReader : IEnumerable<ZipReaderItem>, IDisposable
     {

@@ -148,8 +148,8 @@
     <Compile Include="cs\UtilsFile.cs" />
     <Compile Include="cs\UtilsReflection.cs" />
     <Compile Include="cs\WinAPI.cs" />
-    <Compile Include="Helpers\ZipReader.cs" />
-    <Compile Include="Models\MinuteYahoo.cs" />
+    <Compile Include="Quote2023\Helpers\ZipReader.cs" />
+    <Compile Include="Quote2023\Models\MinuteYahoo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QData\Common\General.cs" />
@@ -196,6 +196,7 @@
     <Compile Include="QData\UI\UIGraph.cs" />
     <Compile Include="QData\UI\UIIndicator.cs" />
     <Compile Include="QData\UI\UIPane.cs" />
+    <Compile Include="Quote2023\Models\SymbolsXref.cs" />
     <EmbeddedResource Include="Comp\frmUIStockGraph.resx">
       <DependentUpon>frmUIStockGraph.cs</DependentUpon>
     </EmbeddedResource>

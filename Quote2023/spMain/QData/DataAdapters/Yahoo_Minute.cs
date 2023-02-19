@@ -5,8 +5,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using Newtonsoft.Json;
-using spMain.Helpers;
 using spMain.QData.DataFormat;
+using spMain.Quote2023.Helpers;
+using spMain.Quote2023.Models;
 
 namespace spMain.QData.DataAdapters
 {
@@ -86,7 +87,7 @@ namespace spMain.QData.DataAdapters
                 using (var zip = new ZipReader(zipFileName))
                     foreach (var item in zip.Where(a=> a.Length >0 && string.Equals(a.FileNameWithoutExtension, entryName, StringComparison.InvariantCultureIgnoreCase) ))
                     {
-                        var o = JsonConvert.DeserializeObject<Models.MinuteYahoo>(item.Content);
+                        var o = JsonConvert.DeserializeObject<MinuteYahoo>(item.Content);
                         data.AddRange(o.GetQuotes(symbol).Where(a => a.date.Date >= startDate && a.date.Date <= endDate));
                     }
             }
