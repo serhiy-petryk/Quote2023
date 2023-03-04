@@ -28,7 +28,7 @@ namespace DGWnd.Quote.Actions
                 using (var cmd = conn.CreateCommand())
                 {
                     conn.Open();
-                    cmd.CommandText = "SELECT a.* from vSymbolsAndDatesLive a left join dbQuote2023..IntradaySnapshots b on a.Symbol=b.Symbol and a.Date=b.Date WHERE b.Symbol is null AND a.Date>'2022-10-01'";
+                    cmd.CommandText = "SELECT a.* from vSymbolAndDateLive a left join dbQuote2023..IntradaySnapshots b on a.Symbol=b.Symbol and a.Date=b.Date WHERE b.Symbol is null AND a.Date>'2022-10-01'";
                     using (var rdr = cmd.ExecuteReader())
                         while (rdr.Read())
                             liveSymbolsAndDates.Add(new Tuple<string, DateTime>((string)rdr["Symbol"], (DateTime)rdr["Date"]), null);
