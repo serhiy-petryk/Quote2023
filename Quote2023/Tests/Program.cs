@@ -13,6 +13,9 @@ namespace Tests
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            Eoddata.Test();
+
             Application.Run(new Form1());
         }
     }
