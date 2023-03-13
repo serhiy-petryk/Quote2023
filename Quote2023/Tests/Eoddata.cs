@@ -7,12 +7,11 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Data.Sqlite;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Parameters;
-using SQLitePCL;
+using System.Data.SQLite;
 
 namespace Tests
 {
@@ -72,7 +71,7 @@ namespace Tests
             {
                 try
                 {
-                    using (var conn = new SqliteConnection($"Data Source={ChromeCookiePath}"))
+                    using (var conn = new SQLiteConnection($"Data Source={ChromeCookiePath}"))
                     using (var cmd = conn.CreateCommand())
                     {
                         cmd.CommandText = $"SELECT name,encrypted_value,host_key FROM cookies WHERE host_key = '{whereString}'";
@@ -114,7 +113,7 @@ namespace Tests
 
         }
 
-        private static byte[] GetBytes(SqliteDataReader reader, int columnIndex)
+        private static byte[] GetBytes(SQLiteDataReader reader, int columnIndex)
         {
             const int CHUNK_SIZE = 2 * 1024;
             byte[] buffer = new byte[CHUNK_SIZE];
