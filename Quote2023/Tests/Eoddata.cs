@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Parameters;
+using SQLitePCL;
 
 namespace Tests
 {
@@ -66,6 +67,7 @@ namespace Tests
 
             var ChromeCookiePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Google\Chrome\User Data\Default\Network\Cookies";
             var data = new List<Cookie>();
+            // SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_dynamic_cdecl());
             if (File.Exists(ChromeCookiePath))
             {
                 try
