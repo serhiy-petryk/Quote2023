@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DGWnd.Quote.Helpers;
-using DGWnd.UI;
-using spMain.Comp;
 
 namespace DGWnd.Quote.UI
 {

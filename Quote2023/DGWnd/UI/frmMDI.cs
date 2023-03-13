@@ -2,10 +2,7 @@ using System;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Windows.Forms;
-using DGWnd.Quote;
-using DGWnd.Quote.Helpers;
 using DGWnd.Quote.UI;
-using spMain.Comp;
 
 namespace DGWnd.UI
 {
