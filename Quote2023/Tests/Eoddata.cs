@@ -54,6 +54,8 @@ namespace Tests
 
         public static List<Cookie> GetCookies(string hostname)
         {
+            // Source: https://stackoverflow.com/questions/68643057/decrypt-google-cookies-in-c-sharp-net-framework
+
             if (hostname.EndsWith("/")) hostname = hostname.Substring(0, hostname.Length - 1);
             if (hostname.StartsWith("https://")) hostname = hostname.Substring(8);
             if (hostname.StartsWith("http://")) hostname = hostname.Substring(7);
