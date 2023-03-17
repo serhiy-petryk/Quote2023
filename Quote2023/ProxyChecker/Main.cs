@@ -34,17 +34,14 @@ namespace ProxyChecker
             commonProxies = proxies.Distinct().ToArray();
 
             label_TotalProxy.Text = proxies.Length.ToString();
-            label_GoodProxy.Text = "0";
-            label_BadProxy.Text = "0";
 
             var tasks =
                 from proxy in commonProxies.Where(a => !string.IsNullOrEmpty(a))
                 select Task.Factory.StartNew(() => Checker(proxy));
             Task.WaitAll(tasks.ToArray());
-
         }
 
-        private int SetProxiesFromProxyScrape()
+        private void SetProxiesFromProxyScrape()
         {
             var url = "https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=10000&country=all&ssl=all&anonymity=all";
             string[] proxies;
@@ -54,10 +51,9 @@ namespace ProxyChecker
                 proxies = response.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.None);
             }
             StartCheckProxies(proxies);
-            return proxies.Length;
         }
 
-        private int SetProxiesFromProxyListDownload()
+        private void SetProxiesFromProxyListDownload()
         {
             var url = "https://www.proxy-list.download/api/v2/get?l=en&t=http";
             string[] proxies;
@@ -68,10 +64,9 @@ namespace ProxyChecker
                 proxies = oo.LISTA.Select(a => $"{a.IP}:{a.PORT}").ToArray();
             }
             StartCheckProxies(proxies);
-            return proxies.Length;
         }
 
-        private int SetProxiesFromFreeProxyList()
+        private void SetProxiesFromFreeProxyList()
         {
             var url = "https://free-proxy-list.net/";
             string[] proxies;
@@ -85,7 +80,6 @@ namespace ProxyChecker
                     .Where(a => !string.IsNullOrEmpty(a) && char.IsDigit(a[0])).ToArray();
             }
             StartCheckProxies(proxies);
-            return proxies.Length;
         }
 
         [DebuggerStepThrough]
@@ -135,15 +129,22 @@ namespace ProxyChecker
 
         private void button_StartApi_Click(object sender, EventArgs e)
         {
-            var proxyCount = 0;
-            if (cbProxyScrape.Checked)
-                proxyCount += SetProxiesFromProxyScrape();
-            if (cbProxyListDownload.Checked)
-                proxyCount += SetProxiesFromProxyListDownload();
-            if (cbFreeProxyList.Checked)
-                proxyCount += SetProxiesFromFreeProxyList();
+            label_GoodProxy.Text = "0";
+            label_BadProxy.Text = "0";
+            Task.Factory.StartNew(() =>
+            {
+                btnStartApi.Enabled = false;
 
-            MessageBox.Show("Finished");
+                if (cbProxyScrape.Checked)
+                    SetProxiesFromProxyScrape();
+                if (cbProxyListDownload.Checked)
+                    SetProxiesFromProxyListDownload();
+                if (cbFreeProxyList.Checked)
+                    SetProxiesFromFreeProxyList();
+
+                MessageBox.Show("Finished");
+                btnStartApi.Enabled = true;
+            });
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e) => isClosing = true;
