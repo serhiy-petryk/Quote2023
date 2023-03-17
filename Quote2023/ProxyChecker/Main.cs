@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
@@ -7,12 +8,15 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Newtonsoft.Json;
 
 namespace ProxyChecker
 {
     // https://www.proxy-list.download/api/v1/get?type=https
     // https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=10000&country=all&ssl=all&anonymity=all
     // sites: https://www.proxy-list.download/HTTP, https://free-proxy-list.net/
+
+    // https://www.proxy-list.download/api/v2/get?l=en&t=http
 
     public partial class Main : Form
     {
@@ -23,43 +27,65 @@ namespace ProxyChecker
             System.Windows.Forms.Control.CheckForIllegalCrossThreadCalls = false;
         }
 
-        private string[] proxies;
+        private string[] commonProxies;
 
-        private void StartCheckProxies()
+        private void StartCheckProxies(string[] proxies)
         {
-            /*if (proxyType == "api")
-                GetProxiesFromApi();
-            else
-                GetProxiesFromFile(@"E:\Temp\ProjectTests\ProxyList1.txt");*/
+            commonProxies = proxies.Distinct().ToArray();
 
-            proxies = proxies.Distinct().ToArray();
             label_TotalProxy.Text = proxies.Length.ToString();
             label_GoodProxy.Text = "0";
             label_BadProxy.Text = "0";
 
-            var thread = new Thread(SubTask);
-            thread.Start();
-            thread.IsBackground = true;
+            var tasks =
+                from proxy in commonProxies.Where(a => !string.IsNullOrEmpty(a))
+                select Task.Factory.StartNew(() => Checker(proxy));
+            Task.WaitAll(tasks.ToArray());
+
         }
 
-        private void GetProxiesFromApi(string url)
+        private int SetProxiesFromProxyScrape()
         {
-            // var url = "https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=10000&country=all&ssl=all&anonymity=all";
-            // string url = @"https://raw.githubusercontent.com/clarketm/proxy-list/master/proxy-list-raw.txt";
-
+            var url = "https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=10000&country=all&ssl=all&anonymity=all";
+            string[] proxies;
             using (var request = new WebClient())
             {
                 var response = request.DownloadString(url).ToString();
-                proxies = response.Split(new[] {Environment.NewLine, "\n"}, StringSplitOptions.None);
+                proxies = response.Split(new[] { Environment.NewLine, "\n" }, StringSplitOptions.None);
             }
-
-            StartCheckProxies();
+            StartCheckProxies(proxies);
+            return proxies.Length;
         }
 
-        private void GetProxiesFromFile(string filename)
+        private int SetProxiesFromProxyListDownload()
         {
-            proxies = File.ReadAllLines(filename).Where(a => !string.IsNullOrEmpty(a) && !a.StartsWith("#")).Select(a => a.Split('\t')[0].Trim()).ToArray();
-            StartCheckProxies();
+            var url = "https://www.proxy-list.download/api/v2/get?l=en&t=http";
+            string[] proxies;
+            using (var request = new WebClient())
+            {
+                var response = request.DownloadString(url).ToString();
+                var oo = JsonConvert.DeserializeObject<cRoot>(response);
+                proxies = oo.LISTA.Select(a => $"{a.IP}:{a.PORT}").ToArray();
+            }
+            StartCheckProxies(proxies);
+            return proxies.Length;
+        }
+
+        private int SetProxiesFromFreeProxyList()
+        {
+            var url = "https://free-proxy-list.net/";
+            string[] proxies;
+            using (var request = new WebClient())
+            {
+                var response = request.DownloadString(url).ToString();
+                var i1 = response.IndexOf("<textarea class=\"form-control\"", StringComparison.InvariantCultureIgnoreCase);
+                var i2 = response.IndexOf("</textarea>", i1 + 30, StringComparison.InvariantCultureIgnoreCase);
+                proxies = response.Substring(i1 + 30, i2 - i1 - 30)
+                    .Split(new[] {"\n"}, StringSplitOptions.RemoveEmptyEntries)
+                    .Where(a => !string.IsNullOrEmpty(a) && char.IsDigit(a[0])).ToArray();
+            }
+            StartCheckProxies(proxies);
+            return proxies.Length;
         }
 
         [DebuggerStepThrough]
@@ -107,36 +133,30 @@ namespace ProxyChecker
             }
         }
 
-        private void SubTask()
+        private void button_StartApi_Click(object sender, EventArgs e)
         {
-            var tasks =
-                from proxy in proxies.Where(a => !string.IsNullOrEmpty(a))
-                select Task.Factory.StartNew(() => Checker(proxy));
-            Task.WaitAll(tasks.ToArray());
-
-            // Parallel.ForEach(proxies, new ParallelOptions { MaxDegreeOfParallelism = 8 }, (s) => checker(s));
+            var proxyCount = 0;
+            if (cbProxyScrape.Checked)
+                proxyCount += SetProxiesFromProxyScrape();
+            if (cbProxyListDownload.Checked)
+                proxyCount += SetProxiesFromProxyListDownload();
+            if (cbFreeProxyList.Checked)
+                proxyCount += SetProxiesFromFreeProxyList();
 
             MessageBox.Show("Finished");
         }
 
-        private void button_StartApi_Click(object sender, EventArgs e) => GetProxiesFromApi( "https://api.proxyscrape.com/v2/?request=getproxies&protocol=http&timeout=10000&country=all&ssl=all&anonymity=all");
-
-        private void btnStartFile_Click(object sender, EventArgs e)
-        {
-            var folder = @"E:\Temp\ProjectTests";
-            using (var ofd = new OpenFileDialog())
-            {
-                ofd.InitialDirectory = folder;
-                ofd.RestoreDirectory = true;
-                ofd.Multiselect = false;
-                ofd.Filter = "Text|*.txt|All|*.*";
-                if (ofd.ShowDialog() == DialogResult.OK)
-                {
-                    GetProxiesFromFile(ofd.FileName);
-                }
-            }
-        }
-
         private void Form1_FormClosing(object sender, FormClosingEventArgs e) => isClosing = true;
+
+        // =========================
+        public class cRoot
+        {
+            public cProxyItem[] LISTA;
+        }
+        public class cProxyItem
+        {
+            public string IP;
+            public string PORT;
+        }
     }
 }

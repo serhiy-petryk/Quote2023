@@ -37,7 +37,9 @@ namespace ProxyChecker
             this.label_TotalProxy = new System.Windows.Forms.Label();
             this.label_GoodProxy = new System.Windows.Forms.Label();
             this.label_BadProxy = new System.Windows.Forms.Label();
-            this.btnStartFile = new System.Windows.Forms.Button();
+            this.cbProxyScrape = new System.Windows.Forms.CheckBox();
+            this.cbProxyListDownload = new System.Windows.Forms.CheckBox();
+            this.cbFreeProxyList = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // textBox_Results
@@ -51,7 +53,7 @@ namespace ProxyChecker
             // 
             // btnStartApi
             // 
-            this.btnStartApi.Location = new System.Drawing.Point(137, 296);
+            this.btnStartApi.Location = new System.Drawing.Point(279, 316);
             this.btnStartApi.Margin = new System.Windows.Forms.Padding(2);
             this.btnStartApi.Name = "btnStartApi";
             this.btnStartApi.Size = new System.Drawing.Size(118, 49);
@@ -120,23 +122,50 @@ namespace ProxyChecker
             this.label_BadProxy.TabIndex = 8;
             this.label_BadProxy.Text = "0";
             // 
-            // btnStartFile
+            // cbProxyScrape
             // 
-            this.btnStartFile.Location = new System.Drawing.Point(279, 297);
-            this.btnStartFile.Margin = new System.Windows.Forms.Padding(2);
-            this.btnStartFile.Name = "btnStartFile";
-            this.btnStartFile.Size = new System.Drawing.Size(118, 49);
-            this.btnStartFile.TabIndex = 9;
-            this.btnStartFile.Text = "Start (from file)";
-            this.btnStartFile.UseVisualStyleBackColor = true;
-            this.btnStartFile.Click += new System.EventHandler(this.btnStartFile_Click);
+            this.cbProxyScrape.AutoSize = true;
+            this.cbProxyScrape.Checked = true;
+            this.cbProxyScrape.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbProxyScrape.Location = new System.Drawing.Point(113, 297);
+            this.cbProxyScrape.Name = "cbProxyScrape";
+            this.cbProxyScrape.Size = new System.Drawing.Size(123, 17);
+            this.cbProxyScrape.TabIndex = 10;
+            this.cbProxyScrape.Text = "api.proxyscrape.com";
+            this.cbProxyScrape.UseVisualStyleBackColor = true;
             // 
-            // Form1
+            // cbProxyListDownload
+            // 
+            this.cbProxyListDownload.AutoSize = true;
+            this.cbProxyListDownload.Checked = true;
+            this.cbProxyListDownload.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbProxyListDownload.Location = new System.Drawing.Point(113, 323);
+            this.cbProxyListDownload.Name = "cbProxyListDownload";
+            this.cbProxyListDownload.Size = new System.Drawing.Size(142, 17);
+            this.cbProxyListDownload.TabIndex = 11;
+            this.cbProxyListDownload.Text = "www.proxy-list.download";
+            this.cbProxyListDownload.UseVisualStyleBackColor = true;
+            // 
+            // cbFreeProxyList
+            // 
+            this.cbFreeProxyList.AutoSize = true;
+            this.cbFreeProxyList.Checked = true;
+            this.cbFreeProxyList.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbFreeProxyList.Location = new System.Drawing.Point(113, 349);
+            this.cbFreeProxyList.Name = "cbFreeProxyList";
+            this.cbFreeProxyList.Size = new System.Drawing.Size(105, 17);
+            this.cbFreeProxyList.TabIndex = 12;
+            this.cbFreeProxyList.Text = "free-proxy-list.net";
+            this.cbFreeProxyList.UseVisualStyleBackColor = true;
+            // 
+            // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(408, 378);
-            this.Controls.Add(this.btnStartFile);
+            this.ClientSize = new System.Drawing.Size(411, 376);
+            this.Controls.Add(this.cbFreeProxyList);
+            this.Controls.Add(this.cbProxyListDownload);
+            this.Controls.Add(this.cbProxyScrape);
             this.Controls.Add(this.label_BadProxy);
             this.Controls.Add(this.label_GoodProxy);
             this.Controls.Add(this.label_TotalProxy);
@@ -146,7 +175,7 @@ namespace ProxyChecker
             this.Controls.Add(this.btnStartApi);
             this.Controls.Add(this.textBox_Results);
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.Name = "Form1";
+            this.Name = "Main";
             this.Text = "MyProxy Scraper and Checker";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.ResumeLayout(false);
@@ -164,7 +193,9 @@ namespace ProxyChecker
         private System.Windows.Forms.Label label_TotalProxy;
         private System.Windows.Forms.Label label_GoodProxy;
         private System.Windows.Forms.Label label_BadProxy;
-        private System.Windows.Forms.Button btnStartFile;
+        private System.Windows.Forms.CheckBox cbProxyScrape;
+        private System.Windows.Forms.CheckBox cbProxyListDownload;
+        private System.Windows.Forms.CheckBox cbFreeProxyList;
     }
 }
 
