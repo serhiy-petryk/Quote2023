@@ -27,16 +27,14 @@ namespace ProxyChecker
             System.Windows.Forms.Control.CheckForIllegalCrossThreadCalls = false;
         }
 
-        private string[] commonProxies;
-
         private void StartCheckProxies(string[] proxies)
         {
-            commonProxies = proxies.Distinct().ToArray();
+            var uniqueProxies = proxies.Distinct().ToArray();
 
-            label_TotalProxy.Text = proxies.Length.ToString();
+            label_TotalProxy.Text = int.Parse(label_TotalProxy.Text) + uniqueProxies.Length.ToString();
 
             var tasks =
-                from proxy in commonProxies.Where(a => !string.IsNullOrEmpty(a))
+                from proxy in uniqueProxies.Where(a => !string.IsNullOrEmpty(a))
                 select Task.Factory.StartNew(() => Checker(proxy));
             Task.WaitAll(tasks.ToArray());
         }
@@ -129,6 +127,7 @@ namespace ProxyChecker
 
         private void button_StartApi_Click(object sender, EventArgs e)
         {
+            label_TotalProxy.Text = "0";
             label_GoodProxy.Text = "0";
             label_BadProxy.Text = "0";
             Task.Factory.StartNew(() =>
@@ -136,11 +135,22 @@ namespace ProxyChecker
                 btnStartApi.Enabled = false;
 
                 if (cbProxyScrape.Checked)
+                {
                     SetProxiesFromProxyScrape();
+                    cbProxyScrape.Checked = false;
+                }
+
                 if (cbProxyListDownload.Checked)
+                {
                     SetProxiesFromProxyListDownload();
+                    cbProxyListDownload.Checked = false;
+                }
+
                 if (cbFreeProxyList.Checked)
+                {
                     SetProxiesFromFreeProxyList();
+                    cbFreeProxyList.Checked = false;
+                }
 
                 MessageBox.Show("Finished");
                 btnStartApi.Enabled = true;
