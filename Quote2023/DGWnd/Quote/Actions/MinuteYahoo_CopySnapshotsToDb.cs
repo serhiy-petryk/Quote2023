@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using DGWnd.Quote.Helpers;
 using DGWnd.Quote.Models;
@@ -40,11 +41,11 @@ namespace DGWnd.Quote.Actions
             {
                 showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Get symbols & date to copy.");
                 var toLoadSymbolsAndDate = new Dictionary<Tuple<string, DateTime>, DGWnd.Quote.Models.IntradaySnapshot>();
-                using (var zip = new ZipReader(zipFile))
-                    foreach (var item in zip)
-                        if (item.Length > 0 && item.FileNameWithoutExtension.ToUpper().StartsWith("YMIN-"))
+                using (var zip = ZipFile.Open(zipFile, ZipArchiveMode.Read))
+                    foreach (var item in zip.Entries)
+                        if (item.Length > 0 && item.Name.ToUpper().StartsWith("YMIN-"))
                         {
-                            var symbol = item.FileNameWithoutExtension.Substring(5).ToUpper();
+                            var symbol = Path.GetFileNameWithoutExtension(item.Name).Substring(5).ToUpper();
                             if (!liveSymbols.ContainsKey(symbol))
                                 continue;
 
@@ -52,7 +53,7 @@ namespace DGWnd.Quote.Actions
                             if ((cnt % 100) == 0)
                                 showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Total files in zip processed: {cnt:N0}");
 
-                            var o = JsonConvert.DeserializeObject<MinuteYahoo>(item.Content);
+                            var o = JsonConvert.DeserializeObject<MinuteYahoo>(item.GetContentOfZipEntry());
                             var dates = o.GetQuotes(symbol).Select(a => a.date.Date).Distinct();
                             foreach (var date in dates)
                             {

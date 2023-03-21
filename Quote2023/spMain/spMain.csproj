@@ -99,6 +99,8 @@
     <Compile Include="Comp\UI_StockGraph.Designer.cs">
       <DependentUpon>UI_StockGraph.cs</DependentUpon>
     </Compile>
+    <Compile Include="QData\DataAdapters\AlphaVantage_MinuteByMonth.cs" />
+    <Compile Include="Quote2023\Helpers\ZipUtils.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="csUtils.cs" />
     <Compile Include="cs\ColorEditor\ColorButton.cs">
@@ -148,7 +150,6 @@
     <Compile Include="cs\UtilsFile.cs" />
     <Compile Include="cs\UtilsReflection.cs" />
     <Compile Include="cs\WinAPI.cs" />
-    <Compile Include="Quote2023\Helpers\ZipReader.cs" />
     <Compile Include="Quote2023\Models\MinuteYahoo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

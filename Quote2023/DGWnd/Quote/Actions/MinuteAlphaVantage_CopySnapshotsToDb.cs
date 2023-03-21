@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using DGWnd.Quote.Helpers;
 using DGWnd.Quote.Models;
@@ -64,12 +65,12 @@ namespace DGWnd.Quote.Actions
                     var toLoadSymbols = liveSymbolsByDate[dateKey]
                         .ToDictionary(a => a, a => (DGWnd.Quote.Models.IntradaySnapshot) null);
 
-                    using (var zip = new ZipReader(zipFile))
-                        foreach (var item in zip)
+                    using (var zip = ZipFile.Open(zipFile, ZipArchiveMode.Read))
+                        foreach (var item in zip.Entries)
                             if (item.Length > 0 &&
                                 item.FullName.EndsWith(".csv", StringComparison.InvariantCultureIgnoreCase))
                             {
-                                var ss = item.FileNameWithoutExtension.Split('_');
+                                var ss = Path.GetFileNameWithoutExtension(item.Name).Split('_');
                                 var alphaVantageSymbol = ss[0].ToUpper();
                                 var symbol = symbolsXref[alphaVantageSymbol];
                                 if (!toLoadSymbols.ContainsKey(symbol))

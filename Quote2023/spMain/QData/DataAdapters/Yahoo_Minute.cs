@@ -4,6 +4,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO.Compression;
 using Newtonsoft.Json;
 using spMain.QData.DataFormat;
 using spMain.Quote2023.Helpers;
@@ -15,7 +16,7 @@ namespace spMain.QData.DataAdapters
     [Serializable]
     class Yahoo_Minute : Data.DataAdapter
     {
-        private const string zipFileEntryNameTemplate = @"yMin-{0}";
+        private const string zipFileEntryNameTemplate = @"yMin-{0}.txt";
 
         public override bool IsStream => false;
 
@@ -84,10 +85,10 @@ namespace spMain.QData.DataAdapters
             var entryName = string.Format(zipFileEntryNameTemplate, symbol);
             foreach (var zipFileName in validFiles)
             {
-                using (var zip = new ZipReader(zipFileName))
-                    foreach (var item in zip.Where(a=> a.Length >0 && string.Equals(a.FileNameWithoutExtension, entryName, StringComparison.InvariantCultureIgnoreCase) ))
+                using (var zip = ZipFile.Open(zipFileName, ZipArchiveMode.Read)) 
+                    foreach (var item in zip.Entries.Where(a=> a.Length >0 && string.Equals(a.Name, entryName, StringComparison.InvariantCultureIgnoreCase) ))
                     {
-                        var o = JsonConvert.DeserializeObject<MinuteYahoo>(item.Content);
+                        var o = JsonConvert.DeserializeObject<MinuteYahoo>(item.GetContentOfZipEntry());
                         data.AddRange(o.GetQuotes(symbol).Where(a => a.date.Date >= startDate && a.date.Date <= endDate));
                     }
             }

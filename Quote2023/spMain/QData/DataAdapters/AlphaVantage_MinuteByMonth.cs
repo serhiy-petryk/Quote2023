@@ -13,7 +13,7 @@ namespace spMain.QData.DataAdapters
 {
 
     [Serializable]
-    public class AlphaVantage_Minute : Data.DataAdapter
+    public class AlphaVantage_MinuteByMonth : Data.DataAdapter
     {
         public override bool IsStream => false;
 
@@ -50,41 +50,45 @@ namespace spMain.QData.DataAdapters
         {
             // Get valid file names
             var files = new List<string>();
+            var dates = new Dictionary<DateTime, string>();
             for (var k = 0; k < days; k++)
             {
-                var filename = Settings.MinuteAlphaVantageDataFolder + "MAV_" + endDate.AddDays(-k).ToString("yyyyMMdd") + ".zip";
+                var filename = Settings.MinuteAlphaVantageByMonthDataFolder + "MAV_" + endDate.AddDays(-k).ToString("yyyyMM") + ".zip";
                 if (File.Exists(filename))
+                {
+                    dates.Add(endDate.AddDays(-k), filename);
                     files.Add(filename);
+                }
             }
             if (files.Count == 0) return;
+
+            files = files.Distinct().OrderBy(a => a).ToList();
 
             var alphaSymbol = Quote2023.Models.SymbolsXref.GetSymbolsXref(symbol)?.AlphaVantageSymbol ?? symbol;
             var key = alphaSymbol + "_";
             for (var k = files.Count - 1; k >= 0; k--)
                 using (var zip = ZipFile.Open(files[k], ZipArchiveMode.Read))
                     foreach (var item in zip.Entries.Where(a => a.Length > 0 && a.Name.StartsWith(key, StringComparison.InvariantCultureIgnoreCase)))
+                    foreach (var line in item.GetLinesOfZipEntry().Where(a => !a.StartsWith("#")))
                     {
-                        foreach (var line in item.GetLinesOfZipEntry().Where(a => !a.StartsWith("#")))
+                        var ss = line.Split(',');
+                        var date = DateTime.ParseExact(ss[0], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)
+                            .AddMinutes(-1);
+                        var include = !showOnlyTradingHours ||
+                                      (date.TimeOfDay >= General.marketStart && date.TimeOfDay < General.marketEnd);
+                        if (include)
                         {
-                            var ss = line.Split(',');
-                            var date = DateTime.ParseExact(ss[0], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)
-                                .AddMinutes(-1);
-                            var include = !showOnlyTradingHours ||
-                                          (date.TimeOfDay >= General.marketStart && date.TimeOfDay < General.marketEnd);
-                            if (include)
-                            {
-                                var open = Math.Round(double.Parse(ss[1], CultureInfo.InvariantCulture), 4);
-                                var high = Math.Round(double.Parse(ss[2], CultureInfo.InvariantCulture), 4);
-                                var low = Math.Round(double.Parse(ss[3], CultureInfo.InvariantCulture), 4);
-                                var close = Math.Round(double.Parse(ss[4], CultureInfo.InvariantCulture), 4);
-                                var volume = Math.Round(double.Parse(ss[5], CultureInfo.InvariantCulture), 4);
-                                data.Add(new Quote
-                                    {Date = date, Open = open, High = high, Low = low, Close = close, Volume = volume});
-                            }
+                            var open = Math.Round(double.Parse(ss[1], CultureInfo.InvariantCulture), 4);
+                            var high = Math.Round(double.Parse(ss[2], CultureInfo.InvariantCulture), 4);
+                            var low = Math.Round(double.Parse(ss[3], CultureInfo.InvariantCulture), 4);
+                            var close = Math.Round(double.Parse(ss[4], CultureInfo.InvariantCulture), 4);
+                            var volume = Math.Round(double.Parse(ss[5], CultureInfo.InvariantCulture), 4);
+                            data.Add(new Quote
+                                {Date = date, Open = open, High = high, Low = low, Close = close, Volume = volume});
                         }
-
-                        break;
                     }
+
+                    // break;
         }
     }
 }
