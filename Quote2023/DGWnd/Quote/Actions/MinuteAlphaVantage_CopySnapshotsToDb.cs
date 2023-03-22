@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Drawing.Imaging;
-using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using DGWnd.Quote.Helpers;
-using DGWnd.Quote.Models;
 using spMain.Comp;
-using spMain.Quote2023.Helpers;
 
 namespace DGWnd.Quote.Actions
 {
@@ -17,114 +14,103 @@ namespace DGWnd.Quote.Actions
     {
         public static bool StopFlag;
 
-        public static void CopySnapshots(string[] zipFiles, Action<string> showStatus)
+        private class CopyItem
+        {
+            public string Symbol;
+            public string AlphaVantageSymbol;
+            public DateTime Date;
+            public byte[] Snapshot;
+        }
+
+        public static void Start()
         {
             StopFlag = false;
 
-            var liveSymbolsAndDates = new List<Tuple<string, DateTime>>();
+            var items = new List<CopyItem>();
             var symbolsXref = new Dictionary<string, string>();
 
-            showStatus($"CopySnapshots. Loading data from database ...");
+            Logger.AddMessage("Loading data from database ...");
             using (var conn = new SqlConnection(DGWnd.Settings.DbConnectionString))
             {
                 using (var cmd = conn.CreateCommand())
                 {
                     conn.Open();
-                    cmd.CommandText = "SELECT a.* from vSymbolAndDateLive a left join dbQuote2023..IntradaySnapshots b on a.Symbol=b.Symbol and a.Date=b.Date WHERE b.Symbol is null";
+                    cmd.CommandText = "select distinct a.Symbol, b.AlphaVantageSymbol, a.date from vSymbolAndDateLive a "+
+                                      "inner join SymbolsEoddata b on a.Symbol = b.Symbol and a.Exchange = b.Exchange "+
+                                      "left join dbQuote2023..IntradaySnapshots c on a.Symbol = c.Symbol and a.Date = c.Date "+
+                                      "where a.date is not null and b.AlphaVantageSymbol is not null and c.Symbol is null";
                     using (var rdr = cmd.ExecuteReader())
                         while (rdr.Read())
-                            liveSymbolsAndDates.Add(new Tuple<string, DateTime>((string)rdr["Symbol"], (DateTime)rdr["Date"]));
-
-                    cmd.CommandText = "SELECT Symbol, AlphaVantageSymbol from vSymbolsLive WHERE AlphaVantageSymbol IS NOT NULL";
-                    using (var rdr = cmd.ExecuteReader())
-                        while (rdr.Read())
-                            symbolsXref.Add((string) rdr["AlphaVantageSymbol"], (string) rdr["Symbol"]);
+                            items.Add(new CopyItem{Symbol= (string)rdr["Symbol"], AlphaVantageSymbol = (string)rdr["AlphaVantageSymbol"], Date = (DateTime)rdr["Date"] });
                 }
             }
 
-            var liveSymbolsByDate = liveSymbolsAndDates.GroupBy(a => a.Item2).ToDictionary(a => a.Key, a => a.Select(a1 => a1.Item1).ToArray());
+            var groupedItems = items.GroupBy(a=>a.Date).ToDictionary(a => a.Key, a => a.ToArray());
+            items.Clear();
 
-            var cnt = 0;
-            var fileCnt = 0;
-            // var dataToSave = new List<Tuple<string, DateTime, byte[]>>();
-            var toLoadSymbolsAndDate = new Dictionary<Tuple<string, DateTime>, DGWnd.Quote.Models.IntradaySnapshot>();
-            // using (var frm = new frmUIStockGraph(null, true))
+            var frm = new frmUIStockGraph(null, true) {Visible = false};
+            var dateCnt = 0;
+            foreach (var kvp in groupedItems)
             {
-                var frm = new frmUIStockGraph(null, true);
-                frm.Visible = false;
+                dateCnt++;
+                Logger.AddMessage($"Process data for {kvp.Key:d}. {dateCnt++} from {groupedItems.Count} dates processed");
 
-                foreach (var zipFile in zipFiles)
-                {
-                    fileCnt++;
-                    var dateKey = DateTime.ParseExact(Path.GetFileNameWithoutExtension(zipFile).Split('_')[1],
-                        "yyyyMMdd", CultureInfo.InvariantCulture);
-
-                    if (!liveSymbolsByDate.ContainsKey(dateKey)) continue;
-
-                    showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Get symbols and dates to copy.");
-                    var toLoadSymbols = liveSymbolsByDate[dateKey]
-                        .ToDictionary(a => a, a => (DGWnd.Quote.Models.IntradaySnapshot) null);
-
+                var zipFile = $@"E:\Quote\WebData\Minute\AlphaVantage\Data\MAV_{kvp.Key:yyyyMMdd}.zip";
+                if (File.Exists(zipFile))
                     using (var zip = ZipFile.Open(zipFile, ZipArchiveMode.Read))
-                        foreach (var item in zip.Entries)
-                            if (item.Length > 0 &&
-                                item.FullName.EndsWith(".csv", StringComparison.InvariantCultureIgnoreCase))
+                        foreach (var item in kvp.Value)
+                        {
+                            var fileKey = $"{item.AlphaVantageSymbol}_{kvp.Key:yyyyMMdd}.csv";
+                            var entry = zip.Entries.FirstOrDefault(a =>
+                                string.Equals(a.Name, fileKey, StringComparison.InvariantCultureIgnoreCase));
+                            if (entry != null)
                             {
-                                var ss = Path.GetFileNameWithoutExtension(item.Name).Split('_');
-                                var alphaVantageSymbol = ss[0].ToUpper();
-                                var symbol = symbolsXref[alphaVantageSymbol];
-                                if (!toLoadSymbols.ContainsKey(symbol))
-                                    continue;
+                                var graph = spMain.csUtils.GetAlphaVantageGraphToSave(item.AlphaVantageSymbol,
+                                    item.Date, 1);
+                                frm._SetUIGraph(graph, true);
 
-                                cnt++;
-                                if ((cnt % 10) == 0)
-                                    showStatus(
-                                        $"CopySnapshots. File {Path.GetFileName(zipFile)}. Total items in zip processed: {cnt:N0}. Processed {fileCnt:N0} zip files from {zipFiles.Length:N0}");
-
-                                var key = new Tuple<string, DateTime>(symbol, dateKey);
-                                if (!toLoadSymbolsAndDate.ContainsKey(key))
+                                using (var image = frm._GetImage())
+                                using (var ms = new MemoryStream())
                                 {
-                                    var graph = spMain.csUtils.GetAlphaVantageGraphToSave(alphaVantageSymbol, dateKey, 1);
-                                    frm._SetUIGraph(graph, true);
-                                    using (var image = frm._GetImage())
-                                    using (var ms = new MemoryStream())
-                                    {
-                                        image.Save(ms, ImageFormat.Png);
-                                        toLoadSymbolsAndDate.Add(key, new IntradaySnapshot {Symbol = key.Item1, Date = key.Item2, Snapshot = ms.ToArray()});
-                                    }
+                                    image.Save(ms, ImageFormat.Png);
+                                    item.Snapshot = ms.ToArray();
+                                    items.Add(item);
                                 }
 
-                                if (toLoadSymbolsAndDate.Count >= 100)
+                                if (items.Count >= 100)
                                 {
-                                    showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Save snapshots to database ...");
-                                    DbHelper.SaveToDbTable(toLoadSymbolsAndDate.Values, "dbQuote2023..IntradaySnapshots", "Symbol", "Date", "Snapshot");
-                                    toLoadSymbolsAndDate.Clear();
+                                    Logger.AddMessage($"CopySnapshots. Save snapshots to database ...");
+                                    DbHelper.SaveToDbTable(items, "dbQuote2023..IntradaySnapshots", "Symbol", "Date",
+                                        "Snapshot");
+
+                                    foreach (var a in items) a.Snapshot = null;
+                                    items.Clear();
 
                                     frm.Dispose();
                                     if (StopFlag)
                                     {
-                                        showStatus($"CopySnapshots. Interrupted!");
+                                        Logger.AddMessage($"CopySnapshots. Interrupted!");
                                         return;
                                     }
 
-                                    frm = new frmUIStockGraph(null, true);
-                                    frm.Visible = false;
+                                    frm = new frmUIStockGraph(null, true) {Visible = false};
                                 }
+
                             }
-
-
-                    if (toLoadSymbolsAndDate.Count > 0)
-                    {
-                        showStatus($"CopySnapshots. File {Path.GetFileName(zipFile)}. Save snapshots to database ...");
-                        DbHelper.SaveToDbTable(toLoadSymbolsAndDate.Values, "dbQuote2023..IntradaySnapshots", "Symbol",
-                            "Date", "Snapshot");
-                        toLoadSymbolsAndDate.Clear();
-                    }
-                }
+                        }
             }
 
-            showStatus($"CopySnapshots. Finished!");
-        }
+            frm.Dispose();
 
+            if (items.Count > 0)
+            {
+                DbHelper.SaveToDbTable(items, "dbQuote2023..IntradaySnapshots", "Symbol", "Date", "Snapshot");
+
+                foreach (var a in items) a.Snapshot = null;
+                items.Clear();
+            }
+
+            Logger.AddMessage("!Finished");
+        }
     }
 }

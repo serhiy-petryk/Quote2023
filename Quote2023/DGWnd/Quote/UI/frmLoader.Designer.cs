@@ -33,9 +33,9 @@ namespace DGWnd.Quote.UI
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.btnStopSavingIntradaySnapshotsToDb = new System.Windows.Forms.Button();
             this.btnSaveIntradaySnapshotsToDb = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.btnStopSavingIntradaySnapshotsToDb = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -80,6 +80,16 @@ namespace DGWnd.Quote.UI
             this.tabPage1.Text = "Loader";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // btnStopSavingIntradaySnapshotsToDb
+            // 
+            this.btnStopSavingIntradaySnapshotsToDb.Location = new System.Drawing.Point(470, 60);
+            this.btnStopSavingIntradaySnapshotsToDb.Name = "btnStopSavingIntradaySnapshotsToDb";
+            this.btnStopSavingIntradaySnapshotsToDb.Size = new System.Drawing.Size(234, 23);
+            this.btnStopSavingIntradaySnapshotsToDb.TabIndex = 1;
+            this.btnStopSavingIntradaySnapshotsToDb.Text = "Stop saving Intraday Quote Snapshots to DB";
+            this.btnStopSavingIntradaySnapshotsToDb.UseVisualStyleBackColor = true;
+            this.btnStopSavingIntradaySnapshotsToDb.Click += new System.EventHandler(this.btnStopSavingIntradaySnapshotsToDb_Click);
+            // 
             // btnSaveIntradaySnapshotsToDb
             // 
             this.btnSaveIntradaySnapshotsToDb.Location = new System.Drawing.Point(470, 17);
@@ -100,16 +110,6 @@ namespace DGWnd.Quote.UI
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // btnStopSavingIntradaySnapshotsToDb
-            // 
-            this.btnStopSavingIntradaySnapshotsToDb.Location = new System.Drawing.Point(470, 60);
-            this.btnStopSavingIntradaySnapshotsToDb.Name = "btnStopSavingIntradaySnapshotsToDb";
-            this.btnStopSavingIntradaySnapshotsToDb.Size = new System.Drawing.Size(234, 23);
-            this.btnStopSavingIntradaySnapshotsToDb.TabIndex = 1;
-            this.btnStopSavingIntradaySnapshotsToDb.Text = "Stop saving Intraday Quote Snapshots to DB";
-            this.btnStopSavingIntradaySnapshotsToDb.UseVisualStyleBackColor = true;
-            this.btnStopSavingIntradaySnapshotsToDb.Click += new System.EventHandler(this.btnStopSavingIntradaySnapshotsToDb_Click);
-            // 
             // frmLoader
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -119,6 +119,7 @@ namespace DGWnd.Quote.UI
             this.Controls.Add(this.statusStrip1);
             this.Name = "frmLoader";
             this.Text = "Loader";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmLoader_FormClosed);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
