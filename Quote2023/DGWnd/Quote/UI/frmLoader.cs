@@ -18,26 +18,10 @@ namespace DGWnd.Quote.UI
 
         private void Logger_MessageAdded(object sender, Logger.MessageAddedEventArgs e) => statusLabel.Text = e.FullMessage;
 
-        private void ShowStatus(string message)
-        {
-            lock (_lock) statusLabel.Text = message;
-            Application.DoEvents();
-        }
-
         private async void btnSaveIntradaySnapshotsToDb_Click(object sender, EventArgs e)
         {
             btnSaveIntradaySnapshotsToDb.Enabled = false;
-
             await Task.Factory.StartNew(Quote.Actions.MinuteAlphaVantage_CopySnapshotsToDb.Start);
-
-            /*if (CsHelper.OpenFileDialogMultiselect(Settings.MinuteAlphaVantageDataFolder,
-                    @"MAV_202?????.zip file (*.zip)|MAV_202?????.zip") is string[] files && files.Length > 0)
-            {
-                await Task.Factory.StartNew(() => Quote.Actions.MinuteAlphaVantage_CopySnapshotsToDb.CopySnapshots(files, ShowStatus));
-            }
-            // if (CsHelper.OpenFileDialogMultiselect(Settings.MinuteYahooDataFolder, @"YahooMinute_202?????.zip file (*.zip)|YahooMinute_202?????.zip") is string[] files && files.Length > 0) 
-            // Quote.Actions.MinuteYahoo_CopySnapshotsToDb.CopySnapshots(files, ShowStatus);*/
-
             btnSaveIntradaySnapshotsToDb.Enabled = true;
         }
 
