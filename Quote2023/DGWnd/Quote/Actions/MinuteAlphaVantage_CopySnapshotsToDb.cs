@@ -49,11 +49,12 @@ namespace DGWnd.Quote.Actions
             items.Clear();
 
             var frm = new frmUIStockGraph(null, true) {Visible = false};
+            var savedToDbCount = 0;
             var dateCnt = 0;
             foreach (var kvp in groupedItems)
             {
                 dateCnt++;
-                Logger.AddMessage($"Process data for {kvp.Key:d}. {dateCnt++} from {groupedItems.Count} dates processed");
+                Logger.AddMessage($"Process data for {kvp.Key:d}. {dateCnt} from {groupedItems.Count} dates processed");
 
                 var zipFile = $@"E:\Quote\WebData\Minute\AlphaVantage\Data\MAV_{kvp.Key:yyyyMMdd}.zip";
                 if (File.Exists(zipFile))
@@ -83,6 +84,7 @@ namespace DGWnd.Quote.Actions
                                     DbHelper.SaveToDbTable(items, "dbQuote2023..IntradaySnapshots", "Symbol", "Date",
                                         "Snapshot");
 
+                                    savedToDbCount += items.Count;
                                     foreach (var a in items) a.Snapshot = null;
                                     items.Clear();
 
@@ -95,7 +97,6 @@ namespace DGWnd.Quote.Actions
 
                                     frm = new frmUIStockGraph(null, true) {Visible = false};
                                 }
-
                             }
                         }
             }
@@ -106,11 +107,12 @@ namespace DGWnd.Quote.Actions
             {
                 DbHelper.SaveToDbTable(items, "dbQuote2023..IntradaySnapshots", "Symbol", "Date", "Snapshot");
 
+                savedToDbCount += items.Count;
                 foreach (var a in items) a.Snapshot = null;
                 items.Clear();
             }
 
-            Logger.AddMessage("!Finished");
+            Logger.AddMessage($"!Finished. {savedToDbCount} snapshots saved to database");
         }
     }
 }
