@@ -19,6 +19,8 @@ namespace spMain.Comp {
       QData.UI.UIGraph x1 = (this._uiGraph == null ? new spMain.QData.UI.UIGraph() : this._uiGraph);
       object x = cs.PGfrmObjectEditor._GetObject(x1, QData.UI.UIGraph._serializationFileName, true);
       if (x != null) {
+        if (_uiGraph != null)
+          _uiGraph.ClearDataSources();
         this._uiGraph = (QData.UI.UIGraph)x;
         this._UIGraphApply();
       }

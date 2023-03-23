@@ -231,7 +231,8 @@ namespace DGWnd.UI
 
         private void btnTest_Click(object sender, EventArgs e)
         {
-
+            var a1 = spMain.QData.Data.DataManager.dataIndicators;
+            var a2 = spMain.QData.Data.DataManager.dataProviders;
         }
     }
 }
