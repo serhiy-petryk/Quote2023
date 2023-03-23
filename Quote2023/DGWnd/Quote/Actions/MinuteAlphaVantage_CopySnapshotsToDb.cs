@@ -35,6 +35,7 @@ namespace DGWnd.Quote.Actions
                 using (var cmd = conn.CreateCommand())
                 {
                     conn.Open();
+                    cmd.CommandTimeout = 150;
                     cmd.CommandText = "select distinct a.Symbol, b.AlphaVantageSymbol, a.date from vSymbolAndDateLive a "+
                                       "inner join SymbolsEoddata b on a.Symbol = b.Symbol and a.Exchange = b.Exchange "+
                                       "left join dbQuote2023..IntradaySnapshots c on a.Symbol = c.Symbol and a.Date = c.Date "+
@@ -80,13 +81,14 @@ namespace DGWnd.Quote.Actions
 
                                 if (items.Count >= 100)
                                 {
-                                    Logger.AddMessage($"CopySnapshots. Save snapshots to database ...");
                                     DbHelper.SaveToDbTable(items, "dbQuote2023..IntradaySnapshots", "Symbol", "Date",
                                         "Snapshot");
 
                                     savedToDbCount += items.Count;
                                     foreach (var a in items) a.Snapshot = null;
                                     items.Clear();
+
+                                    Logger.AddMessage($"Process data for {kvp.Key:d}. {dateCnt} from {groupedItems.Count} dates processed. Saved {savedToDbCount} snapshots to database");
 
                                     frm.Dispose();
                                     if (StopFlag)
