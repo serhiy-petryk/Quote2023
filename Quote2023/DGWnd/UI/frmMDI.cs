@@ -228,5 +228,10 @@ namespace DGWnd.UI
             }
             MessageBox.Show(@"Sql Cache was cleared");
         }
+
+        private void btnTest_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

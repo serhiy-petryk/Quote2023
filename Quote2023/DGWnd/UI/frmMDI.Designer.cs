@@ -46,6 +46,7 @@ namespace DGWnd.UI {
             this.btnLog = new System.Windows.Forms.ToolStripButton();
             this.btnClearSqlCache = new System.Windows.Forms.ToolStripButton();
             this.btnProxyChecker = new System.Windows.Forms.ToolStripButton();
+            this.btnTest = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1.SuspendLayout();
             this.stripBtns.SuspendLayout();
             this.SuspendLayout();
@@ -160,7 +161,8 @@ namespace DGWnd.UI {
             this.btnDependentObjectManager,
             this.btnLog,
             this.btnClearSqlCache,
-            this.btnProxyChecker});
+            this.btnProxyChecker,
+            this.btnTest});
             this.stripBtns.Location = new System.Drawing.Point(3, 24);
             this.stripBtns.Name = "stripBtns";
             this.stripBtns.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
@@ -255,6 +257,16 @@ namespace DGWnd.UI {
             this.btnProxyChecker.Text = "Proxy Checker";
             this.btnProxyChecker.Click += new System.EventHandler(this.btnProxyChecker_Click);
             // 
+            // btnTest
+            // 
+            this.btnTest.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnTest.Image = ((System.Drawing.Image)(resources.GetObject("btnTest.Image")));
+            this.btnTest.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnTest.Name = "btnTest";
+            this.btnTest.Size = new System.Drawing.Size(33, 22);
+            this.btnTest.Text = "Test";
+            this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
+            // 
             // frmMDI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -311,5 +323,6 @@ namespace DGWnd.UI {
         private System.Windows.Forms.ToolStripButton btnStockGraph;
     private System.Windows.Forms.ToolStripButton btnLoader;
         private System.Windows.Forms.ToolStripButton btnProxyChecker;
+        private System.Windows.Forms.ToolStripButton btnTest;
     }
 }
