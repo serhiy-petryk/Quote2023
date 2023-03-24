@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProxyChecker", "ProxyChecke
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{D77F6660-804B-4DD1-9D19-9A5A3B77665F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebScanner", "WebScanner\WebScanner.csproj", "{E771ED3A-1A82-4ECB-86DF-E75F9F7F616E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{D77F6660-804B-4DD1-9D19-9A5A3B77665F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D77F6660-804B-4DD1-9D19-9A5A3B77665F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D77F6660-804B-4DD1-9D19-9A5A3B77665F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E771ED3A-1A82-4ECB-86DF-E75F9F7F616E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E771ED3A-1A82-4ECB-86DF-E75F9F7F616E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E771ED3A-1A82-4ECB-86DF-E75F9F7F616E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E771ED3A-1A82-4ECB-86DF-E75F9F7F616E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
