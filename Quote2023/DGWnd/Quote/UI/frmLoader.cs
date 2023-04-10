@@ -21,13 +21,14 @@ namespace DGWnd.Quote.UI
         private async void btnSaveIntradaySnapshotsToDb_Click(object sender, EventArgs e)
         {
             btnSaveIntradaySnapshotsToDb.Enabled = false;
-            await Task.Factory.StartNew(Quote.Actions.MinuteAlphaVantage_CopySnapshotsToDb.Start);
+            await Task.Factory.StartNew(Quote.Actions.MinutePolygon_CopySnapshotsToDb.Start);
             btnSaveIntradaySnapshotsToDb.Enabled = true;
         }
 
         private void btnStopSavingIntradaySnapshotsToDb_Click(object sender, EventArgs e)
         {
             Quote.Actions.MinuteAlphaVantage_CopySnapshotsToDb.StopFlag = true;
+            Quote.Actions.MinutePolygon_CopySnapshotsToDb.StopFlag = true;
         }
 
         private void frmLoader_FormClosed(object sender, FormClosedEventArgs e)

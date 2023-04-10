@@ -75,6 +75,7 @@
     </Compile>
     <Compile Include="Misc\CheckedListBoxItem.cs" />
     <Compile Include="Misc\ControlExtension.cs" />
+    <Compile Include="Quote\Actions\MinutePolygon_CopySnapshotsToDb.cs" />
     <Compile Include="Quote\Helpers\Logger.cs" />
     <Compile Include="Misc\TreeViewOnDemand.cs">
       <SubType>Component</SubType>

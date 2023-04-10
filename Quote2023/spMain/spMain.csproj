@@ -99,6 +99,7 @@
     <Compile Include="Comp\UI_StockGraph.Designer.cs">
       <DependentUpon>UI_StockGraph.cs</DependentUpon>
     </Compile>
+    <Compile Include="QData\DataAdapters\Polygon_Minute.cs" />
     <Compile Include="Quote2023\Helpers\ZipUtils.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="csUtils.cs" />
