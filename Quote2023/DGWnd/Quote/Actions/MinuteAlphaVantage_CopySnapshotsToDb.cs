@@ -38,7 +38,7 @@ namespace DGWnd.Quote.Actions
                     cmd.CommandTimeout = 150;
                     cmd.CommandText = "select distinct a.Symbol, b.AlphaVantageSymbol, a.date from vSymbolAndDateLive a "+
                                       "inner join SymbolsEoddata b on a.Symbol = b.Symbol and a.Exchange = b.Exchange "+
-                                      "left join dbQuote2023..IntradaySnapshots c on a.Symbol = c.Symbol and a.Date = c.Date "+
+                                      "left join dbQ2023..IntradaySnapshots c on a.Symbol = c.Symbol and a.Date = c.Date "+
                                       "where a.date is not null and b.AlphaVantageSymbol is not null and c.Symbol is null";
                     using (var rdr = cmd.ExecuteReader())
                         while (rdr.Read())
@@ -81,7 +81,7 @@ namespace DGWnd.Quote.Actions
 
                                 if (items.Count >= 100)
                                 {
-                                    DbHelper.SaveToDbTable(items, "dbQuote2023..IntradaySnapshots", "Symbol", "Date",
+                                    DbHelper.SaveToDbTable(items, "dbQ2023..IntradaySnapshots", "Symbol", "Date",
                                         "Snapshot");
 
                                     savedToDbCount += items.Count;
@@ -107,7 +107,7 @@ namespace DGWnd.Quote.Actions
 
             if (items.Count > 0)
             {
-                DbHelper.SaveToDbTable(items, "dbQuote2023..IntradaySnapshots", "Symbol", "Date", "Snapshot");
+                DbHelper.SaveToDbTable(items, "dbQ2023..IntradaySnapshots", "Symbol", "Date", "Snapshot");
 
                 savedToDbCount += items.Count;
                 foreach (var a in items) a.Snapshot = null;

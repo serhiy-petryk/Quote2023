@@ -17,7 +17,6 @@ namespace DGWnd.Quote.Actions
         private class CopyItem
         {
             public string Symbol;
-            // public string PolygonSymbol;
             public DateTime Date;
             public byte[] Snapshot;
         }
@@ -36,7 +35,7 @@ namespace DGWnd.Quote.Actions
                     conn.Open();
                     cmd.CommandTimeout = 300;
                     cmd.CommandText = "select top 1000000 a.symbol, a.date from dbQ2023..DayPolygonSummary a "+
-                                      "left join dbQuote2023..IntradaySnapshots b on a.Symbol = b.Symbol and a.Date = b.Date "+
+                                      "left join dbQ2023..IntradaySnapshots b on a.Symbol = b.Symbol and a.Date = b.Date "+
                                       "where a.AvgTradeValue >= 40.0 and isnull(a.AvgTradeCount,0)>= 5000 and b.Symbol is null order by 2";
                     using (var rdr = cmd.ExecuteReader())
                         while (rdr.Read())
@@ -78,7 +77,7 @@ namespace DGWnd.Quote.Actions
 
                                 if (items.Count >= 100)
                                 {
-                                    DbHelper.SaveToDbTable(items, "dbQuote2023..IntradaySnapshots", "Symbol", "Date",
+                                    DbHelper.SaveToDbTable(items, "dbQ2023..IntradaySnapshots", "Symbol", "Date",
                                         "Snapshot");
 
                                     savedToDbCount += items.Count;
@@ -104,7 +103,7 @@ namespace DGWnd.Quote.Actions
 
             if (items.Count > 0)
             {
-                DbHelper.SaveToDbTable(items, "dbQuote2023..IntradaySnapshots", "Symbol", "Date", "Snapshot");
+                DbHelper.SaveToDbTable(items, "dbQ2023..IntradaySnapshots", "Symbol", "Date", "Snapshot");
 
                 savedToDbCount += items.Count;
                 foreach (var a in items) a.Snapshot = null;
