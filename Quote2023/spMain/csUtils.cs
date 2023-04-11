@@ -117,9 +117,9 @@ namespace spMain
         {
             var graph = new UIGraph
             {
-                DataAdapter = QData.Data.DataManager.dataProviders[typeof(AlphaVantage_Minute)],
+                DataAdapter = QData.Data.DataManager.dataProviders[typeof(Polygon_Minute)],
                 TimeInterval = new TimeInterval(60),
-                Description = "AlphaVantage Minute"
+                Description = "Polygon Minute"
             };
 
             var pane = new UIPane();
