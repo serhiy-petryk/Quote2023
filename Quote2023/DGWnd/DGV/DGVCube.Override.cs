@@ -68,7 +68,7 @@ namespace DGWnd.DGV
         if (data.GetType().Name != "DGVList_GroupItem`1")
         {
           var done = false;
-          if (((IUserSettingProperties)this).SettingKey.IndexOf("quote", StringComparison.InvariantCultureIgnoreCase) != -1)
+          if (columnName == "SNAPSHOT" ||((IUserSettingProperties)this).SettingKey.IndexOf("quote", StringComparison.InvariantCultureIgnoreCase) != -1)
           {
             if (columnName == "DATE" || columnName == "SNAPSHOT")
             {
@@ -79,7 +79,7 @@ namespace DGWnd.DGV
                 var mainForm = this.TopLevelControl;
                 if (mainForm is UI.frmMDI)
                 {
-                  var days = ddate.DayOfWeek == DayOfWeek.Monday ? 4 : 2;
+                  var days = 7;
                   var graph = spMain.csUtils.GetStandardGraph(symbol, ddate, days);
                   ((UI.frmMDI) mainForm).AttachNewChildForm(new frmUIStockGraph(graph, false));
                 }
