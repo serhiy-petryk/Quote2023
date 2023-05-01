@@ -414,7 +414,7 @@ namespace DGCore.DGVList
       {
         data = ApplyWherePredicates(data, predicates);
       }
-      int recs = Enumerable.Count(data);
+      // int recs = Enumerable.Count(data);
       // Fast filter
       PrepareFastFilter();
       if (this._formattedValueObjects != null)
