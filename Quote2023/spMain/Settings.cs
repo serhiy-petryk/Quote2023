@@ -16,8 +16,8 @@ namespace spMain
     {
         public const string DbConnectionString = "Data Source=localhost;Initial Catalog=dbQuote2022;Integrated Security=True;Connect Timeout=150;";
 
-        public const string MinuteYahooDataFolder = @"C:\Quote\WebData\Minute\Yahoo\Data\";
-        public const string MinuteAlphaVantageDataFolder = @"C:\Quote\WebData\Minute\AlphaVantage\Data\";
+        public const string MinuteYahooDataFolder = @"D:\Quote\WebData\Minute\Yahoo\Data\";
+        public const string MinuteAlphaVantageDataFolder = @"D:\Quote\WebData\Minute\AlphaVantage\Data\";
         public const string MinutePolygonDataFolder = @"E:\Quote\WebData\Minute\Polygon\Data\";
 
         public static Dictionary<string, Type> typeXref = new Dictionary<string, Type>
@@ -32,7 +32,7 @@ namespace spMain
         public static readonly bool isDesignMode = (Process.GetCurrentProcess().ProcessName.ToLower() == "devenv" ||
                                                     Process.GetCurrentProcess().ProcessName.ToLower() == "vcsexpress");
 
-        public const string pathRoot = @"C:\Old\vs\";
+        public const string pathRoot = @"D:\Old\vs\";
         public const string pathLog = pathRoot + @"Log\";
         public const string pathData = pathRoot + @"Data\";
         public const string pathSerialization = pathData + @"Serialization\";

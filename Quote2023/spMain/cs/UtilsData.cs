@@ -6,7 +6,8 @@ using System.Data.OleDb;
 namespace spMain {
   class csUtilsData {
 
-    public const string mdbProvider = @"Provider=Microsoft.Jet.OleDb.4.0;Data Source={0}";
+    // public const string mdbProvider = @"Provider=Microsoft.Jet.OleDb.4.0;Data Source={0}";
+    public const string mdbProvider = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0}";
 
     /*public static void FromOneTableToAnother(csJob job, string tblSource, string tblTarget, string mdbFullFileName) {
       int messID = csJob.ShowMessage(job, "Start copy data from " + tblSource + " table to " +
