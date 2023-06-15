@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-using WebDownloader.Properties;
 
 namespace WebDownloader {
   public partial class frmJobViewer : Form {
@@ -12,6 +11,11 @@ namespace WebDownloader {
     public delegate void dlgShowMessage(string pMessage, csJob.MessageType messType, int pRowNo);
     public delegate void dlgProgressBar(long totalItems, long count);
 
+    internal DateTimePicker dtpRunAt = new DateTimePicker
+    {
+      CustomFormat = @"yyyy-MM-dd HH:mm:ss", Format = DateTimePickerFormat.Custom, Size = new Size(140, 20),
+      TabIndex = 30
+    };
     private DataTable dt = new DataTable();
     private bool reverse;
     private int outputMode = 1;
@@ -19,6 +23,9 @@ namespace WebDownloader {
 
     public frmJobViewer() {
       InitializeComponent();
+
+      var picker = new ToolStripControlHost(dtpRunAt);
+      stripUp.Items.Insert(1, picker);
 
       // Create data table structure
       dt.Columns.Add("Time", typeof(DateTime));
@@ -67,13 +74,13 @@ namespace WebDownloader {
 
       DataGridViewImageCell imageCell = (DataGridViewImageCell)this.grid.Rows[k].Cells[0];
       switch (messType) {
-        case csJob.MessageType.start: imageCell.Value = Resources.imgStart; break;
-        case csJob.MessageType.done: imageCell.Value = Resources.imgDone; break;
-        case csJob.MessageType.error: imageCell.Value = Resources.imgError; break;
-        case csJob.MessageType.warning: imageCell.Value = Resources.imgWarning; break;
-        case csJob.MessageType.info: imageCell.Value = Resources.imgInfo; break;
-        case csJob.MessageType.noImage: imageCell.Value = Resources.imgBlank; break;
-        default: imageCell.Value = Resources.imgError; break;
+        case csJob.MessageType.start: imageCell.Value = WebDownloader.Resource.imgStart; break;
+        case csJob.MessageType.done: imageCell.Value = WebDownloader.Resource.imgDone; break;
+        case csJob.MessageType.error: imageCell.Value = WebDownloader.Resource.imgError; break;
+        case csJob.MessageType.warning: imageCell.Value = WebDownloader.Resource.imgWarning; break;
+        case csJob.MessageType.info: imageCell.Value = WebDownloader.Resource.imgInfo; break;
+        case csJob.MessageType.noImage: imageCell.Value = WebDownloader.Resource.imgBlank; break;
+        default: imageCell.Value = WebDownloader.Resource.imgError; break;
       }
       this.lblStatus.Image = (Image)imageCell.Value;
       string[] ss = pMessage.Split("\r\n".ToCharArray());

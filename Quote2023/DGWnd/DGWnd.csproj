@@ -434,16 +434,12 @@
       <Name>DGCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\ProxyChecker\ProxyChecker.csproj">
-      <Project>{3ab24b08-e495-409f-9117-75b2354fc276}</Project>
+      <Project>{f7162d8d-dd1d-4436-9df8-f3b408a5b191}</Project>
       <Name>ProxyChecker</Name>
     </ProjectReference>
     <ProjectReference Include="..\spMain\spMain.csproj">
       <Project>{13b07f33-782d-40d4-9b44-840c0eb9cc36}</Project>
       <Name>spMain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\WebDownloader\WebDownloader.csproj">
-      <Project>{a37cb74e-2627-4748-95a0-88838e69d5b6}</Project>
-      <Name>WebDownloader</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
