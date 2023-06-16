@@ -14,7 +14,7 @@ namespace spMain
 {
     class Settings
     {
-        public const string DbConnectionString = "Data Source=localhost;Initial Catalog=dbQuote2022;Integrated Security=True;Connect Timeout=150;";
+        public const string DbConnectionString = "Data Source=localhost;Initial Catalog=dbQuote2022;Integrated Security=True;Connect Timeout=150;Encrypt=false;";
 
         public const string MinuteYahooDataFolder = @"D:\Quote\WebData\Minute\Yahoo\Data\";
         public const string MinuteAlphaVantageDataFolder = @"D:\Quote\WebData\Minute\AlphaVantage\Data\";

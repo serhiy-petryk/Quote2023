@@ -244,7 +244,7 @@ namespace WebDownloader {
       // btnRun
       // 
       this.btnRun.BackColor = System.Drawing.SystemColors.Control;
-      this.btnRun.Image = global::WebDownloader.Resource.imgBtnStandard;
+      this.btnRun.Image = global::WebDownloader.Properties.Resources.imgBtnStandard;
       this.btnRun.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.btnRun.Name = "btnRun";
       this.btnRun.Size = new System.Drawing.Size(72, 22);
@@ -261,7 +261,7 @@ namespace WebDownloader {
       // 
       // btnPause
       // 
-      this.btnPause.Image = global::WebDownloader.Resource.imgBtnStandard;
+      this.btnPause.Image = global::WebDownloader.Properties.Resources.imgBtnStandard;
       this.btnPause.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.btnPause.Margin = new System.Windows.Forms.Padding(12, 1, 0, 2);
       this.btnPause.Name = "btnPause";
@@ -270,7 +270,7 @@ namespace WebDownloader {
       // 
       // btnResume
       // 
-      this.btnResume.Image = global::WebDownloader.Resource.imgBtnStandard;
+      this.btnResume.Image = global::WebDownloader.Properties.Resources.imgBtnStandard;
       this.btnResume.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.btnResume.Margin = new System.Windows.Forms.Padding(2, 1, 0, 2);
       this.btnResume.Name = "btnResume";
@@ -279,7 +279,7 @@ namespace WebDownloader {
       // 
       // btnCancel
       // 
-      this.btnCancel.Image = global::WebDownloader.Resource.imgBtnStandard;
+      this.btnCancel.Image = global::WebDownloader.Properties.Resources.imgBtnStandard;
       this.btnCancel.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.btnCancel.Margin = new System.Windows.Forms.Padding(2, 1, 0, 2);
       this.btnCancel.Name = "btnCancel";
@@ -288,7 +288,7 @@ namespace WebDownloader {
       // 
       // btnOpenTraceFile
       // 
-      this.btnOpenTraceFile.Image = global::WebDownloader.Resource.imgBtnStandard;
+      this.btnOpenTraceFile.Image = global::WebDownloader.Properties.Resources.imgBtnStandard;
       this.btnOpenTraceFile.ImageTransparentColor = System.Drawing.Color.Magenta;
       this.btnOpenTraceFile.Margin = new System.Windows.Forms.Padding(12, 1, 0, 2);
       this.btnOpenTraceFile.Name = "btnOpenTraceFile";
@@ -301,7 +301,7 @@ namespace WebDownloader {
             this.btnModeScroll,
             this.btnModeDirect,
             this.btnModeReverse});
-      this.cbOutputMode.Image = global::WebDownloader.Resource.imgBtnStandard;
+      this.cbOutputMode.Image = global::WebDownloader.Properties.Resources.imgBtnStandard;
       this.cbOutputMode.Margin = new System.Windows.Forms.Padding(2, 1, 0, 2);
       this.cbOutputMode.Name = "cbOutputMode";
       this.cbOutputMode.Size = new System.Drawing.Size(108, 22);

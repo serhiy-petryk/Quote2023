@@ -74,13 +74,13 @@ namespace WebDownloader {
 
       DataGridViewImageCell imageCell = (DataGridViewImageCell)this.grid.Rows[k].Cells[0];
       switch (messType) {
-        case csJob.MessageType.start: imageCell.Value = WebDownloader.Resource.imgStart; break;
-        case csJob.MessageType.done: imageCell.Value = WebDownloader.Resource.imgDone; break;
-        case csJob.MessageType.error: imageCell.Value = WebDownloader.Resource.imgError; break;
-        case csJob.MessageType.warning: imageCell.Value = WebDownloader.Resource.imgWarning; break;
-        case csJob.MessageType.info: imageCell.Value = WebDownloader.Resource.imgInfo; break;
-        case csJob.MessageType.noImage: imageCell.Value = WebDownloader.Resource.imgBlank; break;
-        default: imageCell.Value = WebDownloader.Resource.imgError; break;
+        case csJob.MessageType.start: imageCell.Value = WebDownloader.Properties.Resources.imgStart; break;
+        case csJob.MessageType.done: imageCell.Value = WebDownloader.Properties.Resources.imgDone; break;
+        case csJob.MessageType.error: imageCell.Value = WebDownloader.Properties.Resources.imgError; break;
+        case csJob.MessageType.warning: imageCell.Value = WebDownloader.Properties.Resources.imgWarning; break;
+        case csJob.MessageType.info: imageCell.Value = WebDownloader.Properties.Resources.imgInfo; break;
+        case csJob.MessageType.noImage: imageCell.Value = WebDownloader.Properties.Resources.imgBlank; break;
+        default: imageCell.Value = WebDownloader.Properties.Resources.imgError; break;
       }
       this.lblStatus.Image = (Image)imageCell.Value;
       string[] ss = pMessage.Split("\r\n".ToCharArray());

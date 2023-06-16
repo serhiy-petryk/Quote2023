@@ -113,7 +113,7 @@ namespace ProxyChecker
 
         private void WriteToSql(string proxy, long? swElapsedMilliseconds)
         {
-            var DbConnectionString = "Data Source=localhost;Initial Catalog=dbQuote2022;Integrated Security=True;Connect Timeout=150;";
+            var DbConnectionString = "Data Source=localhost;Initial Catalog=dbQuote2022;Integrated Security=True;Connect Timeout=150;Encrypt=false;";
             using (var conn = new SqlConnection(DbConnectionString))
             using (var cmd = conn.CreateCommand())
             {
