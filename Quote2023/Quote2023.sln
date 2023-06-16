@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32126.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{D77F6660-804B-4DD1-9D19-9A5A3B77665F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProxyChecker", "ProxyChecker\ProxyChecker.csproj", "{F7162D8D-DD1D-4436-9DF8-F3B408A5B191}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebScanner", "WebScanner\WebScanner.csproj", "{E05EC1E8-1DC8-4096-A353-57163062AB66}"
@@ -27,10 +25,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D77F6660-804B-4DD1-9D19-9A5A3B77665F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D77F6660-804B-4DD1-9D19-9A5A3B77665F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D77F6660-804B-4DD1-9D19-9A5A3B77665F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D77F6660-804B-4DD1-9D19-9A5A3B77665F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F7162D8D-DD1D-4436-9DF8-F3B408A5B191}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F7162D8D-DD1D-4436-9DF8-F3B408A5B191}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7162D8D-DD1D-4436-9DF8-F3B408A5B191}.Release|Any CPU.ActiveCfg = Release|Any CPU
