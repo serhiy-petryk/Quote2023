@@ -1,16 +1,33 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text;
 
 namespace DGCore.Misc {
   public static class DependentObjectManager {
 
     public static event EventHandler ObjectListChanged;
 
+    public static string GetStringPresentation()
+    {
+      StringBuilder sb = new StringBuilder();
+      Dictionary<object, List<IComponent>> data = DGCore.Misc.DependentObjectManager.LinksData;
+      foreach (KeyValuePair<object, List<IComponent>> kvp in data)
+      {
+        sb.Append(kvp.Key + Environment.NewLine);
+        foreach (IComponent o in kvp.Value)
+        {
+          sb.Append("\t" + o + Environment.NewLine);
+        }
+        sb.Append(Environment.NewLine);
+      }
+      return sb.ToString();
+    }
+
     public static void Bind(object producer, IComponent consumer)
     {
-      if (consumer == null)
-        return;
+      if (consumer == null) return;
+
       lock (_links) {
         List<IComponent> oo;
         if (!_links.TryGetValue(producer, out oo)) {
@@ -51,14 +68,14 @@ namespace DGCore.Misc {
     }
 
     private static void RemoveConsumer(IComponent consumer) {
-      Utils.Events.RemoveAllEventSubsriptions(consumer);
+      Utils.Events.RemoveAllEventSubscriptions(consumer);
 
       List<object> blankEntries = new List<object>();
       // Remove consumer from all dictionary values
       foreach (KeyValuePair<object, List<IComponent>> kvp in _links) {
         while (kvp.Value.Contains(consumer)) {
           kvp.Value.Remove(consumer);
-          Utils.Events.RemoveEventSubsriptions(kvp.Key, consumer);
+          Utils.Events.RemoveEventSubscriptions(kvp.Key, consumer);
         }
         if (kvp.Value.Count == 0) blankEntries.Add(kvp.Key);
       }

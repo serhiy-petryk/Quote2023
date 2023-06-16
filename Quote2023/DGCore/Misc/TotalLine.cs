@@ -9,29 +9,25 @@ namespace DGCore.Misc
     public class TotalLine : Common.ITotalLine
     {
         #region ==========  Static section  ==============
-        private static readonly Type[] _typesForTotalLines = {
-            typeof(char), typeof(byte), typeof(sbyte), typeof(short), typeof(ushort), typeof(int), typeof(uint),
-            typeof(long), typeof(ulong), typeof(float), typeof(double), typeof(decimal)
-        };
-
-        public static bool IsTypeSupport(Type t) => _typesForTotalLines.Contains(t);
+        public static bool IsTypeSupport(Type t) => Utils.Types.IsNumericType(t);
 
         public static void ApplySettings(IEnumerable<TotalLine> target, IEnumerable<Common.ITotalLine> source)
         {
-            foreach (Common.ITotalLine tl1 in source)
-                foreach (TotalLine tl2 in target)
-                    if (tl2.Id == tl1.Id)
-                    {
-                        tl2.TotalFunction = tl1.TotalFunction;
-                        tl2.DecimalPlaces = tl1.DecimalPlaces;
-                        break;
-                    }
+            foreach (TotalLine tl1 in target)
+            {
+                if (source.FirstOrDefault(o => o.Id == tl1.Id) is Common.ITotalLine tl2)
+                    tl1.TotalFunction = tl2.TotalFunction;
+                else
+                    tl1.TotalFunction = Common.Enums.TotalFunction.None;
+            }
         }
         #endregion
 
         // PropertyDescriptor _pd;// can be null; before work with pd you need to activate it (use PropertyDescriptor property set)
         // Common.Enums.TotalFunction _totalFunction = Common.Enums.TotalFunction.None;
-        private int _dpTotals = 7;
+
+        // Valid only for AverageFunction
+        private int? _dpTotals = null;
 
         public TotalLine() { }
 
@@ -43,22 +39,11 @@ namespace DGCore.Misc
 
         [Browsable(false)]
         public string Id { get; }
-
-        public string DisplayName => PropertyDescriptor.DisplayName;
-
+        public string DisplayName => PropertyDescriptor.DisplayName; // For label in totals of datagridview (DGWnd project)
         public Common.Enums.TotalFunction TotalFunction { get; set; }
-
-        public int DecimalPlaces
-        {
-            get => _dpTotals;
-            set => _dpTotals = Math.Min(15, Math.Max(0, value));
-        }
-
         [Browsable(false)]
         public PropertyDescriptor PropertyDescriptor { get; set; }
-
-        public UserSettings.TotalLine ToSettingsTotalLine() => new UserSettings.TotalLine { Id = Id, DecimalPlaces = _dpTotals, TotalFunction = TotalFunction };
-
+        public UserSettings.TotalLine ToSettingsTotalLine() => new UserSettings.TotalLine { Id = Id, TotalFunction = TotalFunction };
         public override string ToString() => Id;
     }
 

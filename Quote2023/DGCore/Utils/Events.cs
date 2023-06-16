@@ -6,10 +6,10 @@ using System.Reflection;
 namespace DGCore.Utils {
   public static class Events {
 
-    public static void RemoveAllEventSubsriptions(object target) {
-      RemoveEventSubsriptions(target, null);
+    public static void RemoveAllEventSubscriptions(object target) {
+      RemoveEventSubscriptions(target, null);
     }
-    public static void RemoveEventSubsriptions(object target, object subscriber) {
+    public static void RemoveEventSubscriptions(object target, object subscriber) {
       EventInfo[] eis = target.GetType().GetEvents(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
       foreach (EventInfo ei in eis) {
         RemoveDelegates(ei, target, subscriber);
@@ -42,12 +42,12 @@ namespace DGCore.Utils {
       List<Delegate> delegates = new List<Delegate>();
       List<object> keys = new List<object>();
       if (ehl != null) {
-        FieldInfo fiHead = typeof(EventHandlerList).GetField("head", BindingFlags.Instance | BindingFlags.NonPublic);
+        FieldInfo fiHead = typeof(EventHandlerList).GetField("_head", BindingFlags.Instance | BindingFlags.NonPublic);
         object head = fiHead.GetValue(ehl);
         if (fiHandler == null) {
-          fiHandler = head.GetType().GetField("handler", BindingFlags.Instance | BindingFlags.NonPublic);
-          fiNext = head.GetType().GetField("next", BindingFlags.Instance | BindingFlags.NonPublic);
-          fiKey = head.GetType().GetField("key", BindingFlags.Instance | BindingFlags.NonPublic);
+          fiHandler = head.GetType().GetField("_handler", BindingFlags.Instance | BindingFlags.NonPublic);
+          fiNext = head.GetType().GetField("_next", BindingFlags.Instance | BindingFlags.NonPublic);
+          fiKey = head.GetType().GetField("_key", BindingFlags.Instance | BindingFlags.NonPublic);
         }
         //    FieldInfo fiHandler = head.GetType().GetField("handler", BindingFlags.Instance | BindingFlags.NonPublic);
         //  FieldInfo fiNext = head.GetType().GetField("next", BindingFlags.Instance | BindingFlags.NonPublic);

@@ -5,6 +5,7 @@ using System.Reflection.Emit;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Text;
+using DGCore.Common;
 
 namespace DGCore.PD
 {
@@ -27,7 +28,7 @@ namespace DGCore.PD
                 // This event need when you are creating LookupTableTypeConverter when componentType is dynamic type
                 System.Threading.Thread.GetDomain().AssemblyResolve += new ResolveEventHandler(DynamicType_AssemblyResolve);
                 // not working in Net.5.0 _dynamicAssembly = System.Threading.Thread.GetDomain().DefineDynamicAssembly(new AssemblyName("PD_DynamicType"), AssemblyBuilderAccess.RunAndSave);
-                _dynamicAssembly = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName("PD_DynamicType"), AssemblyBuilderAccess.RunAndSave);
+                _dynamicAssembly = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName("PD_DynamicType"), AssemblyBuilderAccess.Run);
                 _moduleBuilder = _dynamicAssembly.DefineDynamicModule(moduleName);
             }
             //      ModuleBuilder moduleBuilder = (ModuleBuilder)_dynamicAssembly.GetModule(moduleName);
@@ -88,21 +89,21 @@ namespace DGCore.PD
                 // This event need when you are creating LookupTableTypeConverter when componentType is dynamic type
                 System.Threading.Thread.GetDomain().AssemblyResolve += new ResolveEventHandler(DynamicType_AssemblyResolve);
                 // not working in Net.5.0 _dynamicAssembly = System.Threading.Thread.GetDomain().DefineDynamicAssembly(new AssemblyName("PD_DynamicType"), AssemblyBuilderAccess.RunAndSave);
-                _dynamicAssembly = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName("PD_DynamicType"), AssemblyBuilderAccess.RunAndSave);
+                _dynamicAssembly = AssemblyBuilder.DefineDynamicAssembly(new AssemblyName("PD_DynamicType"), AssemblyBuilderAccess.Run);
                 _moduleBuilder = _dynamicAssembly.DefineDynamicModule(moduleName);
             }
             //      ModuleBuilder moduleBuilder = (ModuleBuilder)_dynamicAssembly.GetModule(moduleName);
 
             // Add new type to module
-            TypeBuilder tb = _moduleBuilder.DefineType("DynamicType_" + Utils.Tips.GetUniqueNumber().ToString(), TypeAttributes.Public);
+            var tb = _moduleBuilder.DefineType("DynamicType_" + Utils.Tips.GetUniqueNumber(), TypeAttributes.Public);
             Dictionary<string, FieldBuilder> fields = new Dictionary<string, FieldBuilder>();
             Dictionary<string, PropertyBuilder> properties = new Dictionary<string, PropertyBuilder>();
             // Add fields
             for (int i = 0; i < propertyNames.Count; i++)
             {
-                var builders = GetDynamicPropertyBuilder(tb, propertyNames[i], propertyTypes[i]);
-                fields.Add($"{FIELD_PREFIX}{propertyNames[i]}", builders.Item2);
-                properties.Add(propertyNames[i], builders.Item1);
+                var builderInfo = GetDynamicPropertyBuilder(tb, propertyNames[i], propertyTypes[i]);
+                fields.Add($"{FIELD_PREFIX}{propertyNames[i]}", builderInfo.Item2);
+                properties.Add(propertyNames[i], builderInfo.Item1);
 
                 if (customAttributes != null && customAttributes.ContainsKey(propertyNames[i]))
                 {
@@ -111,11 +112,12 @@ namespace DGCore.PD
                     {
                         string attrCode;
                         CustomAttributeBuilder aBuilder = GetAttributeBuilderFromAttribute(a, out attrCode);
-                        builders.Item1.SetCustomAttribute(aBuilder);
-                        builders.Item2.SetCustomAttribute(aBuilder);
+                        builderInfo.Item1.SetCustomAttribute(aBuilder);
+                        builderInfo.Item2.SetCustomAttribute(aBuilder);
                     }
                 }
             }
+
             // Create some methods if there is primary key
             if (primaryKey != null && primaryKey.Length > 0)
             {
@@ -157,14 +159,70 @@ namespace DGCore.PD
             }*/
 
         //==================    Private section   =================================  
-        private static Tuple<PropertyBuilder, FieldBuilder> GetDynamicPropertyBuilder(TypeBuilder typeBuilder, string propertyName, Type propertyType)
+        private static Tuple<PropertyBuilder, FieldBuilder> NestedPropertyBuilder(TypeBuilder tb, string propertyName, Type propertyType, string parentPropertyName, Type parentType, MemberInfo baseMember)
+        {
+            var nestedPropertyName = parentPropertyName + Constants.MDelimiter + propertyName;
+            propertyType = Utils.Types.GetNullableType(propertyType);
+            var isPropertyValueType = propertyType.IsValueType;
+
+            var aa1 = propertyName.Split(new string[] { Constants.MDelimiter }, StringSplitOptions.None);
+            if (aa1.Length > 5)
+                return null;
+
+            //Getter
+            var methodGetBuilder = tb.DefineMethod($"get_{nestedPropertyName}",
+                MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, propertyType,
+                Type.EmptyTypes);
+
+            var il = methodGetBuilder.GetILGenerator();
+            var lblGetValue = il.DefineLabel();
+            var lblReturn = il.DefineLabel();
+            LocalBuilder locValue = null;
+            if (isPropertyValueType)
+                locValue = il.DeclareLocal(propertyType);
+
+            il.Emit(OpCodes.Ldarg_0);
+            if (baseMember is FieldInfo baseFieldInfo)
+                il.Emit(OpCodes.Ldfld, baseFieldInfo);
+            else if (baseMember is MethodInfo baseMethodInfo)
+                il.Emit(OpCodes.Call, baseMethodInfo);
+            il.Emit(OpCodes.Dup);
+            il.Emit(OpCodes.Brtrue, lblGetValue);
+
+            il.Emit(OpCodes.Pop);
+            if (isPropertyValueType)
+            {
+                il.Emit(OpCodes.Ldloca, locValue);
+                il.Emit(OpCodes.Initobj, propertyType);
+                il.Emit(OpCodes.Ldloc_0);
+            }
+            else
+                il.Emit(OpCodes.Ldnull);
+
+            il.Emit(OpCodes.Br, lblReturn);
+            il.MarkLabel(lblGetValue);
+            var miProperty = parentType.GetMethod($"get_{propertyName}", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            il.Emit(OpCodes.Call, miProperty);
+            if (isPropertyValueType)
+                il.Emit(OpCodes.Newobj, propertyType.GetConstructor(new[] {Utils.Types.GetNotNullableType(propertyType)}));
+
+            il.MarkLabel(lblReturn);
+            il.Emit(OpCodes.Ret);
+
+            var propertyBuilder = tb.DefineProperty(nestedPropertyName, PropertyAttributes.HasDefault, propertyType, null);
+            propertyBuilder.SetGetMethod(methodGetBuilder);
+
+            return new Tuple<PropertyBuilder, FieldBuilder>(propertyBuilder, null);
+        }
+
+        private static Tuple<PropertyBuilder, FieldBuilder> GetDynamicPropertyBuilder(TypeBuilder tb, string propertyName, Type propertyType)
         {
             FieldBuilder fieldBuilder =
                 // typeBuilder.DefineField($"{FIELD_PREFIX}{propertyName}", propertyType, FieldAttributes.Private);
-                typeBuilder.DefineField($"{FIELD_PREFIX}{propertyName}", propertyType, FieldAttributes.Public);
+                tb.DefineField($"{FIELD_PREFIX}{propertyName}", propertyType, FieldAttributes.Public);
 
             //Getter
-            MethodBuilder methodGetBuilder = typeBuilder.DefineMethod($"get_{propertyName}",
+            MethodBuilder methodGetBuilder = tb.DefineMethod($"get_{propertyName}",
                 MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, propertyType,
                 Type.EmptyTypes);
 
@@ -174,7 +232,7 @@ namespace DGCore.PD
             getIL.Emit(OpCodes.Ret);
 
             //Setter
-            MethodBuilder methodSetBuilder = typeBuilder.DefineMethod($"set_{propertyName}",
+            MethodBuilder methodSetBuilder = tb.DefineMethod($"set_{propertyName}",
                 MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, null,
                 new Type[] { propertyType });
 
@@ -185,9 +243,19 @@ namespace DGCore.PD
             setIL.Emit(OpCodes.Ret);
 
             PropertyBuilder propertyBuilder =
-                typeBuilder.DefineProperty(propertyName, PropertyAttributes.HasDefault, propertyType, null);
+                tb.DefineProperty(propertyName, PropertyAttributes.HasDefault, propertyType, null);
             propertyBuilder.SetGetMethod(methodGetBuilder);
             propertyBuilder.SetSetMethod(methodSetBuilder);
+
+            if (propertyType != typeof(string) && !propertyType.IsValueType && propertyType.Name != "RuntimeType")
+            {
+                var pp = MemberDescriptorUtils.GetPublicProperties(propertyType);
+                foreach (var p in pp)
+                {
+                    // NestedPropertyBuilder(tb, p.Name, p.PropertyType, propertyName, propertyType, methodGetBuilder);
+                    NestedPropertyBuilder(tb, p.Name, p.PropertyType, propertyName, propertyType, fieldBuilder);
+                }
+            }
 
             return new Tuple<PropertyBuilder, FieldBuilder>(propertyBuilder, fieldBuilder);
         }

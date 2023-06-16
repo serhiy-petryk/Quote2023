@@ -39,7 +39,7 @@ namespace DGWnd.UserControls {
       // Set column visibility
       foreach (var c in settings.AllColumns)
       {
-        clbAllColumns.Items.Add(new Misc.CheckedListBoxItem(c.Id, properties[c.Id].DisplayName, c.IsHidden));
+        clbAllColumns.Items.Add(new Misc.CheckedListBoxItem(c.Id, properties[c.Id].DisplayName.Replace(Environment.NewLine, DGCore.Common.Constants.MDelimiter), c.IsHidden));
         if (c.IsHidden)
           clbAllColumns.SetItemChecked(clbAllColumns.Items.Count - 1, true);
       }
@@ -72,7 +72,7 @@ namespace DGWnd.UserControls {
 
       // Totals
       _totalLines.AddRange(properties.Cast<PropertyDescriptor>()
-        .Where(pd => pd.IsBrowsable && DGCore.Misc.TotalLine.IsTypeSupport(DGCore.Utils.Types.GetNotNullableType(pd.PropertyType)))
+        .Where(pd => pd.IsBrowsable && DGCore.Misc.TotalLine.IsTypeSupport(pd.PropertyType))
         .Select(pd => new DGCore.Misc.TotalLine(pd))); // Create total data source
       DGCore.Misc.TotalLine.ApplySettings(_totalLines, settings.TotalLines); // set statistic function & decimal places
       dgvTotals.DataSource = _totalLines;
@@ -114,8 +114,7 @@ namespace DGWnd.UserControls {
         .ToList();
 
       // Totals
-      settings.TotalLines = _totalLines.Where(item => item.TotalFunction != DGCore.Common.Enums.TotalFunction.None)
-        .Select(item => item.ToSettingsTotalLine()).ToList();
+      settings.TotalLines = _totalLines.Select(item => item.ToSettingsTotalLine()).ToList();
 
       // ShowTotalRow
       settings.ShowTotalRow = cbShowTotalRow.Checked;

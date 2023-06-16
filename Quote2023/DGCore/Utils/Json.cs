@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using DGCore.Misc;
 
 namespace DGCore.Utils
 {
@@ -60,6 +60,10 @@ namespace DGCore.Utils
             if (objType == null || objType.IsPrimitive || objType == typeof(string) || typeof(Type).IsAssignableFrom(objType))
                 return;
 
+            if (obj is IEnumerable list)
+                foreach (var o in list)
+                    ConvertJsonElements(o);
+
             // var properties = objType.GetProperties();
             var properties = PD.MemberDescriptorUtils.GetPublicProperties(objType);
             foreach (var property in properties)
@@ -88,7 +92,7 @@ namespace DGCore.Utils
                             property.SetValue(obj, json.GetBoolean());
                             break;
                         case JsonValueKind.Object:
-                            break;
+                          break;
                         default:
                             throw new Exception($"Trap!!!. ConvertJsonElements not defined for {json.ValueKind}");
                     }
@@ -97,5 +101,15 @@ namespace DGCore.Utils
                     ConvertJsonElements(propValue);
             }
         }
+
+        public class JsonTimeSpanConverter : JsonConverter<TimeSpan>
+        {
+            public override TimeSpan Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options) =>
+                TimeSpan.Parse(reader.GetString(), CultureInfo.InvariantCulture);
+
+            public override void Write(Utf8JsonWriter writer, TimeSpan value, JsonSerializerOptions options) =>
+                writer.WriteStringValue(value.ToString("g", CultureInfo.InvariantCulture));
+        }
+
     }
 }

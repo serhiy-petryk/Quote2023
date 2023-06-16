@@ -135,7 +135,7 @@ namespace spMain.cs {
         form.Controls[0].Controls[5].Controls[2].Enabled = false;
       }
 
-      FieldInfo fi = form.GetType().GetField("listbox", BindingFlags.NonPublic | BindingFlags.Instance);
+      FieldInfo fi = form.GetType().GetField("_listbox", BindingFlags.NonPublic | BindingFlags.Instance);
       this._formListBox = (ListBox)fi.GetValue(form);
       //      form.Size = new Size(800, 500);
       form.Text = "\"" + form.Text;
@@ -146,7 +146,7 @@ namespace spMain.cs {
 			PropertyGrid pg = (PropertyGrid)sender;
 			object x = pg.SelectedObject;
 			if (x is PropertyDescriptor) {// Dictionary (SelectionWrapper object)
-        FieldInfo fi = x.GetType().GetField("value", BindingFlags.Instance | BindingFlags.NonPublic);
+        FieldInfo fi = x.GetType().GetField("_value", BindingFlags.Instance | BindingFlags.NonPublic);
         if (fi != null) {
 					object x1 = fi.GetValue(x);
 					PGUtils.PropertyType myType = PGUtils.GetPropertyTypeFromValue(x1);
@@ -274,7 +274,7 @@ namespace spMain.cs {
               pi.SetValue(items[i], value, null);
             }
             else {
-              FieldInfo fi = items[i].GetType().GetField("value", BindingFlags.Instance | BindingFlags.NonPublic);
+              FieldInfo fi = items[i].GetType().GetField("_value", BindingFlags.Instance | BindingFlags.NonPublic);
               fi.SetValue(items[i], value);
             }
           }

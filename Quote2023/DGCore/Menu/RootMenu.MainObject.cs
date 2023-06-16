@@ -38,7 +38,6 @@ namespace DGCore.Menu
                 // var mo = ((Newtonsoft.Json.Linq.JObject) kvp.Value).ToObject<MenuOption>();
                 var mo = JsonSerializer.Deserialize<MenuOption>(((JsonElement)kvp.Value).GetRawText(), Utils.Json.DefaultJsonOptions);
                 Utils.Json.ConvertJsonElements(mo);
-
                 mo.Label = kvp.Key;
                 mo.ParentId = parent?.Id;
                 FlatMenu.Add(mo);

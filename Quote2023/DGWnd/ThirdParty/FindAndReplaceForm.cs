@@ -119,13 +119,20 @@ namespace DGWnd.ThirdParty {
     }
 
     DataGridViewCell _lastFindCell = null;
-    void FindButton1_Click(object sender, System.EventArgs e) {
+    void FindButton1_Click(object sender, System.EventArgs e)
+    {
+      var findWhat = this.FindWhatTextBox1.Text;
+      var matchCase = this.MatchCaseCheckBox1.Checked;
+      var matchCell = this.MatchCellCheckBox1.Checked;
+      var  searchMethod = this.UseCheckBox1.Checked ? this.UseComboBox1.SelectedIndex : -1; // -1 = No regular repression or wildcard
+      var containsTextPredicate = DGCore.Utils.Tips.GetContainsTextPredicate(findWhat, matchCase, matchCell, searchMethod);
+
       DataGridViewCell FindCell = null;
       if (_lastFindCell != this._dgv.CurrentCell) {
         _lastFindCell = null;
       }
       if (this.rbAllTable1.Checked ) {
-        FindCell = sp_FindInTable();
+        FindCell = sp_FindInTable(containsTextPredicate);
 //        if (FindCell != null) _dgv.CurrentCell = FindCell;
         if (FindCell != null) {
           if (FindCell == _lastFindCell) {
@@ -138,7 +145,7 @@ namespace DGWnd.ThirdParty {
         }
       }
       else if (this.rbSelection1.Checked) {
-        FindCell = sp_FindInSelection();
+        FindCell = sp_FindInSelection(containsTextPredicate);
         if (FindCell != null) {
           DataGridViewSelectedCellCollection selectedCells = this._dgv.SelectedCells;
           DGVUtils.SetNewCurrentCell(_dgv, FindCell);
@@ -147,7 +154,7 @@ namespace DGWnd.ThirdParty {
         }
       }
       else if (this.rbActiveColumn1.Checked) {
-        FindCell = sp_FindInColumn();
+        FindCell = sp_FindInColumn(containsTextPredicate);
 //        if (FindCell != null) _dgv.CurrentCell = FindCell;
         if (FindCell != null) DGVUtils.SetNewCurrentCell(_dgv, FindCell);
       }
@@ -156,19 +163,19 @@ namespace DGWnd.ThirdParty {
       }
     }
 
-/*    void SetCurrentCell(DataGridViewCell newCurrentCell) {
-      _dgv.CurrentCell = newCurrentCell;
-      if (!_dgv.CurrentCell.OwningColumn.Displayed) {
-        int colIndex = _dgv.CurrentCell.OwningColumn.Index;
-        int rowIndex = _dgv.CurrentCell.OwningRow.Index;
-        _dgv.CurrentCell = _dgv[colIndex - 1, rowIndex];
-        _dgv.CurrentCell = _dgv[colIndex, rowIndex];
-      }
-//      MessageBox.Show(_dgv.CurrentCell.OwningColumn.Displayed.ToString());
-    }*/
+    /*    void SetCurrentCell(DataGridViewCell newCurrentCell) {
+          _dgv.CurrentCell = newCurrentCell;
+          if (!_dgv.CurrentCell.OwningColumn.Displayed) {
+            int colIndex = _dgv.CurrentCell.OwningColumn.Index;
+            int rowIndex = _dgv.CurrentCell.OwningRow.Index;
+            _dgv.CurrentCell = _dgv[colIndex - 1, rowIndex];
+            _dgv.CurrentCell = _dgv[colIndex, rowIndex];
+          }
+    //      MessageBox.Show(_dgv.CurrentCell.OwningColumn.Displayed.ToString());
+        }*/
 
     // ============  Private methods  ==================
-    DataGridViewCell sp_FindInTable() {
+    DataGridViewCell sp_FindInTable(Func<object, bool> containsTextPredicate) {
       if (_dgv.CurrentCell == null) return null;
 
       // Search criterions
@@ -182,8 +189,9 @@ namespace DGWnd.ThirdParty {
       }
 
       DataGridViewColumn[] cols = DGVUtils.GetColumnsInDisplayOrder(this._dgv, true);
-      Utils.DGVColumnHelper[] colHelpers = new Utils.DGVColumnHelper[cols.Length];
-      for (int i = 0; i < cols.Length; i++) colHelpers[i] = new Utils.DGVColumnHelper(cols[i]);
+      var getters = new Func<object, string>[cols.Length];
+      for (int i = 0; i < cols.Length; i++)
+        getters[i] = Tips.GetDGCellValueFormatter(cols[i]).StringForFindTextGetter;
 
       // Start of search            
       int iSearchStartRow = _dgv.CurrentCell.RowIndex;
@@ -219,15 +227,15 @@ namespace DGWnd.ThirdParty {
         if (iRowIndex >= iLastRowNumber) iRowIndex = 0;
         else if (iRowIndex < 0) iRowIndex = iLastRowNumber - 1;
         // find value
-        if (sp_FindBase(colHelpers[iColIndex].GetFormattedValueFromItem(data[iRowIndex], false), sFindWhat, bMatchCase, bMatchCell, iSearchMethod)) {
-          return _dgv[cols[iColIndex].Index, iRowIndex];
-        }
+        if (containsTextPredicate(getters[iColIndex](data[iRowIndex])))
+          //if (sp_FindBase(getters[iColIndex](data[iRowIndex]), sFindWhat, bMatchCase, bMatchCell, iSearchMethod))
+            return _dgv[cols[iColIndex].Index, iRowIndex];
       } while (!(iRowIndex == iSearchStartRow && iColIndex == iSearchStartColumn));
       return null;
     }
 
     //sp_FindInSelection
-    DataGridViewCell sp_FindInSelection() {
+    DataGridViewCell sp_FindInSelection(Func<object, bool> containsTextPredicate) {
       if (_dgv.CurrentCell == null) return null;
 
       // Search criterions
@@ -243,8 +251,9 @@ namespace DGWnd.ThirdParty {
       int[] selectedRows;
       DataGridViewColumn[] selectedColumns;
       DGVUtils.GetSelectedArea(this._dgv, out selectedRows, out selectedColumns);
-      Utils.DGVColumnHelper[] colHelpers = new Utils.DGVColumnHelper[selectedColumns.Length];
-      for (int i = 0; i < selectedColumns.Length; i++) colHelpers[i] = new Utils.DGVColumnHelper(selectedColumns[i]);
+      var getters = new Func<object, string>[selectedColumns.Length];
+      for (int i = 0; i < selectedColumns.Length; i++)
+          getters[i] = Tips.GetDGCellValueFormatter(selectedColumns[i]).StringForFindTextGetter;
 
       // Start of search            
       int iTmp = _dgv.CurrentCell.RowIndex;
@@ -286,15 +295,14 @@ namespace DGWnd.ThirdParty {
         if (iRowIndex >= selectedRows.Length) iRowIndex = 0;
         else if (iRowIndex < 0) iRowIndex = selectedRows.Length - 1;
         // find
-        if (sp_FindBase(colHelpers[iColIndex].GetFormattedValueFromItem(data[selectedRows[iRowIndex]], false), sFindWhat, bMatchCase, bMatchCell, iSearchMethod)) {
+        if (containsTextPredicate(getters[iColIndex](data[selectedRows[iRowIndex]])))
           return _dgv[selectedColumns[iColIndex].Index, selectedRows[iRowIndex]];
-        }
       } while (!(iRowIndex == iSearchStartRow && iColIndex == iSearchStartColumn));
       return null;
     }
 
     //sp_FindInColumn
-    DataGridViewCell sp_FindInColumn() {
+    DataGridViewCell sp_FindInColumn(Func<object, bool> containsTextPredicate) {
       if (_dgv.CurrentCell == null) return null;
 
       // Search criterions
@@ -308,7 +316,7 @@ namespace DGWnd.ThirdParty {
       }
 
       DataGridViewColumn col = this._dgv.Columns[_dgv.CurrentCell.ColumnIndex];
-      Utils.DGVColumnHelper colHelper = new Utils.DGVColumnHelper(col);
+      var getter = Tips.GetDGCellValueFormatter(col).StringForFindTextGetter;
 
       // Start of search            
       int iSearchStartRow = _dgv.CurrentCell.RowIndex;
@@ -334,48 +342,48 @@ namespace DGWnd.ThirdParty {
         if (iRowIndex >= iLastRowNumber) iRowIndex = 0;
         else if (iRowIndex < 0) iRowIndex = iLastRowNumber - 1;
         //find
-        if (sp_FindBase(colHelper.GetFormattedValueFromItem(data[iRowIndex], false), sFindWhat, bMatchCase, bMatchCell, iSearchMethod)) {
-          return _dgv[col.Index, iRowIndex];
-        }
+        if (containsTextPredicate(getter(data[iRowIndex])))
+            return _dgv[col.Index, iRowIndex];
       } while (!(iRowIndex == iSearchStartRow));
       return null;
     }
 
     //sp_FindBase
-    bool sp_FindBase(object cellValue, String FindString, bool bMatchCase, bool bMatchCell, int iSearchMethod) {
-      if (cellValue == null || !(cellValue is string)) return false;
-      String SearchString = ((string)cellValue).Replace((char)160, (char)32);
+    bool xsp_FindBase(string formattedValue, string sFindWhat, bool bMatchCase, bool bMatchCell, int iSearchMethod) {
+      if (string.IsNullOrWhiteSpace(formattedValue)) return false;
+
+      var searchString = formattedValue.Replace((char)160, (char)32);
       // Regular string search
       if (iSearchMethod == -1) {
         // Match Cell
         if (bMatchCell) {
           if (bMatchCase)
-            return String.Equals(FindString, SearchString, StringComparison.Ordinal);
+            return String.Equals(sFindWhat, searchString, StringComparison.Ordinal);
           else
-            return String.Equals(FindString, SearchString, StringComparison.OrdinalIgnoreCase);
+            return String.Equals(sFindWhat, searchString, StringComparison.OrdinalIgnoreCase);
         }
         // No Match Cell
         else {
-          if (bMatchCase) return SearchString.IndexOf(FindString, StringComparison.Ordinal) >= 0;
-          else return SearchString.IndexOf(FindString, StringComparison.OrdinalIgnoreCase) >= 0;
+          if (bMatchCase) return searchString.IndexOf(sFindWhat, StringComparison.Ordinal) >= 0;
+          else return searchString.IndexOf(sFindWhat, StringComparison.OrdinalIgnoreCase) >= 0;
           //if (bMatchCase) return FastIndexOf(SearchString, FindString) >= 0; 
           //else return FastIndexOf(SearchString.ToLower(), FindString.ToLower()) >= 0;
         }
       }
       else {
         // Regular Expression
-        string RegexPattern = FindString;
+        string regexPattern = sFindWhat;
         // Wildcards
         if (iSearchMethod == 1) {
           // Convert wildcard to regex:
-          RegexPattern = "^" + System.Text.RegularExpressions.Regex.Escape(FindString).Replace("\\*", ".*").Replace("\\?", ".") + "$";
+          regexPattern = "^" + System.Text.RegularExpressions.Regex.Escape(sFindWhat).Replace("\\*", ".*").Replace("\\?", ".") + "$";
         }
-        System.Text.RegularExpressions.RegexOptions strCompare = System.Text.RegularExpressions.RegexOptions.None;
+        var strCompare = System.Text.RegularExpressions.RegexOptions.None;
         if (!bMatchCase) {
           strCompare = System.Text.RegularExpressions.RegexOptions.IgnoreCase;
         }
-        System.Text.RegularExpressions.Regex regex = new System.Text.RegularExpressions.Regex(RegexPattern, strCompare);
-        if (regex.IsMatch(SearchString)) return true;
+        var regex = new System.Text.RegularExpressions.Regex(regexPattern, strCompare);
+        if (regex.IsMatch(searchString)) return true;
         return false;
       }
     }

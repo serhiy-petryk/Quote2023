@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using DGCore.Common;
 
 namespace DGCore.DGVList
 {
-    public interface IDGVList_GroupItem
+    public interface IDGVList_GroupItem: IDisposable
     {
         int Level { get; }
         int ItemCount { get; }
@@ -26,7 +27,7 @@ namespace DGCore.DGVList
         private string _propertyName;
         internal object _propertyValue;
 
-        private double[] _totalValues;
+        private decimal?[] _totalValues;
         private Misc.TotalLine[] _totalDefinitions;
         private int[] _totalItemCount;
 
@@ -47,14 +48,6 @@ namespace DGCore.DGVList
             return newItem;
         }
         //============
-        public double[] TotalValues
-        {
-            get
-            {
-                if (this._totalValues == null) GetTotals();
-                return this._totalValues;
-            }
-        }
         public void ResetTotals()
         {
             if (_totalValues != null) _totalValues = null;
@@ -108,13 +101,18 @@ namespace DGCore.DGVList
             }
         }
 
-        object GetPropertyValue(string propertyName)
+        // Old code: before WPF
+         object GetPropertyValue(string propertyName)
         {
-            if (_propertyName == propertyName) return _propertyValue;
-            if (_propertyValue != null && _pdc != null && propertyName.StartsWith(_propertyName + "."))
+            if (_propertyName == propertyName) return this._propertyValue;
+            if (propertyName.Contains(Constants.MDelimiter) && _parent!=null && propertyName.Contains("NAME"))
             {
-                var s = propertyName.Substring(this._propertyName.Length + 1);
-                var pd = this._pdc[s];
+
+            }
+            if (_propertyValue != null && this._pdc != null && propertyName.StartsWith(this._propertyName + Constants.MDelimiter))
+            {
+                var s = propertyName.Substring(this._propertyName.Length + Constants.MDelimiter.Length);
+                var pd = _pdc[s];
                 if (pd != null) return pd.GetValue(this._propertyValue);
             }
 
@@ -123,44 +121,15 @@ namespace DGCore.DGVList
 
         public object GetValue(string propertyName)
         {
-            object value = GetPropertyValue(propertyName);
+            var value = GetPropertyValue(propertyName);
             if (value == null)
-            {
                 if (_totalDefinitions != null)
-                {
-                    var propertyNameWithDot = propertyName + ".";
-                    var nestedTotalValues = new List<double>();
-                    var nestedTotalDefinitions = new List<Misc.TotalLine>();
                     for (var i = 0; i < _totalDefinitions.Length; i++)
-                    {
                         if (_totalDefinitions[i].Id == propertyName)
                         {
-                            if (_totalValues == null) GetTotals();// Refresh totals if they do not exist
+                            if (_totalValues == null) GetTotals(); // Refresh totals if they do not exist
                             return _totalValues[i];
                         }
-
-                        if (_totalDefinitions[i].Id.StartsWith(propertyNameWithDot))
-                        {
-                            if (_totalValues == null) GetTotals();// Refresh totals if they do not exist
-                            nestedTotalDefinitions.Add(_totalDefinitions[i]);
-                            nestedTotalValues.Add(_totalValues[i]);
-                        }
-
-                    }
-
-                    if (nestedTotalDefinitions.Count > 0)
-                    {
-                        var propertyType = PD.MemberDescriptorUtils.GetTypeMembers(typeof(T))[propertyName].PropertyType;
-                        return new DGVGroupTotalValueProxy
-                        {
-                            pdc = PD.MemberDescriptorUtils.GetTypeMembers(propertyType),
-                            Prefix = propertyNameWithDot,
-                            TotalDefinitions = nestedTotalDefinitions.ToArray(),
-                            TotalValues = nestedTotalValues.ToArray()
-                        };
-                    }
-                }
-            }
             return value;
         }
 
@@ -170,21 +139,21 @@ namespace DGCore.DGVList
             this._totalDefinitions = totalLines;
         }
 
-        double[] GetTotals()
+        decimal?[] GetTotals()
         {
             if (this._totalDefinitions == null || this._totalValues != null) return this._totalValues;
-            this._totalValues = new double[this._totalDefinitions.Length];
+            this._totalValues = new decimal?[this._totalDefinitions.Length];
             this._totalItemCount = new int[this._totalDefinitions.Length];
             // Init total values
             for (int i = 0; i < this._totalDefinitions.Length; i++)
             {
                 if (this._totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Minimum)
                 {
-                    this._totalValues[i] = double.MaxValue;
+                    this._totalValues[i] = decimal.MaxValue;
                 }
                 else if (this._totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Maximum)
                 {
-                    this._totalValues[i] = double.MinValue;
+                    this._totalValues[i] = decimal.MinValue;
                 }
                 else this._totalValues[i] = 0;
                 this._totalItemCount[i] = 0;
@@ -197,7 +166,7 @@ namespace DGCore.DGVList
                     var dd = child.GetTotals().ToArray();
                     for (var i = 0; i < dd.Length; i++)
                     {
-                        if (double.IsNaN(dd[i])) continue;
+                        if (!dd[i].HasValue) continue;
 
                         this._totalItemCount[i] += child._totalItemCount[i];
                         switch (this._totalDefinitions[i].TotalFunction)
@@ -218,10 +187,10 @@ namespace DGCore.DGVList
                                 this._totalValues[i] += dd[i];
                                 break;
                             case Common.Enums.TotalFunction.Maximum:
-                                this._totalValues[i] = Math.Max(this._totalValues[i], dd[i]);
+                                this._totalValues[i] = Math.Max(this._totalValues[i].Value, dd[i].Value);
                                 break;
                             case Common.Enums.TotalFunction.Minimum:
-                                this._totalValues[i] = Math.Min(this._totalValues[i], dd[i]);
+                                this._totalValues[i] = Math.Min(this._totalValues[i].Value, dd[i].Value);
                                 break;
                         }
                     }
@@ -241,23 +210,23 @@ namespace DGCore.DGVList
                             switch (this._totalDefinitions[i].TotalFunction)
                             {
                                 case Common.Enums.TotalFunction.First:
-                                    if (!notFirstFlags[i]) this._totalValues[i] = Convert.ToDouble(o);
+                                    if (!notFirstFlags[i]) this._totalValues[i] = Convert.ToDecimal(o);
                                     break;
                                 case Common.Enums.TotalFunction.Last:
-                                    this._totalValues[i] = Convert.ToDouble(o);
+                                    this._totalValues[i] = Convert.ToDecimal(o);
                                     break;
                                 case Common.Enums.TotalFunction.Count:
-                                    this._totalValues[i] += 1.0;
+                                    this._totalValues[i] += decimal.One;
                                     break;
                                 case Common.Enums.TotalFunction.Average:
                                 case Common.Enums.TotalFunction.Sum:
-                                    this._totalValues[i] += Convert.ToDouble(o);
+                                    this._totalValues[i] += Convert.ToDecimal(o);
                                     break;
                                 case Common.Enums.TotalFunction.Maximum:
-                                    this._totalValues[i] = Math.Max(this._totalValues[i], Convert.ToDouble(o));
+                                    this._totalValues[i] = Math.Max(this._totalValues[i].Value, Convert.ToDecimal(o));
                                     break;
                                 case Common.Enums.TotalFunction.Minimum:
-                                    this._totalValues[i] = Math.Min(this._totalValues[i], Convert.ToDouble(o));
+                                    this._totalValues[i] = Math.Min(this._totalValues[i].Value, Convert.ToDecimal(o));
                                     break;
                             }
                             notFirstFlags[i] = true;
@@ -265,27 +234,34 @@ namespace DGCore.DGVList
                     }
                 }
             }
-            // Rounding rezult
+
             for (int i = 0; i < this._totalDefinitions.Length; i++)
             {
-                if (this._totalItemCount[i] == 0)
+                // Clear value if no rows
+                if (_totalItemCount[i] == 0)
                 {
-                    this._totalValues[i] = double.NaN;
+                    _totalValues[i] = null;
+                    continue;
                 }
-                else
-                {
-                    if (this._totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Average)
-                    {
-                        this._totalValues[i] = Math.Round(this._totalValues[i] / this._totalItemCount[i], this._totalDefinitions[i].DecimalPlaces);
-                    }
-                    else
-                    {
-                        this._totalValues[i] = Math.Round(this._totalValues[i], this._totalDefinitions[i].DecimalPlaces);
-                    }
-                }
+
+                // Set value for average function
+                if (_totalDefinitions[i].TotalFunction == Common.Enums.TotalFunction.Average)
+                    _totalValues[i] = _totalValues[i] / _totalItemCount[i];
             }
 
             return this._totalValues;
+        }
+
+        public void Dispose()
+        {
+            _propertyValue = null;
+            _parent = null;
+            _pdc = null;
+            ChildGroups?.Clear();
+            ChildItems?.Clear();
+            _totalDefinitions = null;
+            _totalValues = null;
+            _totalItemCount = null;
         }
     }
 }

@@ -5,8 +5,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
+using DGCore.Common;
+using DGCore.Utils;
 using DGWnd.Utils;
+using Color = System.Drawing.Color;
 
 //[module:CLSCompliant(true)]
 namespace DGWnd.ThirdParty { //AllocationRequest
@@ -16,6 +20,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
   /// didn't see fit to do it.
   /// </summary>
   public class DGVPrinter {
+
     public enum Alignment { NotSet, Left, Right, Center }
     public enum Location { Header, Footer, Absolute }
     public enum SizeType { CellSize, StringSize, Porportional }
@@ -97,9 +102,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
       public Margins margins;
 
       public List<DataGridViewColumn> _columnsToPrint = new List<DataGridViewColumn>();
-      public List<Utils.DGVColumnHelper> _helpers = new List<Utils.DGVColumnHelper>();
-      //      public float[] _columnWidths;
-
+      public List<Func<object, object>> _getters = new List<Func<object, object>>();
     }
     List<PageDef> pagesets;
     int currentpageset = 0;
@@ -3118,21 +3121,21 @@ namespace DGWnd.ThirdParty { //AllocationRequest
 
       // temp variables
       DataGridViewColumn col;
-            //      DataGridViewRow row;
+      //      DataGridViewRow row;
 
-            //-----------------------------------------------------------------
-            // measure the page headers and footers, including the grid column header cells
-            //-----------------------------------------------------------------
+      //-----------------------------------------------------------------
+      // measure the page headers and footers, including the grid column header cells
+      //-----------------------------------------------------------------
 
-            // set initial column sizes based on column titles
-            //      _rowHeight = (this.dgv.Rows.Count == 0 ? 0 : Convert.ToSingle(this.dgv.Rows[0].Height));
-            //      _rowHeight = 0;
+      // set initial column sizes based on column titles
+      //      _rowHeight = (this.dgv.Rows.Count == 0 ? 0 : Convert.ToSingle(this.dgv.Rows[0].Height));
+      //      _rowHeight = 0;
 
-      Utils.DGVColumnHelper[] helpers = new Utils.DGVColumnHelper[this._colsToPrint.Length];
+      var getters = new Func<object, object>[_colsToPrint.Length];
       float textRowHeight = -1f;
       for (i = 0; i < this._colsToPrint.Length; i++) {
         col = this._colsToPrint[i];
-        helpers[i] = new Utils.DGVColumnHelper(col);
+        getters[i] = Utils.Tips.GetDGCellValueFormatter(col).ValueForPrinterGetter;
         if (col.Name == "__groupColumn") {
           throw new Exception("Lovushka 2019-12. ?? Not used code");
           this.colwidths[i] = col.Width;
@@ -3182,7 +3185,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
           paddingWidth = col.InheritedStyle.Padding.Left + col.InheritedStyle.Padding.Right;
         }
         //      float paddingWidth = (RowHeight == RowHeightSetting.DataHeight ? col.InheritedStyle.Padding.Top + col.InheritedStyle.Padding.Bottom : 0f);
-        helpers[i].GetColumnSize(g, col.InheritedStyle.Font, _objectsToPrint, out colWidth, out rowHeight, rowHeights);
+        GetColumnSize(_colsToPrint[i], g, col.InheritedStyle.Font, _objectsToPrint, out colWidth, out rowHeight, rowHeights);
         if (rowHeights.Count > 0) {// heights for individual rows (Images)
           if (this.colwidths[i] < colWidth) this.colwidths[i] = colWidth;
           for (int i1 = 0; i1 < this.rowheights.Length; i1++) {
@@ -3197,9 +3200,6 @@ namespace DGWnd.ThirdParty { //AllocationRequest
           if (this.colwidths[i] < (colWidth + paddingWidth)) this.colwidths[i] = colWidth + paddingWidth;
           if (textRowHeight < rowHeight) textRowHeight = rowHeight;
           if (this.colwidths[i]>0f) this.colwidths[i]+=2f;
-        }
-
-        if (col.Name == "AMT") {
         }
 
         // calculate the size of column header cells after data column width defined 
@@ -3356,7 +3356,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
         pagesets[0].colwidthsoverride = new List<float>(colwidthsoverride);
         pagesets[0]._columnsToPrint = new List<DataGridViewColumn>(this._colsToPrint);
         pagesets[0].colwidths = new List<float>(this.colwidths);
-        pagesets[0]._helpers = new List<Utils.DGVColumnHelper>(helpers);
+        pagesets[0]._getters = new List<Func<object, object>>(getters);
         //        pagesets[0].colstoprint = colstoprint;
         //      pagesets[0].colwidths = colwidths;
         //    pagesets[0].colwidthsoverride = colwidthsoverride;
@@ -3401,7 +3401,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
         pagesets[pset].colwidthsoverride.Add(colwidthsoverride[i]);
         pagesets[pset].coltotalwidth += columnwidth;
         pagesets[pset]._columnsToPrint.Add(this._colsToPrint[i]);
-        pagesets[pset]._helpers.Add(helpers[i]);
+        pagesets[pset]._getters.Add(getters[i]);
       }
 
       //-----------------------------------------------------------------
@@ -3780,7 +3780,7 @@ namespace DGWnd.ThirdParty { //AllocationRequest
 
             DataGridViewCellStyle style = col.InheritedStyle;
             DataGridViewImageCellLayout imageLayout = DataGridViewImageCellLayout.NotSet;
-            object o = pageset._helpers[i].GetFormattedValueFromItem(this._objectsToPrint[currentrow], false);
+            object o = pageset._getters[i](_objectsToPrint[currentrow]);
             if (col is DataGridViewImageColumn) {
               imageLayout = ((DataGridViewImageColumn)col).ImageLayout;
             }
@@ -3870,10 +3870,8 @@ namespace DGWnd.ThirdParty { //AllocationRequest
               g.DrawString((string)formattedValue, GetScaledFont(style.Font), b1, actualprint, cellformat);
             }
           }
-          else if (formattedValue is Bitmap) {
-            //          DrawImageCell(g, (DataGridViewImageCell)cell, actualprint);
-            sp_DrawImageCell(g, (Bitmap)formattedValue, actualprint, imageLayout, style.Alignment);
-          }
+          else if (formattedValue is byte[] bytes)
+              sp_DrawImageCell(g, (Bitmap) Utils.Tips.ByteArrayToBitmapConverter.ConvertFrom(bytes), actualprint, imageLayout, style.Alignment);
           else if (formattedValue is CheckState || formattedValue is bool) {
 //            DGV.DGVCube.Draw_CheckBox(g, e.CellBounds, style, this.dgv[e.Column.Index, 0], formattedValue, formattedValue, 0, this.dgv);
             bool boolValue = (formattedValue is bool ? (bool)formattedValue : (CheckState)formattedValue == CheckState.Checked);
@@ -4066,15 +4064,80 @@ namespace DGWnd.ThirdParty { //AllocationRequest
       else if (sourceAlignment.ToString().Contains("Bottom")) destinationFormat.LineAlignment = StringAlignment.Far;
 //      System.Drawing.StringAlignment
     }
-/*    private void Alignment_Convert(DataGridViewContentAlignment sourceAlignment, System.Drawing2 StringFormat destinationFormat) {
-      if (sourceAlignment.ToString().Contains("Center")) destinationFormat.Alignment = StringAlignment.Center;
-      else if (sourceAlignment.ToString().Contains("Left")) destinationFormat.Alignment = StringAlignment.Near;
-      else if (sourceAlignment.ToString().Contains("Right")) destinationFormat.Alignment = StringAlignment.Far;
+    /*    private void Alignment_Convert(DataGridViewContentAlignment sourceAlignment, System.Drawing2 StringFormat destinationFormat) {
+          if (sourceAlignment.ToString().Contains("Center")) destinationFormat.Alignment = StringAlignment.Center;
+          else if (sourceAlignment.ToString().Contains("Left")) destinationFormat.Alignment = StringAlignment.Near;
+          else if (sourceAlignment.ToString().Contains("Right")) destinationFormat.Alignment = StringAlignment.Far;
 
-      if (sourceAlignment.ToString().Contains("Top")) destinationFormat.LineAlignment = StringAlignment.Near;
-      else if (sourceAlignment.ToString().Contains("Middle")) destinationFormat.LineAlignment = StringAlignment.Center;
-      else if (sourceAlignment.ToString().Contains("Bottom")) destinationFormat.LineAlignment = StringAlignment.Far;
-    }*/
+          if (sourceAlignment.ToString().Contains("Top")) destinationFormat.LineAlignment = StringAlignment.Near;
+          else if (sourceAlignment.ToString().Contains("Middle")) destinationFormat.LineAlignment = StringAlignment.Center;
+          else if (sourceAlignment.ToString().Contains("Bottom")) destinationFormat.LineAlignment = StringAlignment.Far;
+        }*/
+
+    private void GetColumnSize(DataGridViewColumn column, Graphics g, Font font, IEnumerable<object> items, out float colWidth, out float rowHeight, List<float> rowHeights)
+    {
+      var imageLayout = DataGridViewImageCellLayout.NotSet;
+      if (column is DataGridViewImageColumn)
+      {
+        imageLayout = ((DataGridViewImageColumn)column).ImageLayout;
+        // if this._imageLayout equals to NotSet == Not image columns
+        if (imageLayout == DataGridViewImageCellLayout.NotSet) imageLayout = DataGridViewImageCellLayout.Normal;
+      }
+
+      var formatter = Utils.Tips.GetDGCellValueFormatter(column);
+      colWidth = 0f;
+      rowHeight = 0f;
+      if (!column.Name.StartsWith(Constants.GroupColumnNamePrefix))
+      {
+        switch (imageLayout)
+        {
+          case DataGridViewImageCellLayout.NotSet: // Not image column
+            var propertyType = Types.GetNotNullableType(formatter.PropertyType);
+            if (propertyType == typeof(bool))
+            {
+              rowHeight = 18f;
+              colWidth = 18f;
+              return;
+            }
+
+            var rowHeightFlag = true;
+            var values = items.Select(item => formatter.ValueForPrinterGetter(item)).OfType<string>().Distinct();
+            foreach (var o in values)
+            {
+              if (o != null)
+              {
+                var size = g.MeasureString((string)o, font);
+                if (size.Width > colWidth) colWidth = size.Width;
+                if (rowHeightFlag)
+                {
+                  rowHeight = size.Height;
+                  rowHeightFlag = false;
+                }
+              }
+            }
+
+            break;
+          case DataGridViewImageCellLayout.Normal:
+            foreach (var item in items)
+            {
+              var value = formatter.ValueForPrinterGetter(item);
+              if (value == null)
+                rowHeights.Add(0x0F);
+              else
+              {
+                var bm = (Bitmap)Utils.Tips.ByteArrayToBitmapConverter.ConvertFrom(value);
+                if (bm.Width > colWidth) colWidth = bm.Width;
+                rowHeights.Add(bm.Height);
+              }
+            }
+            break;
+          default: // Stretched/Zoomed images
+            colWidth = -1f;
+            rowHeight = -1f;
+            break;
+        }
+      }
+    }
 
   }
 }

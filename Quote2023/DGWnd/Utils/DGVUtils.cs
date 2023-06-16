@@ -33,8 +33,8 @@ namespace DGWnd.Utils {
       List<int> cols = new List<int>();
       DataGridViewColumn[] cc = GetColumnsInDisplayOrder(dgv, true);
 
-      FieldInfo fi1 = typeof(DataGridView).GetField("individualSelectedCells", BindingFlags.Instance | BindingFlags.NonPublic);
-      FieldInfo fi2 = typeof(DataGridView).GetField("selectedBandIndexes", BindingFlags.Instance | BindingFlags.NonPublic);
+      FieldInfo fi1 = typeof(DataGridView).GetField("_individualSelectedCells", BindingFlags.Instance | BindingFlags.NonPublic);
+      FieldInfo fi2 = typeof(DataGridView).GetField("_selectedBandIndexes", BindingFlags.Instance | BindingFlags.NonPublic);
       IEnumerable cells = (IEnumerable)fi1.GetValue(dgv);
       IEnumerable bands = (IEnumerable)fi2.GetValue(dgv);
 
@@ -146,7 +146,7 @@ namespace DGWnd.Utils {
     public static PropertyDescriptorCollection GetInternalPropertyDescriptorCollection(DataGridView dgv) {
       PropertyInfo pi = typeof(DataGridView).GetProperty("DataConnection", BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
       object o = pi.GetValue(dgv, new object[0]);
-      FieldInfo fiPDC = o.GetType().GetField("props", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+      FieldInfo fiPDC = o.GetType().GetField("_props", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
       return (PropertyDescriptorCollection)fiPDC.GetValue(o);
     }
     public static int GetColumnIndexByPropertyName(DataGridView dgv, string propertyName) {

@@ -131,59 +131,12 @@ namespace spMain.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type {0} is not by default valid for use with the KeyedList&lt;{1},{0}&gt;, 
-        ///since no KeyForItemDelegate could be determined automatically.
-        ///Consider :
-        ///- implementing the IKeyedItem interface, 
-        ///- or specify one DataObjectField(true) attribute to just one property of type {1},
-        ///- or specify a custom GetKeyForItemDelegate() on instantiation..
-        /// </summary>
-        internal static string Error_ItemNotValidAsKeyedItemByDefault {
-            get {
-                return ResourceManager.GetString("Error_ItemNotValidAsKeyedItemByDefault", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Item Type {0} contains more than one property of key type {1} marked as DataObjectField.PrimaryKey.
-        ///Consider :
-        ///- implementing the IKeyedItem interface, 
-        ///- or reduce the DataObjectField to just one,
-        ///- or specify a custom GetKeyForItemDelegate() on instantiation..
-        /// </summary>
-        internal static string Error_TooManyPrimaryKeyProperties {
-            get {
-                return ResourceManager.GetString("Error_TooManyPrimaryKeyProperties", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Filter {
             get {
                 object obj = ResourceManager.GetObject("Filter", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon graph1 {
-            get {
-                object obj = ResourceManager.GetObject("graph1", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon graph2 {
-            get {
-                object obj = ResourceManager.GetObject("graph2", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         

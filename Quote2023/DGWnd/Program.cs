@@ -1,6 +1,8 @@
 using System;
+using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
+using DGWnd.Misc;
 using DGWnd.Utils;
 
 namespace DGWnd {
@@ -18,6 +20,7 @@ namespace DGWnd {
       // Application.Run(new Test.PropertyDescr());
 
       DGCore.Common.Shared.MessageBoxProxy = new MessageBoxProxy();
+      TypeDescriptor.AddAttributes(typeof(CheckState), new TypeConverterAttribute(typeof(CheckStateConverter)));
 
       try
       {

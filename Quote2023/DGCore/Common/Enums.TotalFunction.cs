@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 
 namespace DGCore.Common
 {
@@ -7,7 +8,8 @@ namespace DGCore.Common
   {
     [TypeConverter(typeof(TotalFunctionTypeConverter))]
     public enum TotalFunction { None, Sum, Average, Minimum, Maximum, Count, First, Last };
-
+    public static TotalFunction[] TotalFunctionsWithoutNull => Enum.GetValues<TotalFunction>().Where(o => o != TotalFunction.None).ToArray();
+    
     private class TotalFunctionTypeConverter : TypeConverter
     {
       //==========   Static Section  ===============

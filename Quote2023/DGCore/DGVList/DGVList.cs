@@ -1,8 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using DGCore.Common;
 
 namespace DGCore.DGVList
 {
@@ -13,7 +14,7 @@ namespace DGCore.DGVList
     public List<ListSortDescription> Sorts { get; } = new List<ListSortDescription>();
     public List<ListSortDescription> Groups { get; } = new List<ListSortDescription>();
     public List<List<ListSortDescription>> SortsOfGroups { get; } = new List<List<ListSortDescription>>();
-    public Misc.TotalLine[] TotalLines { get; }
+    public Misc.TotalLine[] TotalLines { get; private set; }
     public List<Misc.TotalLine> LiveTotalLines { get; } = new List<Misc.TotalLine>();
     public int LastRefreshedTimeInMsecs { get; private set; } = 0;
 
@@ -46,34 +47,52 @@ namespace DGCore.DGVList
       CurrentExpandedGroupLevel == int.MaxValue ||
       Enumerable.Range(0, CurrentExpandedGroupLevel).Any(i =>
         Groups[i].PropertyDescriptor.Name == propertyName ||
-        propertyName.StartsWith(Groups[i].PropertyDescriptor.Name + ".")) || LiveTotalLines.Any(tl =>
-        tl.PropertyDescriptor.Name == propertyName || propertyName.StartsWith(tl.PropertyDescriptor.Name + "."));
+        propertyName.StartsWith(Groups[i].PropertyDescriptor.Name + Constants.MDelimiter)) || LiveTotalLines.Any(tl =>
+        tl.PropertyDescriptor.Name == propertyName || propertyName.StartsWith(tl.PropertyDescriptor.Name + Constants.MDelimiter));
 
     public bool IsGroupColumnVisible(int groupIndex) =>
       (Groups.Count > 0 && groupIndex < CurrentExpandedGroupLevel &&
        (ShowGroupsOfUpperLevels || groupIndex >= (ExpandedGroupLevel - 1)));
 
+    public string[] GetSubheaders_ExcelAndPrint(string startUpParameters, string lastAppliedLayoutName)
+    {
+      List<string> subHeaders = new List<string>();
+      if (UnderlyingData.IsPartiallyLoaded) subHeaders.Add("Дані завантаженні частково");
+      if (!string.IsNullOrEmpty(lastAppliedLayoutName)) subHeaders.Add("Останнє налаштування: " + lastAppliedLayoutName);
+      if (!string.IsNullOrEmpty(startUpParameters)) subHeaders.Add("Початкові параметри: " + startUpParameters);
+      var s1 = WhereFilter.StringPresentation;
+      if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Фільтр даних: " + s1);
+      if (FilterByValue != null)
+      {
+        s1 = FilterByValue.StringPresentation;
+        if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Фільтр по виразу клітинки: " + s1);
+      }
+      s1 = TextFastFilter;
+      if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Текст швидкого фільтру: " + s1);
+      return subHeaders.ToArray();
+    }
+
     public async void RequeryData() => await Task.Factory.StartNew(() => UnderlyingData.GetData(true));
 
-    public event Sql.DataSourceBase.dlgDataEvent DataStateChanged;
+    public event Sql.DataSourceBase.dlgDataStatusChangedDelegate DataStateChanged;
 
-    private Func<Utils.IDGColumnHelper[]> _getColumnHelpers;
+    private Func<List<string>> _getAllValidColumns;
 
-    public DGVList(Sql.DataSourceBase dataSource, Func<Utils.IDGColumnHelper[]> getColumnHelpers)
+    public DGVList(Sql.DataSourceBase dataSource, Func<List<string>> getAllValidColumns)
     {
       UnderlyingData = dataSource;
-      _getColumnHelpers = getColumnHelpers;
+      _getAllValidColumns = getAllValidColumns;
       WhereFilter = new Filters.FilterList(Properties);
       // FilterByValue = null;
 
       TotalLines = UnderlyingData.Properties.Cast<PropertyDescriptor>()
-        .Where(pd => pd.IsBrowsable && Misc.TotalLine.IsTypeSupport(Utils.Types.GetNotNullableType(pd.PropertyType)))
+        .Where(pd => pd.IsBrowsable && Misc.TotalLine.IsTypeSupport(pd.PropertyType))
         .Select(pd => new Misc.TotalLine(pd)).ToArray();
 
-      UnderlyingData.DataEventHandler += UnderlyingData_DataEventHandler;
+      UnderlyingData.DataStatusChangedEvent += OnUnderlyingData_DataStatusChangedHandler;
     }
 
-    private void UnderlyingData_DataEventHandler(object sender, Sql.DataSourceBase.SqlDataEventArgs e) => DataStateChanged?.Invoke(this, e);
+    private void OnUnderlyingData_DataStatusChangedHandler(object sender, Sql.DataSourceBase.SqlDataEventArgs e) => DataStateChanged?.Invoke(this, e);
 
     protected override object AddNewCore()
     {
@@ -90,22 +109,32 @@ namespace DGCore.DGVList
         return;
 
       _isDisposing = true;
+      UnderlyingData.DataLoadingCancelFlag = true;
+
       await _refreshLock.WaitAsync();
       try
       {
         // _sqlDataSource?.Dispose(); // error on dgv clone: 
-        UnderlyingData.DataEventHandler -= UnderlyingData_DataEventHandler;
+        UnderlyingData.DataStatusChangedEvent -= OnUnderlyingData_DataStatusChangedHandler;
 
         RaiseListChangedEvents = false;
-        Items.Clear();
+
+        foreach (var item in Items.OfType<IDisposable>())
+          item.Dispose();
+        Clear();
+        
         WhereFilter = null;
         FilterByValue = null;
         LiveTotalLines.Clear();
-        _getColumnHelpers = null;
-        this._formattedValueObjects = null;
-        this._helpersGroup = null;
-        this._helpersSort = null;
-        this._rootGroup = null;
+        Groups.Clear();
+        Sorts.Clear();
+        SortsOfGroups.Clear();
+        TotalLines = null;
+        _getAllValidColumns = null;
+        _getters = null;
+        _helpersGroup = null;
+        _helpersSort = null;
+        _rootGroup = null;
         //        if (Disposed != null) Disposed.Invoke(this, new EventArgs());
       }
       // ??? catch (Exception ex)

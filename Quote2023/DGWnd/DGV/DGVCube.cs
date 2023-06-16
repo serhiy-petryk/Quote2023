@@ -5,12 +5,13 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using DGCore.Common;
 using DGWnd.Misc;
 using DGWnd.Utils;
 
 namespace DGWnd.DGV {
   public partial class DGVCube : DataGridView /*Utils.ISettingTripleSupport,*/  {
-    public new DGCore.DGVList.IDGVList DataSource => base.DataSource == null ? null : (DGCore.DGVList.IDGVList) base.DataSource;
+    public new DGCore.DGVList.IDGVList DataSource => base.DataSource == null ? null : (DGCore.DGVList.IDGVList)base.DataSource;
 
     public string _startUpParameters;
     public string _layoutID;
@@ -24,6 +25,7 @@ namespace DGWnd.DGV {
     private int _oldExpandedGroupLevel = 1;
     private Font _startupFont;
     private Font _oldFontForGroup;
+
     private Font[] _groupFonts
     {
       get
@@ -34,21 +36,22 @@ namespace DGWnd.DGV {
           _oldExpandedGroupLevel = DataSource.ExpandedGroupLevel;
           _oldFontForGroup = Font;
           if (this._sourceGroupFonts != null)
-            Array.ForEach(_sourceGroupFonts, (item)=> item?.Dispose());
+            Array.ForEach(_sourceGroupFonts, (item) => item?.Dispose());
           _sourceGroupFonts = new Font[DataSource.Groups.Count + 1];
           int maxLevel = Math.Min(DataSource.ExpandedGroupLevel, DataSource.Groups.Count);
-          _sourceGroupFonts[0] = new Font(this.Font.FontFamily, this.Font.Size, FontStyle.Bold);// total row
+          _sourceGroupFonts[0] = new Font(this.Font.FontFamily, this.Font.Size, FontStyle.Bold); // total row
           for (int i = 1; i < maxLevel; i++)
             _sourceGroupFonts[i] = new Font(this.Font.FontFamily, this.Font.Size + maxLevel - i - 2, FontStyle.Bold);
         }
+
         return _sourceGroupFonts;
       }
     }
 
     // public int _filteredRows;
     // public int _lastRefreshedTimeInMsecs;
-    object _lastActiveItem;// Restore item posirtion after sort
-    int _lastActiveItemScreenOffset;//// Restore item posirtion after sort
+    object _lastActiveItem; // Restore item posirtion after sort
+    int _lastActiveItemScreenOffset; //// Restore item posirtion after sort
 
     public DGVCube()
     {
@@ -57,7 +60,6 @@ namespace DGWnd.DGV {
       ReadOnly = true;
       //this.CellBorderStyle = DataGridViewCellBorderStyle.None;
 
-      Disposed += BODGV_Disposed;
       RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.EnableResizing;
       _gridPen = new Pen(this.GridColor);
       DoubleBuffered = true;
@@ -67,21 +69,24 @@ namespace DGWnd.DGV {
       SelectionMode = DataGridViewSelectionMode.ColumnHeaderSelect;
     }
 
-    void BODGV_Disposed(object sender, EventArgs e) {
-      Disposed -= BODGV_Disposed;
+    protected override void Dispose(bool disposing)
+    {
       Unwire();
+      DataSource.UnderlyingData.DataLoadingCancelFlag = true;
+      DataSource.Dispose();
+
+      base.Dispose(disposing);
+
       _cellLast_PropertyDescriptor = null;
       this._gridPen.Dispose();
       this._groupColumns = null;
       //      foreach (Pen pen in this._groupPens) pen.Dispose();
-      this._groupPens = null;
       this._lastActiveItem = null;
       // this._totalLines = null;
       foreach (Bitmap bm in this._treeImages) bm.Dispose();
       this._treeImages = null;
       this._visibleColumns = null;
       // this._whereFilter = null;
-      if (this.DataSource is IDisposable) DataSource.Dispose();
       base.DataSource = null;
       if (m_FindAndReplaceForm != null) m_FindAndReplaceForm.Dispose();
       if (_sourceGroupFonts != null)
@@ -155,13 +160,13 @@ namespace DGWnd.DGV {
 
       DGCore.Misc.DependentObjectManager.Bind(ds, this); // Register object    
       this._startUpParameters = startUpParameters;
-//      this.ReadOnly = true;
+      //      this.ReadOnly = true;
       this.AllowUserToAddRows = false;
       this._layoutID = layoutID;
 
       this.SelectionMode = DataGridViewSelectionMode.RowHeaderSelect;
       Type listType = typeof(DGCore.DGVList.DGVList<>).MakeGenericType(ds.ItemType);
-      base.DataSource = Activator.CreateInstance(listType, ds, (Func<DGCore.Utils.IDGColumnHelper[]>)GetColumnHelpers);
+      base.DataSource = Activator.CreateInstance(listType, ds, (Func<List<string>>)GetAllValidColumns);
       // Fix column order
       // Visible = true;
 
@@ -184,7 +189,7 @@ namespace DGWnd.DGV {
         string s = col.DataPropertyName;
         if (!string.IsNullOrEmpty(s))
         {
-          if (s.Contains(".")) col.Visible = false;// do not show nested properties on start DGV
+          if (s.Contains(Constants.MDelimiter)) col.Visible = false;// do not show nested properties on start DGV
           if (!string.IsNullOrEmpty(properties[s].Description))
           {
             col.HeaderCell.ToolTipText = properties[s].Description;
@@ -200,20 +205,12 @@ namespace DGWnd.DGV {
           c.CellTemplate.Style.Alignment = DataGridViewContentAlignment.MiddleRight;
           c.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
         }
-        Type t = DGCore.Utils.Types.GetNotNullableType(c.ValueType);
-        if (t != null && (t == typeof(double) || t == typeof(Single)) && string.IsNullOrEmpty(c.CellTemplate.Style.Format))
-        {
-          c.CellTemplate.Style.Format = "N4";
-          c.DefaultCellStyle.Format = "N4";
-        }
         if (!string.IsNullOrEmpty(c.DataPropertyName))
         {
-          PropertyDescriptor pd = properties[c.DataPropertyName];
-          if (pd is DGCore.PD.IMemberDescriptor)
+          if (properties[c.DataPropertyName] is DGCore.PD.IMemberDescriptor memberDescriptor)
           {
-            string format = ((DGCore.PD.IMemberDescriptor)pd).Format;
-            ContentAlignment? alignment = Tips.ConvertAlignment(((DGCore.PD.IMemberDescriptor)pd).Alignment);
-            if (!string.IsNullOrEmpty(format)) c.DefaultCellStyle.Format = format;
+            if (!string.IsNullOrEmpty(memberDescriptor.Format)) c.DefaultCellStyle.Format = memberDescriptor.Format;
+            var alignment = Tips.ConvertAlignment(memberDescriptor.Alignment);
             //            if (alignment != null) c.DefaultCellStyle.Alignment = (DataGridViewContentAlignment)Convert.ChangeType((int)alignment.Value, typeof(DataGridViewContentAlignment));
             if (alignment != null) c.DefaultCellStyle.Alignment = (DataGridViewContentAlignment)((int)alignment.Value);
           }
@@ -232,7 +229,7 @@ namespace DGWnd.DGV {
         if (settings != null)
           ((DGCore.UserSettings.IUserSettingSupport<DGCore.UserSettings.DGV>)this).SetSetting(settings);
         else
-            DGCore.UserSettings.UserSettingsUtils.Init(this, startUpLayoutName);
+          DGCore.UserSettings.UserSettingsUtils.Init(this, startUpLayoutName);
       });
 
       DataSource.UnderlyingData.GetData(false);
@@ -243,7 +240,7 @@ namespace DGWnd.DGV {
     public void ResizeColumnWidth()
     {
       this._layoutCount++;
-      this.AutoResizeColumns(this._RowViewMode == DGCore.Common.Enums.DGRowViewMode.NotSet ? DataGridViewAutoSizeColumnsMode.DisplayedCells : DataGridViewAutoSizeColumnsMode.ColumnHeader, false);
+      this.AutoResizeColumns(this._RowViewMode == DGCore.Common.Enums.DGRowViewMode.NotSet ? DataGridViewAutoSizeColumnsMode.ColumnHeader : DataGridViewAutoSizeColumnsMode.DisplayedCells, false);
       // this.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.ColumnHeader, true);
     }
 
@@ -377,7 +374,7 @@ namespace DGWnd.DGV {
       this._cellLast_SortDirection = null;// not sorted data cell
     }
 
-        //==================================================
+    //==================================================
     ThirdParty.FindAndReplaceForm m_FindAndReplaceForm;
     public void Find_OpenForm()
     {
@@ -475,7 +472,7 @@ namespace DGWnd.DGV {
           Rectangle r2 = GetCellDisplayRectangle(_columnIndexOfCurrentCell, rowIndex, true);
           Rectangle r3 = new Rectangle();// Blank rectangle
           if (r1 == r3 || r1 != r2 || FirstDisplayedScrollingColumnIndex == _columnIndexOfCurrentCell)
-              DGVUtils.ScrollIntoCurrentCell(this);
+            DGVUtils.ScrollIntoCurrentCell(this);
         }
         else
           OnCellEnter(new DataGridViewCellEventArgs(-1, -1));
@@ -516,9 +513,7 @@ namespace DGWnd.DGV {
       SetEnabledColors(true);
     }
 
-    private DGCore.Utils.IDGColumnHelper[] GetColumnHelpers() => _allValidColumnNames
-      .Select(c => new Utils.DGVColumnHelper(Columns.OfType<DataGridViewColumn>().FirstOrDefault(c1 => c1.DataPropertyName == c)))
-      .Where(h => h.IsValid).ToArray();
+    private List<string> GetAllValidColumns() => _allValidColumnNames;
 
     private List<object> _enabled = new List<object>();
     // protected override void OnEnabledChanged(EventArgs e)

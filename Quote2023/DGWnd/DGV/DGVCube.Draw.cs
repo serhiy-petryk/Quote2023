@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using DGCore.Common;
 
 namespace DGWnd.DGV {
   public partial class DGVCube {
@@ -9,15 +10,11 @@ namespace DGWnd.DGV {
     List<DataGridViewColumn> _groupColumns = new List<DataGridViewColumn>();
     DataGridViewColumn _groupItemCountColumn = null;
 
-    static Pen[] _defaultGroupPens = new Pen[] { Pens.Gainsboro, new Pen(Color.FromArgb(255, 255,153,204)), 
-      new Pen(Color.FromArgb(255, 255,204, 153)), new Pen(Color.FromArgb(255, 255,255,153)), 
-      new Pen(Color.FromArgb(255, 204, 255,204)), new Pen(Color.FromArgb(255, 204,255,255)), 
-      new Pen(Color.FromArgb(255, 153, 204, 255)), new Pen(Color.FromArgb(255,204, 153,  255))};
-    //    static Pen[] _defaultGroupPens = new Pen[] { Pens.Bisque, Pens.Beige, Pens.LightBlue, Pens.Pink, Pens.Violet, 
-  //    Pens.GreenYellow, Pens.Gold, Pens.LightCoral,Pens.Yellow, Pens.LightGreen};
-    static Pen _groupBorderPen = Pens.Blue;
-    Pen _gridPen;
-    public List<Pen> _groupPens = new List<Pen>(new Pen[] { _defaultGroupPens[0] });
+    private static readonly DGCore.Helpers.ColorInfo _totalLineBackColor = DGCore.Helpers.ColorInfo.GroupColors[0];
+    private static List<Pen> _groupPens = new List<Pen> {new Pen(Color.FromArgb(255, _totalLineBackColor.R, _totalLineBackColor.G, _totalLineBackColor.B))};
+    private static readonly Pen _groupBorderPen = Pens.Blue;
+
+    private Pen _gridPen;
     DataGridViewColumn[] _visibleColumns;
     static Pen _treeCrossPen = Pens.DarkSlateGray;
 
@@ -57,7 +54,7 @@ namespace DGWnd.DGV {
           }
           if (!row.ReadOnly) row.ReadOnly = true;
           // Adjust color for group row
-          if (row.DefaultCellStyle.BackColor != this._groupPens[groupLevel].Color) row.DefaultCellStyle.BackColor = this._groupPens[groupLevel].Color;
+          if (row.DefaultCellStyle.BackColor != _groupPens[groupLevel].Color) row.DefaultCellStyle.BackColor = _groupPens[groupLevel].Color;
 
           // Adjust color for cells of parent groups 
           if (_visibleGroupNumberStart.HasValue)
@@ -65,7 +62,7 @@ namespace DGWnd.DGV {
             for (int i = _visibleGroupNumberStart.Value; i < groupLevel; i++)
             {
               var columnNo = _visibleColumns[i - _visibleGroupNumberStart.Value].Index;
-              Color c = this._groupPens[i].Color;
+              Color c = _groupPens[i].Color;
               if (row.Cells[columnNo].Style.BackColor != c)
                 row.Cells[columnNo].Style.BackColor = c;
             }
@@ -170,7 +167,7 @@ namespace DGWnd.DGV {
       {
         _groupItemCountColumn = new DataGridViewTextBoxColumn
         {
-          Name = "#group_ItemCount",
+          Name = Constants.GroupItemCountColumnName,
           HeaderText = @"К-сть елементів",
           ReadOnly = true,
           Resizable = DataGridViewTriState.True,
@@ -190,15 +187,15 @@ namespace DGWnd.DGV {
           Resizable = DataGridViewTriState.False,
           SortMode = DataGridViewColumnSortMode.NotSortable,
           AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
-          Name = "#group_" + this._groupColumns.Count,
+          Name = Constants.GroupColumnNamePrefix + this._groupColumns.Count,
           DefaultCellStyle = {NullValue = null}
         };
         Columns.Add(groupColumn);
         _groupColumns.Add(groupColumn);
         if (_groupColumns.Count >= _groupPens.Count) {
           // Need add new pen
-          var penNo = (_groupColumns.Count - 1) % (_defaultGroupPens.Length - 1) + 1;
-          _groupPens.Add(_defaultGroupPens[penNo]);
+          var color = DGCore.Helpers.ColorInfo.GetGroupColor(_groupColumns.Count);
+          _groupPens.Add(new Pen(Color.FromArgb(255, color.R, color.G, color.B)));
         }
       }
       // Remove unnecessary columns
@@ -226,15 +223,15 @@ namespace DGWnd.DGV {
                     }*/
           foreach (DataGridViewColumn c in this.Columns) {
             if (c.DataPropertyName == DataSource.Groups[i].PropertyDescriptor.Name) {
-              if (c.HeaderCell.Style.BackColor != this._groupPens[i + 1].Color) c.HeaderCell.Style.BackColor = this._groupPens[i + 1].Color;
+              if (c.HeaderCell.Style.BackColor != _groupPens[i + 1].Color) c.HeaderCell.Style.BackColor = _groupPens[i + 1].Color;
             }
           }
 //          if (dataColumn != null && dataColumn.HeaderCell.Style.BackColor != this._groupPens[i + 1].Color) dataColumn.HeaderCell.Style.BackColor = this._groupPens[i + 1].Color;
           if (this._groupColumns[i].Width != (this.Font.Height + 7))
             this._groupColumns[i].Width = this.Font.Height + 7;// difference is from 7(Font=16pt) to 9(Font=9pt) pixels
 
-          if (this._groupColumns[i].DefaultCellStyle.BackColor != this._groupPens[i + 1].Color)
-            this._groupColumns[i].DefaultCellStyle.BackColor = this._groupPens[i + 1].Color;
+          if (this._groupColumns[i].DefaultCellStyle.BackColor != _groupPens[i + 1].Color)
+            this._groupColumns[i].DefaultCellStyle.BackColor = _groupPens[i + 1].Color;
         }
         else {// blank GroupColumn
           this._groupColumns[i].Visible = false;

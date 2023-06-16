@@ -20,7 +20,7 @@ namespace DGWnd.DGV {
     }
     private bool IsRelocating() {
       if (fiDataGridViewOper == null) {
-        fiDataGridViewOper = typeof(DataGridView).GetField("dataGridViewOper", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.GetField | System.Reflection.BindingFlags.NonPublic);
+        fiDataGridViewOper = typeof(DataGridView).GetField("_dataGridViewOper", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.GetField | System.Reflection.BindingFlags.NonPublic);
       }
       System.Collections.Specialized.BitVector32 dataGridViewOper = (System.Collections.Specialized.BitVector32)fiDataGridViewOper.GetValue(this);
       return dataGridViewOper[0x00000020];

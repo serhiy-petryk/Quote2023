@@ -1,281 +1,127 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{13B07F33-782D-40D4-9B44-840C0EB9CC36}</ProjectGuid>
     <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>spMain</RootNamespace>
-    <AssemblyName>spMain</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Deterministic>true</Deterministic>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Design" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Reference Include="ZedGraph, Version=5.1.7.430, Culture=neutral, PublicKeyToken=02a83cbd123fcd60, processorArchitecture=MSIL">
-      <HintPath>..\packages\ZedGraph.5.1.7\lib\net35-Client\ZedGraph.dll</HintPath>
-    </Reference>
+    <None Remove="cs\PropertyGrid\Invesigate.txt" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Comp\frmUIStockGraph.cs">
+    <Content Include="cs\PropertyGrid\Invesigate.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Data.OleDb" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZedGraph.WinForms\ZedGraph.WinForms.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Comp\frmUIStockGraph.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Comp\frmUIStockGraph.Designer.cs">
+    <Compile Update="Comp\frmUIStockGraph.Designer.cs">
       <DependentUpon>frmUIStockGraph.cs</DependentUpon>
     </Compile>
-    <Compile Include="Comp\StockGraph\StockGraph.AdjustPane.cs">
+    <Compile Update="Comp\StockGraph\StockGraph.AdjustPane.cs" />
+    <Compile Update="Comp\StockGraph\StockGraph.AxisChange.cs" />
+    <Compile Update="Comp\StockGraph\StockGraph.cs" />
+    <Compile Update="Comp\StockGraph\StockGraph.Cursor.cs" />
+    <Compile Update="Comp\StockGraph\StockGraph.Events.cs" />
+    <Compile Update="Comp\StockGraph\StockGraph.FillData.cs" />
+    <Compile Update="Comp\StockGraph\StockGraph.GraphObjects.cs" />
+    <Compile Update="Comp\StockGraph\StockGraph.PaneHeader.cs" />
+    <Compile Update="Comp\StockGraph\StockGraph.PaneResize.cs" />
+    <Compile Update="Comp\StockGraph\StockGraph.Static.cs" />
+    <Compile Update="Comp\StockGraph\StockGraph.UI.cs" />
+    <Compile Update="Comp\StockGraph\StockGraph.Utils.cs" />
+    <Compile Update="Comp\UI_StockGraph.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Comp\StockGraph\StockGraph.AxisChange.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Comp\StockGraph\StockGraph.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Comp\StockGraph\StockGraph.Cursor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Comp\StockGraph\StockGraph.Events.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Comp\StockGraph\StockGraph.FillData.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Comp\StockGraph\StockGraph.GraphObjects.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Comp\StockGraph\StockGraph.PaneHeader.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Comp\StockGraph\StockGraph.PaneResize.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Comp\StockGraph\StockGraph.Static.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Comp\StockGraph\StockGraph.UI.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Comp\StockGraph\StockGraph.Utils.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Comp\UI_StockGraph.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Comp\UI_StockGraph.Designer.cs">
+    <Compile Update="Comp\UI_StockGraph.Designer.cs">
       <DependentUpon>UI_StockGraph.cs</DependentUpon>
     </Compile>
-    <Compile Include="QData\DataAdapters\Polygon_Minute.cs" />
-    <Compile Include="Quote2023\Helpers\ZipUtils.cs" />
-    <Compile Include="Settings.cs" />
-    <Compile Include="csUtils.cs" />
-    <Compile Include="cs\ColorEditor\ColorButton.cs">
+    <Compile Update="cs\ColorEditor\ColorButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="cs\ColorEditor\ColorButton.designer.cs">
+    <Compile Update="cs\ColorEditor\ColorButton.designer.cs">
       <DependentUpon>ColorButton.cs</DependentUpon>
     </Compile>
-    <Compile Include="cs\ColorEditor\ColorFormEditor.cs">
+    <Compile Update="cs\ColorEditor\ColorFormEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="cs\ColorEditor\ColorFormEditor.designer.cs">
+    <Compile Update="cs\ColorEditor\ColorFormEditor.designer.cs">
       <DependentUpon>ColorFormEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="cs\ColorEditor\ColorTypeEditor.cs" />
-    <Compile Include="cs\CoolPrintPreview\CoolPrintPreviewControl.cs">
+    <Compile Update="cs\CoolPrintPreview\CoolPrintPreviewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="cs\CoolPrintPreview\CoolPrintPreviewDialog.cs">
+    <Compile Update="cs\CoolPrintPreview\CoolPrintPreviewDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="cs\CoolPrintPreview\CoolPrintPreviewDialog.designer.cs">
+    <Compile Update="cs\CoolPrintPreview\CoolPrintPreviewDialog.designer.cs">
       <DependentUpon>CoolPrintPreviewDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="cs\CoolPrintPreview\PageImageList.cs" />
-    <Compile Include="cs\FastSerializer.cs" />
-    <Compile Include="cs\PropertyGrid\frmObjectEditor.cs">
+    <Compile Update="cs\PropertyGrid\frmObjectEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="cs\PropertyGrid\frmObjectEditor.designer.cs">
+    <Compile Update="cs\PropertyGrid\frmObjectEditor.designer.cs">
       <DependentUpon>frmObjectEditor.cs</DependentUpon>
     </Compile>
-    <Compile Include="cs\PropertyGrid\frmObjectEditor.Helper.cs">
+    <Compile Update="cs\PropertyGrid\frmObjectEditor.Helper.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="cs\PropertyGrid\PGAttributeList.cs" />
-    <Compile Include="cs\PropertyGrid\PGCollectionEditor.cs" />
-    <Compile Include="cs\PropertyGrid\PGPropertyDescriptor.cs" />
-    <Compile Include="cs\PropertyGrid\PGPropertyDescriptorArray.cs" />
-    <Compile Include="cs\PropertyGrid\PGTypeConverter.cs" />
-    <Compile Include="cs\PropertyGrid\PGUtils.cs" />
-    <Compile Include="cs\PropertyGrid\TestData.cs" />
-    <Compile Include="cs\PropertyGrid\UIObjectEditor.cs" />
-    <Compile Include="cs\TimerManager.cs" />
-    <Compile Include="cs\UtilsCursor.cs" />
-    <Compile Include="cs\UtilsData.cs" />
-    <Compile Include="cs\UtilsFile.cs" />
-    <Compile Include="cs\UtilsReflection.cs" />
-    <Compile Include="cs\WinAPI.cs" />
-    <Compile Include="Quote2023\Models\MinuteYahoo.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QData\Common\General.cs" />
-    <Compile Include="QData\Common\TimeInterval\TimeInterval.cs" />
-    <Compile Include="QData\Common\TimeInterval\TimeIntervalConverter.cs" />
-    <Compile Include="QData\Common\TimeInterval\TimeIntervalFormEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="QData\Common\TimeInterval\TimeIntervalFormEditor.designer.cs">
-      <DependentUpon>TimeIntervalFormEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="QData\Common\XScale.cs" />
-    <Compile Include="QData\DataAdapters\HistoryMdb.cs" />
-    <Compile Include="QData\DataAdapters\IProphetFile.cs" />
-    <Compile Include="QData\DataAdapters\IProphetFileStream.cs" />
-    <Compile Include="QData\DataAdapters\MBTFramed_TimeSales.cs" />
-    <Compile Include="QData\DataAdapters\MBT\C.cs" />
-    <Compile Include="QData\DataAdapters\MBT\QDChunk.cs" />
-    <Compile Include="QData\DataAdapters\MBT\QDChunk.MbtTick.cs" />
-    <Compile Include="QData\DataAdapters\MBT\QDChunk.MbtTickHttp.cs" />
-    <Compile Include="QData\DataAdapters\MBT\QDChunk.Quote.cs" />
-    <Compile Include="QData\DataAdapters\AlphaVantage_Minute.cs" />
-    <Compile Include="QData\DataAdapters\Yahoo_Minute.cs" />
-    <Compile Include="QData\DataAdapters\MBT_Minute.cs" />
-    <Compile Include="QData\DataAdapters\MBT_TimeSales.cs" />
-    <Compile Include="QData\DataDB\DBIndicator.cs" />
-    <Compile Include="QData\DataDB\DBIndicator.Subclasses.cs" />
-    <Compile Include="QData\DataFormat\MbtTick.cs" />
-    <Compile Include="QData\DataFormat\MbtTickHttp.cs" />
-    <Compile Include="QData\DataFormat\Quote.cs" />
-    <Compile Include="QData\Data\DataAdapter.cs" />
-    <Compile Include="QData\Data\DataIndicator.cs" />
-    <Compile Include="QData\Data\DataIndicator.UpdateData.cs" />
-    <Compile Include="QData\Data\DataIndicator.U_Compare.cs" />
-    <Compile Include="QData\Data\DataIndicator.U_FramedQuote.cs" />
-    <Compile Include="QData\Data\DataInput.cs" />
-    <Compile Include="QData\Data\DataInputPropertyDescriptor.cs" />
-    <Compile Include="QData\Data\DataManager.cs" />
-    <Compile Include="QData\Data\StatFunctionsOld.cs" />
-    <Compile Include="QData\UI\ComplexColor.cs" />
-    <Compile Include="QData\UI\ComplexColorEditor.cs" />
-    <Compile Include="QData\UI\Curve.cs" />
-    <Compile Include="QData\UI\CurveEditor.cs" />
-    <Compile Include="QData\UI\UIGraph.cs" />
-    <Compile Include="QData\UI\UIIndicator.cs" />
-    <Compile Include="QData\UI\UIPane.cs" />
-    <Compile Include="Quote2023\Models\SymbolsXref.cs" />
-    <EmbeddedResource Include="Comp\frmUIStockGraph.resx">
-      <DependentUpon>frmUIStockGraph.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Comp\StockGraph\StockGraph.resx">
-      <DependentUpon>StockGraph.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Comp\UI_StockGraph.resx">
-      <DependentUpon>UI_StockGraph.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="cs\ColorEditor\ColorButton.resx">
-      <DependentUpon>ColorButton.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="cs\ColorEditor\ColorFormEditor.resx">
-      <DependentUpon>ColorFormEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="cs\CoolPrintPreview\CoolPrintPreviewDialog.resx">
-      <DependentUpon>CoolPrintPreviewDialog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="cs\PropertyGrid\frmObjectEditor.resx">
-      <DependentUpon>frmObjectEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="QData\Common\TimeInterval\TimeIntervalFormEditor.resx">
+    <Compile Update="QData\Common\TimeInterval\TimeIntervalFormEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="QData\Common\TimeInterval\TimeIntervalFormEditor.designer.cs">
+      <DependentUpon>TimeIntervalFormEditor.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Comp\frmUIStockGraph.resx">
+      <DependentUpon>frmUIStockGraph.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Comp\StockGraph\StockGraph.resx">
+      <DependentUpon>StockGraph.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Comp\UI_StockGraph.resx">
+      <DependentUpon>UI_StockGraph.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="cs\ColorEditor\ColorButton.resx">
+      <DependentUpon>ColorButton.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="cs\ColorEditor\ColorFormEditor.resx">
+      <DependentUpon>ColorFormEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="cs\CoolPrintPreview\CoolPrintPreviewDialog.resx">
+      <DependentUpon>CoolPrintPreviewDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="cs\PropertyGrid\frmObjectEditor.resx">
+      <DependentUpon>frmObjectEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="QData\Common\TimeInterval\TimeIntervalFormEditor.resx">
       <DependentUpon>TimeIntervalFormEditor.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <None Include="QData\DataFormat\Specification.doc" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <Content Include="cs\PropertyGrid\Invesigate.txt" />
-    <Content Include="Resources\AddNew.bmp" />
-    <Content Include="Resources\Blank.tif" />
-    <Content Include="Resources\columnwidth.png" />
-    <Content Include="Resources\Copy.bmp" />
-    <Content Include="Resources\Delete.bmp" />
-    <Content Include="Resources\detailsview.gif" />
-    <Content Include="Resources\Done.TIF" />
-    <Content Include="Resources\DownArrow.png" />
-    <Content Include="Resources\EDIT.GIF" />
-    <Content Include="Resources\Error.TIF" />
-    <Content Include="Resources\filter.tif" />
-    <Content Include="Resources\graph1.ico" />
-    <Content Include="Resources\graph2.ico" />
-    <Content Include="Resources\Info.TIF" />
-    <Content Include="Resources\listview.gif" />
-    <Content Include="Resources\OpenFile.bmp" />
-    <Content Include="Resources\PBAlpha1.bmp" />
-    <Content Include="Resources\PBCatego1.bmp" />
-    <Content Include="Resources\print.bmp" />
-    <Content Include="Resources\Save.bmp" />
-    <Content Include="Resources\SaveDataToFile.PNG" />
-    <Content Include="Resources\ShowAllPoints.bmp" />
-    <Content Include="Resources\Start.TIF" />
-    <Content Include="Resources\System.Drawing.Printing.PrintDocument.bmp" />
-    <Content Include="Resources\UpArrow.png" />
-    <Content Include="Resources\VSStandard.png" />
-    <Content Include="Resources\Warning.TIF" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
 </Project>

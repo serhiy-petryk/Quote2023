@@ -17,15 +17,9 @@ namespace DGWnd.Utils {
       int livePropertiesCount = 0;
       for (int i = 0; i < dgv.Columns.Count; i++) {
         string s = dgv.Columns[i].DataPropertyName;
-        if (!string.IsNullOrEmpty(s)) {
-          Type valueType = DGCore.Utils.Types.GetNotNullableType(pdc[s].PropertyType);
-          if (valueType == typeof(char) || valueType == typeof(byte) || valueType == typeof(sbyte) || valueType == typeof(short) ||
-            valueType == typeof(ushort) || valueType == typeof(int) || valueType == typeof(uint) || valueType == typeof(long) ||
-            valueType == typeof(ulong) || valueType == typeof(decimal) || valueType == typeof(float) || valueType == typeof(double)) {
-
-            livePropertiesCount++;
-            properties[i] = pdc[s];
-          }
+        if (!string.IsNullOrEmpty(s) && DGCore.Utils.Types.IsNumericType(pdc[s].PropertyType)) {
+          livePropertiesCount++;
+          properties[i] = pdc[s];
         }
       }
       PropertyDescriptor[] liveProperties = new PropertyDescriptor[livePropertiesCount];
@@ -169,8 +163,8 @@ namespace DGWnd.Utils {
     }
 
     public static void GetSelectedEnumerables(DataGridView dgv, out IEnumerable<DataGridViewCell> selectedCells, out IEnumerable<int> selectedBands) {
-      FieldInfo fi1 = typeof(DataGridView).GetField("individualSelectedCells", BindingFlags.Instance | BindingFlags.NonPublic);
-      FieldInfo fi2 = typeof(DataGridView).GetField("selectedBandIndexes", BindingFlags.Instance | BindingFlags.NonPublic);
+      FieldInfo fi1 = typeof(DataGridView).GetField("_individualSelectedCells", BindingFlags.Instance | BindingFlags.NonPublic);
+      FieldInfo fi2 = typeof(DataGridView).GetField("_selectedBandIndexes", BindingFlags.Instance | BindingFlags.NonPublic);
       IEnumerable cells = (IEnumerable)fi1.GetValue(dgv);
       IEnumerable bands = (IEnumerable)fi2.GetValue(dgv);
       selectedCells = System.Linq.Enumerable.Cast<DataGridViewCell>(cells);
@@ -207,8 +201,8 @@ namespace DGWnd.Utils {
       List<int> cols = new List<int>();
       DataGridViewColumn[] cc = DGVUtils.GetColumnsInDisplayOrder(dgv, true);
 
-      FieldInfo fi1 = typeof(DataGridView).GetField("individualSelectedCells", BindingFlags.Instance | BindingFlags.NonPublic);
-      FieldInfo fi2 = typeof(DataGridView).GetField("selectedBandIndexes", BindingFlags.Instance | BindingFlags.NonPublic);
+      FieldInfo fi1 = typeof(DataGridView).GetField("_individualSelectedCells", BindingFlags.Instance | BindingFlags.NonPublic);
+      FieldInfo fi2 = typeof(DataGridView).GetField("_selectedBandIndexes", BindingFlags.Instance | BindingFlags.NonPublic);
       IEnumerable cells = (IEnumerable)fi1.GetValue(dgv);
       IEnumerable bands = (IEnumerable)fi2.GetValue(dgv);
 
@@ -290,7 +284,7 @@ namespace DGWnd.Utils {
           }
         }
         else {
-          throw new Exception("AAA");
+          throw new Exception("Trap!!!");
         }
       }
     }

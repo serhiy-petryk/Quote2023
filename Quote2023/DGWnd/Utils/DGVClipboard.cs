@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
+using DGCore.Helpers;
 
 namespace DGWnd.Utils {
   public static class DGVClipboard {
@@ -72,14 +74,18 @@ namespace DGWnd.Utils {
       object[] objectsToCopy;
       DataGridViewColumn[] colsToCopy;
       Utils.DGVSelection.GetSelectedArea(dgv, out objectsToCopy, out colsToCopy);
-      Utils.DGVColumnHelper[] helpers = new Utils.DGVColumnHelper[colsToCopy.Length];
-      for (int i = 0; i < colsToCopy.Length; i++) {
-        helpers[i] = new Utils.DGVColumnHelper(colsToCopy[i]);
-      }
-      if (objectsToCopy.Length == 1 && helpers.Length == 1) {
+      var formatters = new DGCellValueFormatter[colsToCopy.Length];
+      for (int i = 0; i < colsToCopy.Length; i++)
+          formatters[i] = Tips.GetDGCellValueFormatter(colsToCopy[i]);
+
+      if (objectsToCopy.Length == 1 && formatters.Length == 1) {
         // Single cell
-        object o1 = helpers[0].GetFormattedValueFromItem(objectsToCopy[0], true);
-        if (o1 is Bitmap) Clipboard.SetImage((Bitmap)o1);
+        var o1 = (formatters[0]).ValueForClipboardGetter(objectsToCopy[0]);
+        if (o1 is byte[] bytes)
+        {
+          var image = (Bitmap) Tips.ByteArrayToBitmapConverter.ConvertFrom(bytes);
+          Clipboard.SetImage(image);
+        }
         else if (o1!=null) Clipboard.SetDataObject(o1);
       }
       else {
@@ -87,18 +93,24 @@ namespace DGWnd.Utils {
         List<string> ss1 = new List<string>();
         // Column headers
         string[] ss3 = new string[colsToCopy.Length];
-        for (int i = 0; i < ss3.Length; i++) ss3[i] = colsToCopy[i].HeaderText;
+        for (int i = 0; i < ss3.Length; i++) ss3[i] = colsToCopy[i].HeaderText.Replace(Environment.NewLine, " ");
         ss1.Add(String.Join("\t", ss3));
         // Data
         foreach (object o in objectsToCopy) {
-          string[] ss2 = new string[helpers.Length];
-          for (int i = 0; i < helpers.Length; i++) {
-            object o1 = helpers[i].GetFormattedValueFromItem(o,true);
+          string[] ss2 = new string[formatters.Length];
+          for (int i = 0; i < formatters.Length; i++) {
+            var o1 = formatters[i].ValueForClipboardGetter(o);
             if (o1 is string) {
               string s1 = (string)o1;
-              if (helpers[i].PropertyDescriptor.PropertyType == typeof(string)) {// Check for string type == formatted value not like number or date
-                if (s1.StartsWith(cellPrefix)) ss2[i] = s1;
-                else ss2[i] = cellPrefix + s1;
+              var aa1 = s1.Split(new string[] {Environment.NewLine, "\r", "\n"}, StringSplitOptions.TrimEntries);
+              if (aa1.Length > 1)
+                s1 = string.Join(" ", aa1.Where(a1 => !string.IsNullOrWhiteSpace(a1)));
+
+              if (formatters[i].PropertyType == typeof(string)) {// Check for string type == formatted value not like number or date
+                if (s1.StartsWith(cellPrefix))
+                  ss2[i] = s1;
+                else ss2[i] =
+                  cellPrefix + s1;
               }
               else ss2[i] = s1;
             }

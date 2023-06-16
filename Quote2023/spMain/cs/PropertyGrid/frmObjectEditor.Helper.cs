@@ -252,7 +252,7 @@ namespace spMain.cs {
     }
 
     void Expand(object gridEntry, int maxExpands) {
-      FieldInfo fi = typeof(PropertyGrid).GetField("peMain", BindingFlags.Instance | BindingFlags.NonPublic);
+      FieldInfo fi = typeof(PropertyGrid).GetField("_peMain", BindingFlags.Instance | BindingFlags.NonPublic);
       object rootGridEntry = fi.GetValue(this.pg);//(GridEntry)
       if (piChildren == null && rootGridEntry != null) {
         piChildren = rootGridEntry.GetType().GetProperty("Children", BindingFlags.Instance | BindingFlags.Public);
@@ -314,7 +314,7 @@ namespace spMain.cs {
     }
 
     GridItem GetGridEntryByPath(List<string> path) {
-      FieldInfo fi = typeof(PropertyGrid).GetField("peMain", BindingFlags.Instance | BindingFlags.NonPublic);
+      FieldInfo fi = typeof(PropertyGrid).GetField("_peMain", BindingFlags.Instance | BindingFlags.NonPublic);
       object rootGridEntry = fi.GetValue(this.pg);//(GridEntry)
       GridItem root = rootGridEntry as GridItem;
 //      List<string> aPath = new List<string>( path.Split('\t'));

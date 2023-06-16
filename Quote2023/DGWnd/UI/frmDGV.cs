@@ -5,19 +5,19 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DGCore.Common;
+using DGCore.Helpers;
+using DGCore.PD;
 using DGWnd.Misc;
 using DGWnd.Utils;
 
 namespace DGWnd.UI {
   public partial class frmDGV : Form
   {
-
-    private bool _cancelLoading = false;
-    private bool _isDisposing = false;
+    private readonly Timer _dataLoadingTimer = new Timer { Interval = 250 };
     private Stopwatch _loadDataTimer;
     private int? _loadTime;
     private bool _noRaiseEvent = false;
@@ -25,13 +25,19 @@ namespace DGWnd.UI {
     public frmDGV()
     {
       InitializeComponent();
+      btnSaveAsTempExcleAndOpen.Enabled = ExcelApp.IsExcelInstalled;
+      _dataLoadingTimer.Tick += OnDataLoadingTimerTick;
       waitSpinner.BackColor = DefaultBackColor; // Error in Designer
     }
 
-    private void frmDGV_Load(object sender, EventArgs e) {
-      this.lblStatus.Text = "";
-      this.lblRecords.Text = "";
-      this.lblRecords.Alignment = ToolStripItemAlignment.Right;
+    #region ===========  Override section ================
+    protected override void OnLoad(EventArgs e)
+    {
+      base.OnLoad(e);
+
+      lblStatus.Text = "";
+      lblRecords.Text = "";
+      lblRecords.Alignment = ToolStripItemAlignment.Right;
       //      lblStatistics_CheckedChanged( lblStatistics, new EventArgs());
       this.dgv._OnRowViewModeChanged += Dgv_OnRowViewModeChanged;
       Dgv_OnRowViewModeChanged(this.dgv, new EventArgs());
@@ -43,9 +49,29 @@ namespace DGWnd.UI {
       lblStatistics.Visible = false;
     }
 
+    protected override void OnClosed(EventArgs e)
+    {
+      base.OnClosed(e);
+      _dataLoadingTimer.Dispose();
+      dgv.DataSource.DataStateChanged -= dgv_OnDataChangedEventHandler;
+    }
+
+    protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+    {
+      switch (keyData)
+      {
+        case Keys.F | Keys.Control:
+          btnFind_Click(null, null);
+          return true;
+      }
+      return base.ProcessCmdKey(ref msg, keyData);
+    }
+
+    #endregion
+
     public void Bind(DGCore.Sql.DataSourceBase ds, string layoutID, string startUpParameters, string startUpLayoutName, DGCore.UserSettings.DGV settings) =>
       Task.Run(() => { dgv.Bind(ds, layoutID, startUpParameters, startUpLayoutName, settings); });
-    private void btnCancel_Click(object sender, EventArgs e) => _cancelLoading = true;
+    private void btnCancel_Click(object sender, EventArgs e) => dgv.DataSource.UnderlyingData.DataLoadingCancelFlag = true;
 
     private void Dgv_DataSourceChanged(object sender, EventArgs e)
     {
@@ -139,7 +165,7 @@ namespace DGWnd.UI {
       printer.TitleAlignment = StringAlignment.Near;
 
       // Subtitle
-      var subHeaders = GetSubheaders_ExcelAndPrint();
+      var subHeaders = dgv.DataSource.GetSubheaders_ExcelAndPrint(dgv._startUpParameters, dgv._lastAppliedLayoutName);
       if (subHeaders.Length == 0)
       {
         printer.SubTitle = null;
@@ -207,22 +233,6 @@ namespace DGWnd.UI {
 
     private void btnRequery_Click(object sender, EventArgs e) => dgv.DataSource.RequeryData();
 
-    private string[] GetSubheaders_ExcelAndPrint() {
-      List<string> subHeaders = new List<string>();
-      if (!string.IsNullOrEmpty(this.dgv._lastAppliedLayoutName)) subHeaders.Add("Останнє налаштування: " + this.dgv._lastAppliedLayoutName);
-      string s1 = this.dgv._startUpParameters;
-      if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Початкові параметри: " + s1);
-      s1 = this.dgv.DataSource.WhereFilter.StringPresentation;
-      if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Фільтр даних: " + s1);
-      if (this.dgv.DataSource.FilterByValue != null) {
-        s1 = this.dgv.DataSource.FilterByValue.StringPresentation;
-        if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Фільтр по виразу клітинки: " + s1);
-      }
-      s1 = this.dgv.DataSource.TextFastFilter;
-      if (!string.IsNullOrEmpty(s1)) subHeaders.Add("Текст швидкого фільтру: " + s1);
-      return subHeaders.ToArray();
-    }
-
     private void dgv_OnDataChangedEventHandler(object sender, DGCore.Sql.DataSourceBase.SqlDataEventArgs e) {
       switch (e.EventKind) {
         case DGCore.Sql.DataSourceBase.DataEventKind.Clear:
@@ -232,35 +242,27 @@ namespace DGWnd.UI {
             this.btnCancel.Select();
             dgv.Visible = false;
             ((IList)dgv.DataSource).Clear(); // need to remove bug: error on refresh sorted (ascendingby amount) GLDOCLINE
-            _cancelLoading = false;
             ActivateWaitSpinner();
             _loadTime = null;
             _loadDataTimer = new Stopwatch();
             _loadDataTimer.Start();
+            _dataLoadingTimer.Start();
           });
           break;
         case DGCore.Sql.DataSourceBase.DataEventKind.Loaded:
-          _cancelLoading = false;
+          _dataLoadingTimer.Stop();
           this.UIThreadAsync(() =>
           {
             _loadDataTimer.Stop();
             _loadTime = Convert.ToInt32(_loadDataTimer.ElapsedMilliseconds);
             btnCancel.Visible = false;
             lblStatus.Text = @"Завантаження даних закінчено";
-            dgv.DataSource.RefreshData();
+            dgv.DataSource?.RefreshData();
             if (!dgv.Visible)
               dgv.Visible = true;
           });
           break;
         case DGCore.Sql.DataSourceBase.DataEventKind.Loading:
-          if (_cancelLoading)
-            e.CancelFlag = true;
-          this.UIThreadAsync(() =>
-          {
-            lblStatus.Text = $@"Завантажено {e.RecordCount:N0} елементів";
-            ActivateWaitSpinner();
-            lblStatistics.Visible = false;
-          });
           break;
         case DGCore.Sql.DataSourceBase.DataEventKind.BeforeRefresh:
           this.UIThreadAsync(() =>
@@ -273,6 +275,7 @@ namespace DGWnd.UI {
         case DGCore.Sql.DataSourceBase.DataEventKind.Refreshed:
           this.UIThreadAsync(() =>
           {
+            _dataLoadingTimer.Stop();
             waitSpinner.Visible = false;
             var prefix = _loadTime.HasValue ? "Дані завантажені за " + _loadTime.Value.ToString("N0") + " мілісекунд. " : "";
             _loadTime = null;
@@ -282,8 +285,7 @@ namespace DGWnd.UI {
             prefix = "";
             if (dgv.DataSource.UnderlyingData.IsPartiallyLoaded)
               prefix = "Дані завантажені частково. ";
-            lblRecords.Text = prefix + "Елементів: " + (totalRows == dgvRows ? "" : totalRows.ToString("N0") + " / ") +
-                              dgvRows.ToString("N0");
+            lblRecords.Text = prefix + "Елементів: " + (totalRows == dgvRows ? "" : totalRows.ToString("N0") + " / ") + dgvRows.ToString("N0");
             lblStatistics.Visible = true;
           });
           break;
@@ -291,19 +293,14 @@ namespace DGWnd.UI {
       this.UIThreadAsync(SetButtonState);
     }
 
-    private void frmDGV_FormClosed(object sender, FormClosedEventArgs e)
+    private void OnDataLoadingTimerTick(object sender, EventArgs e)
     {
-      if (_isDisposing)
-        return;
-
-      _isDisposing = true;
-      _cancelLoading = true;
-      dgv.Visible = false;
-      while (btnCancel.Visible)
-      {// data is loading
-        Application.DoEvents();
-        System.Threading.Thread.Sleep(300);
-      }
+      this.UIThreadAsync(() =>
+      {
+        lblStatus.Text = $@"Завантажено {dgv.DataSource.UnderlyingData.RecordCount:N0} елементів";
+        ActivateWaitSpinner();
+        lblStatistics.Visible = false;
+      });
     }
 
     //============================
@@ -399,47 +396,50 @@ namespace DGWnd.UI {
 
     // ========   Save to file ===========
     private void btnSaveAsTempTextAndOpen_Click_1(object sender, EventArgs e) {
-      string fileExtension = "txt";
-      string folder = Path.GetTempPath();
-      string fn = "DGV_" + this.dgv._layoutID + "." + fileExtension;
-      string fullFilename = DGCore.Utils.Tips.GetNearestNewFileName(folder, fn);
-      this.Cursor = Cursors.WaitCursor;
-      File_SaveAsTextFile(fullFilename);
-      this.Cursor = Cursors.Default;
-    }
-    private void btnSaveAsTempExcleAndOpen_Click(object sender, EventArgs e) {
-      string excelDefaultExtension = DGCore.Utils.ExcelApp.GetDefaultExtension();
-      string folder = Path.GetTempPath();
-      string fn = "DGV_" + this.dgv._layoutID + "." + excelDefaultExtension;
-      string fullFilename = DGCore.Utils.Tips.GetNearestNewFileName(folder, fn);
-      this.Cursor = Cursors.WaitCursor;
-      File_SaveAsExcelFileAndOpen(fullFilename);
-      this.Cursor = Cursors.Default;
-    }
-    void File_SaveAsExcelFileAndOpen(string filename) {
-      // Save file
-      Utils.DGVSave.SaveDGVToXLSFile(this.dgv, this.Text, GetSubheaders_ExcelAndPrint(), filename);
-      // Open file
-      if (File.Exists(filename)) {
-        using (DGCore.Utils.ExcelApp excel = new DGCore.Utils.ExcelApp(filename, false)) {
-          excel.Visible = true;
-          excel.ScreenUpdating = true;
-          //excel.Activate();
-          //excel.SetWindowState(Utils.ExcelApp.xlWindowState.xlMaximized);
-        }
+      Cursor = Cursors.WaitCursor;
+      DGVSelection.GetSaveArea(dgv, out var objectsToSave, out var columns);
+      var columnHelpers = new DGColumnHelper[columns.Length];
+      var pdc = dgv.DataSource.Properties;
+      for (var k = 0; k < columns.Length; k++)
+      {
+        var column = columns[k];
+        if (!string.IsNullOrEmpty(column.DataPropertyName))
+          columnHelpers[k] = new DGColumnHelper(pdc[column.DataPropertyName], column.DisplayIndex);
+        else if (column.Name == Constants.GroupItemCountColumnName)
+          columnHelpers[k] = new DGColumnHelper(new PropertyDescriptorForGroupItemCount(), column.DisplayIndex);
+        else if (column.Name.StartsWith(Constants.GroupColumnNamePrefix)) { }
+        else
+          throw new Exception("Trap!!!");
       }
+
+      var filename = $"DGV_{dgv._layoutID}.txt";
+      SaveData.SaveAndOpenDataToTextFile(filename, objectsToSave, columnHelpers);
+      Cursor = Cursors.Default; 
     }
-    private void File_SaveAsTextFile(string filename) {
-      // Save file
-      Utils.DGVSave.SaveDGVToTextFile(this.dgv, filename);
-      // Open new file
-      if (File.Exists(filename)) {
-        using (Process p = new Process()) {
-          p.StartInfo.FileName = @"notepad.exe";
-          p.StartInfo.Arguments = filename;
-          p.Start();
-        }
+
+    private void btnSaveAsTempExcelAndOpen_Click(object sender, EventArgs e)
+    {
+      Cursor = Cursors.WaitCursor;
+      DGVSelection.GetSaveArea(dgv, out var objectsToSave, out var columns);
+      var columnHelpers = new List<DGColumnHelper>();
+      var pdc = dgv.DataSource.Properties;
+      foreach (var column in columns)
+      {
+        if (!string.IsNullOrEmpty(column.DataPropertyName))
+          columnHelpers.Add(new DGColumnHelper(pdc[column.DataPropertyName], column.DisplayIndex));
+        else if (column.Name == Constants.GroupItemCountColumnName)
+          columnHelpers.Add(new DGColumnHelper(new PropertyDescriptorForGroupItemCount(), column.DisplayIndex));
+        else if (column.Name.StartsWith(Constants.GroupColumnNamePrefix)) { }
+        else
+          throw new Exception("Trap!!!");
       }
+
+      var filename = $"DGV_{dgv._layoutID}.{ExcelApp.GetDefaultExtension()}";
+      var groupColumnNames = dgv.DataSource.Groups.Select(g => g.PropertyDescriptor.Name).ToList();
+      SaveData.SaveAndOpenDataToXlsFile(filename, Text,
+        dgv.DataSource.GetSubheaders_ExcelAndPrint(dgv._startUpParameters, dgv._lastAppliedLayoutName), objectsToSave,
+        columnHelpers.ToArray(), groupColumnNames);
+      Cursor = Cursors.Default;
     }
 
     // =========   Statistics ==========
@@ -562,6 +562,7 @@ namespace DGWnd.UI {
     {
       waitSpinner.Location = new Point {X = (ClientSize.Width - waitSpinner.Width) / 2, Y = (ClientSize.Height - waitSpinner.Height) / 2};
       waitSpinner.Visible = true;
+      Application.DoEvents();
     }
   }
 }

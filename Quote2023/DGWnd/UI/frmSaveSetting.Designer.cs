@@ -58,7 +58,7 @@ namespace DGWnd.UI {
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Arial", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
             dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
             dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
@@ -115,7 +115,7 @@ namespace DGWnd.UI {
             this.createdDataGridViewTextBoxColumn.HeaderText = "Автор";
             this.createdDataGridViewTextBoxColumn.Name = "createdDataGridViewTextBoxColumn";
             this.createdDataGridViewTextBoxColumn.ReadOnly = true;
-            this.createdDataGridViewTextBoxColumn.Width = 68;
+            this.createdDataGridViewTextBoxColumn.Width = 67;
             // 
             // dCreatedDataGridViewTextBoxColumn
             // 
@@ -124,7 +124,7 @@ namespace DGWnd.UI {
             this.dCreatedDataGridViewTextBoxColumn.HeaderText = "Створено";
             this.dCreatedDataGridViewTextBoxColumn.Name = "dCreatedDataGridViewTextBoxColumn";
             this.dCreatedDataGridViewTextBoxColumn.ReadOnly = true;
-            this.dCreatedDataGridViewTextBoxColumn.Width = 89;
+            this.dCreatedDataGridViewTextBoxColumn.Width = 88;
             // 
             // updatedDataGridViewTextBoxColumn
             // 
@@ -133,7 +133,7 @@ namespace DGWnd.UI {
             this.updatedDataGridViewTextBoxColumn.HeaderText = "Оновлено";
             this.updatedDataGridViewTextBoxColumn.Name = "updatedDataGridViewTextBoxColumn";
             this.updatedDataGridViewTextBoxColumn.ReadOnly = true;
-            this.updatedDataGridViewTextBoxColumn.Width = 92;
+            this.updatedDataGridViewTextBoxColumn.Width = 91;
             // 
             // dUpdatedDataGridViewTextBoxColumn
             // 
@@ -142,7 +142,7 @@ namespace DGWnd.UI {
             this.dUpdatedDataGridViewTextBoxColumn.HeaderText = "Оновлено";
             this.dUpdatedDataGridViewTextBoxColumn.Name = "dUpdatedDataGridViewTextBoxColumn";
             this.dUpdatedDataGridViewTextBoxColumn.ReadOnly = true;
-            this.dUpdatedDataGridViewTextBoxColumn.Width = 92;
+            this.dUpdatedDataGridViewTextBoxColumn.Width = 91;
             // 
             // bs
             // 
@@ -221,7 +221,7 @@ namespace DGWnd.UI {
             this.cbAllowEditToOthers.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbAllowEditToOthers.Location = new System.Drawing.Point(17, 78);
             this.cbAllowEditToOthers.Name = "cbAllowEditToOthers";
-            this.cbAllowEditToOthers.Size = new System.Drawing.Size(357, 20);
+            this.cbAllowEditToOthers.Size = new System.Drawing.Size(356, 20);
             this.cbAllowEditToOthers.TabIndex = 3;
             this.cbAllowEditToOthers.Text = "Інші користувачі можуть коригувати це налаштування?";
             this.cbAllowEditToOthers.UseVisualStyleBackColor = true;
@@ -233,7 +233,7 @@ namespace DGWnd.UI {
             this.cbAllowViewToOthers.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbAllowViewToOthers.Location = new System.Drawing.Point(17, 51);
             this.cbAllowViewToOthers.Name = "cbAllowViewToOthers";
-            this.cbAllowViewToOthers.Size = new System.Drawing.Size(230, 20);
+            this.cbAllowViewToOthers.Size = new System.Drawing.Size(229, 20);
             this.cbAllowViewToOthers.TabIndex = 2;
             this.cbAllowViewToOthers.Text = "Показувати іншим користувачам?";
             this.cbAllowViewToOthers.UseVisualStyleBackColor = true;
@@ -243,7 +243,7 @@ namespace DGWnd.UI {
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(13, 18);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(128, 16);
+            this.label1.Size = new System.Drawing.Size(127, 16);
             this.label1.TabIndex = 1;
             this.label1.Text = "Нове налаштування";
             // 
@@ -262,7 +262,7 @@ namespace DGWnd.UI {
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.panel2);
-            this.Font = new System.Drawing.Font("Arial", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Font = new System.Drawing.Font("Arial", 9.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.Name = "frmSaveSetting";
             this.Text = "Записати налаштування";
             this.Load += new System.EventHandler(this.frmSaveSetting_Load);

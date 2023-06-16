@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows.Forms;
 using DGCore.UserSettings;
 using Microsoft.VisualBasic;
-using spMain.Comp;
 
 namespace DGWnd.DGV
 {
@@ -68,144 +67,93 @@ namespace DGWnd.DGV
         if (data.GetType().Name != "DGVList_GroupItem`1")
         {
           var done = false;
-          if (columnName == "SNAPSHOT" ||((IUserSettingProperties)this).SettingKey.IndexOf("quote", StringComparison.InvariantCultureIgnoreCase) != -1)
+          if (((IUserSettingProperties)this).SettingKey == "houses")
           {
-            if (columnName == "DATE" || columnName == "SNAPSHOT")
+            if (columnName == "COMMENT" || columnName == "YEAR" || columnName == "FLOORS" || columnName == "DEVELOPER")
             {
-              var symbol = data.GetType().GetProperty("SYMBOL").GetValue(data).ToString();
-              var date = data.GetType().GetProperty("DATE").GetValue(data);
-              if (date is DateTime ddate)
-              {
-                var mainForm = this.TopLevelControl;
-                if (mainForm is UI.frmMDI)
-                {
-                  var days = 7;
-                  var graph = spMain.csUtils.GetStandardGraph(symbol, ddate, days);
-                  ((UI.frmMDI) mainForm).AttachNewChildForm(new frmUIStockGraph(graph, false));
-                }
-              }
+              done = true;
+              EditCell(cell, data, "Houses");
             }
           }
-          else if (((IUserSettingProperties) this).SettingKey == "houses")
+          else if (((IUserSettingProperties)this).SettingKey == "vnhouses")
           {
-              if (columnName == "COMMENT")
+              if (columnName == "ID")
               {
                   done = true;
-                  var result = Interaction.InputBox("Enter comment text", "Cell edit", cell.Value?.ToString());
-                  if (!string.IsNullOrEmpty(result))
-                  {
-                      result = result.Trim();
-                      if (string.IsNullOrWhiteSpace(result))
-                          result = null;
-
-                      cell.Value = result;
-                      var id = data.GetType().GetProperty("ID").GetValue(data).ToString();
-                      using (var conn = new SqlConnection("Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True"))
-                      using (var cmd = new SqlCommand("UPDATE Houses SET comment=@comment where id=@id", conn))
-                      {
-                          conn.Open();
-                          cmd.Parameters.Add(new SqlParameter("comment", (object)result ?? DBNull.Value));
-                          cmd.Parameters.Add(new SqlParameter("id", id));
-                          cmd.ExecuteNonQuery();
-                      }
-                  }
+                  var url = @"https://vn.com.ua/ua/complex/" + data.GetType().GetProperty("ID").GetValue(data).ToString();
+                  var sInfo = new ProcessStartInfo(url);
+                  Process.Start(sInfo);
+              }
+              else if (columnName == "COMMENT")
+              {
+                  done = true;
+                  EditCell(cell, data, "VN_Houses");
+              }
+              else if (columnName == "LOCATION")
+              {
+                  done = true;
+                  EditCell(cell, data, "VN_Houses");
+              }
+          }
+          else if (((IUserSettingProperties)this).SettingKey == "vndevelopers")
+          {
+              if (columnName == "ID")
+              {
+                  done = true;
+                  var url = @"https://vn.com.ua/ua/developers/" + data.GetType().GetProperty("ID").GetValue(data).ToString();
+                  var sInfo = new ProcessStartInfo(url);
+                  Process.Start(sInfo);
+              }
+              else if (columnName == "COMMENT")
+              {
+                  done = true;
+                  EditCell(cell, data, "VN_Developers");
               }
           }
           else if (((IUserSettingProperties)this).SettingKey == "domria")
           {
-                        if (columnName == "ID")
-              {
-                  done = true;
-                  var url = @"https://dom.ria.com/uk/" + data.GetType().GetProperty("URL").GetValue(data).ToString();
-                  var sInfo = new ProcessStartInfo(url);
-                  Process.Start(sInfo);
-              }
-              else if (columnName == "COMMENT")
-              {
-                  done = true;
-                  var result = Interaction.InputBox("Enter comment text", "Cell edit", cell.Value?.ToString());
-                  if (!string.IsNullOrEmpty(result))
-                  {
-                      result = result.Trim();
-                      if (string.IsNullOrWhiteSpace(result))
-                          result = null;
-
-                      cell.Value = result;
-                      var id = data.GetType().GetProperty("ID").GetValue(data).ToString();
-                      using (var conn = new SqlConnection("Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True"))
-                      using (var cmd = new SqlCommand("UPDATE DomRia SET comment=@comment where id=@id", conn))
-                      {
-                          conn.Open();
-                          cmd.Parameters.Add(new SqlParameter("comment", (object)result ?? DBNull.Value));
-                          cmd.Parameters.Add(new SqlParameter("id", id));
-                          cmd.ExecuteNonQuery();
-                      }
-                  }
-              }
+            if (columnName == "ID")
+            {
+              done = true;
+              var url = @"https://dom.ria.com/uk/" + data.GetType().GetProperty("URL").GetValue(data).ToString();
+              var sInfo = new ProcessStartInfo(url);
+              Process.Start(sInfo);
+            }
+            else if (columnName == "COMMENT")
+            {
+              done = true;
+              EditCell(cell, data, "DomRia");
+            }
           }
           else if (((IUserSettingProperties)this).SettingKey == "olx")
           {
-              if (columnName == "ID")
-              {
-                  done = true;
-                  var url = data.GetType().GetProperty("HREF").GetValue(data).ToString();
-                  var sInfo = new ProcessStartInfo(url);
-                  Process.Start(sInfo);
-              }
-              else if (columnName == "COMMENT")
-              {
-                  done = true;
-                  var result = Interaction.InputBox("Enter comment text", "Cell edit", cell.Value?.ToString());
-                  if (!string.IsNullOrEmpty(result))
-                  {
-                      result = result.Trim();
-                      if (string.IsNullOrWhiteSpace(result))
-                          result = null;
-
-                      cell.Value = result;
-                      var id = data.GetType().GetProperty("ID").GetValue(data).ToString();
-                      using (var conn = new SqlConnection("Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True"))
-                      using (var cmd = new SqlCommand("UPDATE Olx SET comment=@comment where id=@id", conn))
-                      {
-                          conn.Open();
-                          cmd.Parameters.Add(new SqlParameter("comment", (object)result ?? DBNull.Value));
-                          cmd.Parameters.Add(new SqlParameter("id", id));
-                          cmd.ExecuteNonQuery();
-                      }
-                  }
-              }
+            if (columnName == "ID")
+            {
+              done = true;
+              var url = data.GetType().GetProperty("HREF").GetValue(data).ToString();
+              var sInfo = new ProcessStartInfo(url);
+              Process.Start(sInfo);
+            }
+            else if (columnName == "COMMENT")
+            {
+              done = true;
+              EditCell(cell, data, "Olx");
+            }
           }
           else if (((IUserSettingProperties)this).SettingKey == "realestate2021")
           {
-              if (columnName == "ID")
-              {
-                  done = true;
-                  var url = @"https://www.real-estate.lviv.ua" + data.GetType().GetProperty("HREF").GetValue(data).ToString();
-                  var sInfo = new ProcessStartInfo(url);
-                  Process.Start(sInfo);
-              }
-              else if (columnName == "COMMENT")
-              {
-                  done = true;
-                  var result = Interaction.InputBox("Enter comment text", "Cell edit", cell.Value?.ToString());
-                  if (!string.IsNullOrEmpty(result))
-                  {
-                      result = result.Trim();
-                      if (string.IsNullOrWhiteSpace(result))
-                          result = null;
-
-                      cell.Value = result;
-                      var id = data.GetType().GetProperty("ID").GetValue(data).ToString();
-                      using (var conn = new SqlConnection("Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True"))
-                      using (var cmd = new SqlCommand("UPDATE RealEstate SET comment=@comment where id=@id", conn))
-                      {
-                          conn.Open();
-                          cmd.Parameters.Add(new SqlParameter("comment", (object)result ?? DBNull.Value));
-                          cmd.Parameters.Add(new SqlParameter("id", id));
-                          cmd.ExecuteNonQuery();
-                      }
-                  }
-              }
+            if (columnName == "ID")
+            {
+              done = true;
+              var url = @"https://www.real-estate.lviv.ua" + data.GetType().GetProperty("HREF").GetValue(data).ToString();
+              var sInfo = new ProcessStartInfo(url);
+              Process.Start(sInfo);
+            }
+            else if (columnName == "COMMENT")
+            {
+              done = true;
+              EditCell(cell, data, "RealEstate");
+            }
           }
           else if (((DGCore.UserSettings.IUserSettingProperties)this).SettingKey == "realestate")
           {
@@ -285,10 +233,38 @@ namespace DGWnd.DGV
       base.OnCellDoubleClick(e);
     }
 
+    private void EditCell(DataGridViewCell cell, object data, string tableName)
+    {
+      var propertyName = cell.DataGridView.Columns[cell.ColumnIndex].DataPropertyName;
+      var result = Interaction.InputBox($"Enter {propertyName} text of value", "Cell editing", cell.Value?.ToString());
+      if (!string.IsNullOrEmpty(result))
+      {
+        result = result.Trim();
+        if (string.IsNullOrWhiteSpace(result))
+          result = null;
+
+        cell.Value = result;
+        var id = data.GetType().GetProperty("ID").GetValue(data).ToString();
+        using (var conn = new SqlConnection("Data Source=localhost;Initial Catalog=dbLvivFlat2021;Integrated Security=True"))
+        using (var cmd = new SqlCommand($"UPDATE [{tableName}] SET {propertyName}=@value where id=@id", conn))
+        {
+          conn.Open();
+          cmd.Parameters.Add(new SqlParameter("value", (object)result ?? DBNull.Value));
+          cmd.Parameters.Add(new SqlParameter("id", id));
+          cmd.ExecuteNonQuery();
+        }
+      }
+    }
+
+
     protected override void OnDataError(bool displayErrorDialogIfNoHandler, DataGridViewDataErrorEventArgs e)
     {
-      var cell = this[e.ColumnIndex, e.RowIndex];
-      cell.ToolTipText = $"Data error!!!\nContext: {e.Context.ToString()}\nMessage: {e.Exception.Message}\nStack trace: {e.Exception.StackTrace.Trim()}";
+      if (e.ColumnIndex >= 0)
+      {
+        var cell = this[e.ColumnIndex, e.RowIndex];
+        cell.ToolTipText = $"Data error!!!\nContext: {e.Context.ToString()}\nMessage: {e.Exception.Message}\nStack trace: {e.Exception.StackTrace.Trim()}";
+      }
+
       // ToDo: remove tooltip when no error
       // base.OnDataError(displayErrorDialogIfNoHandler, e);
     }

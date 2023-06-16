@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data.Common;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DGCore.Sql {
@@ -12,6 +12,8 @@ namespace DGCore.Sql {
 
     interface IDbDataSourceExtension {//: IDisposable {
       ICollection GetData(bool requeryFlag);
+      int RecordCount { get; }
+      bool DataLoadingCancelFlag { set; }
     }
 
     /* Not need: use LookupTableConverter  public class DbDataSourceExtension<TItemType, TKeyType> : IDbDataSourceExtension {
@@ -23,11 +25,16 @@ namespace DGCore.Sql {
     // ===============  Extension subclass  ====================
     public class DbDataSourceExtension<TItemType> : IDbDataSourceExtension {
 
-      private const int EVENT_RECORDS_STEP = 10000;
       private DbDataSource _owner;
       private List<TItemType> _data;
 
-      public DbDataSourceExtension(DbDataSource owner) => _owner = owner;
+      public DbDataSourceExtension(DbDataSource owner)
+      {
+        _owner = owner;
+      }
+
+      public int RecordCount => _data?.Count ?? 0;
+      public bool DataLoadingCancelFlag { get; set; }
 
       public ICollection GetData(bool requeryFlag) {
         if (_data == null || requeryFlag)
@@ -67,67 +74,54 @@ namespace DGCore.Sql {
         }
       }
 
-      void DoLoadData() {
-        // Check LookupTableTypeConverters
+      private void DoLoadData()
+      {
+        DataLoadingCancelFlag = false;
+
+        // Activate DependentObjectManager & Check LookupTableTypeConverters
         var pdc = PD.MemberDescriptorUtils.GetTypeMembers(typeof(TItemType));
         var tasks = new List<Task>();
         var sqlKeys = new Dictionary<string, object>();
-
-        foreach (PropertyDescriptor pd in pdc) {
-          if (pd.Converter is Common.ILookupTableTypeConverter)
+        foreach (var converter in pdc.OfType<PropertyDescriptor>().Where(d => d.Converter is Common.ILookupTableTypeConverter).Select(d => d.Converter))
+        {
+          var sqlKey = ((Common.ILookupTableTypeConverter) converter).SqlKey;
+          if (!sqlKeys.ContainsKey(sqlKey))
           {
-            var sqlKey = ((Common.ILookupTableTypeConverter) pd.Converter).SqlKey;
-            if (!sqlKeys.ContainsKey(sqlKey))
-            {
-                // ((Common.ILookupTableTypeConverter)pd.Converter).LoadData(this._owner); // sync
-                var task = Task.Factory.StartNew(() =>
-                ((Common.ILookupTableTypeConverter) pd.Converter).LoadData(this._owner));
-              tasks.Add(task);
-              sqlKeys.Add(sqlKey, null);
-            }
+            var task = Task.Factory.StartNew(() => ((Common.ILookupTableTypeConverter) converter).LoadData(this._owner));
+            tasks.Add(task);
+            sqlKeys.Add(sqlKey, null);
           }
         }
 
         Task.WaitAll(tasks.ToArray());
-        tasks.ForEach(t=> t.Dispose());
+        tasks.ForEach(t => t.Dispose());
 
-        Func<DbDataReader, TItemType> func = DB.DbUtils.Reader.GetDelegate_FromDataReaderToObject<TItemType>(this._owner._cmd, null);
+        var func = DB.DbUtils.Reader.GetDelegate_FromDataReaderToObject<TItemType>(_owner._cmd, null);
         _owner._cmdData.Connection_Open();
-
-        using (DbDataReader reader = this._owner._cmdData._dbCmd.ExecuteReader())
-        {
-          int recs = EVENT_RECORDS_STEP;
+        _owner.InvokeDataEvent(_owner, new SqlDataEventArgs(DataEventKind.Loading));
+        using (var reader = _owner._cmdData._dbCmd.ExecuteReader())
           while (reader.Read())
           {
             try
             {
-              this._data.Add(func(reader));
-              if ((--recs) == 0)
+              if (DataLoadingCancelFlag)
               {
-                SqlDataEventArgs e1 = new SqlDataEventArgs(DataEventKind.Loading) { RecordCount = _data.Count };
-                _owner.InvokeDataEvent(this._owner, e1);
-                if (e1.CancelFlag)
-                {
-                  this._owner._partiallyLoaded = true;
-                  this._owner._isDataReady = true;
-                  this._owner._cmdData._dbCmd.Cancel();
-                  break;
-                }
-                recs = EVENT_RECORDS_STEP;
+                _owner._partiallyLoaded = true;
+                _owner._isDataReady = true;
+                _owner._cmdData._dbCmd.Cancel();
+                break;
               }
+
+              _data.Add(func(reader));
             }
             catch (Exception exception)
             {
-              object[] values = new object[reader.FieldCount];
+              var values = new object[reader.FieldCount];
               reader.GetValues(values);
               throw;
             }
           }
-        }
-
-        _owner.InvokeDataEvent(this._owner, new SqlDataEventArgs(DataEventKind.Loading) { RecordCount = _data.Count });
       }
-
     }
   }
 

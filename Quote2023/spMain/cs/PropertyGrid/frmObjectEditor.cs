@@ -107,7 +107,7 @@ namespace spMain.cs {
     void Init() {
       _data = null;
       SetMode(false);
-      FieldInfo fi = typeof(PropertyGrid).GetField("gridView", BindingFlags.Instance | BindingFlags.NonPublic);
+      FieldInfo fi = typeof(PropertyGrid).GetField("_gridView", BindingFlags.Instance | BindingFlags.NonPublic);
       _gridView = fi.GetValue(this.pg);
 
       if (this._collectionFileName == null) {
@@ -190,7 +190,7 @@ namespace spMain.cs {
     private void pg_Paint(object sender, PaintEventArgs e) {
       if (this.DesignMode) return;
       if (!initPGFlag) {// Not init yet
-        FieldInfo fi = typeof(PropertyGrid).GetField("peMain", BindingFlags.Instance | BindingFlags.NonPublic);
+        FieldInfo fi = typeof(PropertyGrid).GetField("_peMain", BindingFlags.Instance | BindingFlags.NonPublic);
         object rootGridEntry = fi.GetValue(this.pg);//(GridEntry)
         if (rootGridEntry != null) {// rootGridEntry exists == can call init procedure
           initPGFlag = true;

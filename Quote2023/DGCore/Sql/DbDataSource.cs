@@ -5,8 +5,7 @@ using System.ComponentModel;
 namespace DGCore.Sql {
 
   //======================  Static section  ===============================
-  public partial class DbDataSource : DataSourceBase {//, IDisposable {
-
+  public partial class DbDataSource : DataSourceBase {
     //======================   Static section  =========================
     public static DbDataSource GetDataSource(DB.DbCmd cmd, Filters.DbWhereFilter whereFilter, Type itemType, string primaryKeyMemberName, IComponent consumer) {
 
@@ -25,6 +24,17 @@ namespace DGCore.Sql {
     IDbDataSourceExtension _extension;
     private bool _partiallyLoaded;// User canceled the data loading
     private bool _isDataReady;
+
+    public override int RecordCount => _extension.RecordCount;
+
+    public override bool DataLoadingCancelFlag
+    {
+      set
+      {
+        if (_extension != null) // not disposed
+          _extension.DataLoadingCancelFlag = value;
+      }
+    }
 
     public override bool IsPartiallyLoaded => _partiallyLoaded;
     public override bool IsDataReady => _isDataReady;
@@ -54,23 +64,27 @@ namespace DGCore.Sql {
     public override ICollection GetData(bool requeryFlag) => _extension.GetData(requeryFlag);
 
     public override void Dispose() {
-      if (_cmd != null) {
+      DataLoadingCancelFlag = true;
+      if (_cmd != null)
+      {
         _cmd.Dispose();
         _cmd = null;
       }
-      if (_cmdData != null) {
+      if (_cmdData != null)
+      {
         _cmdData.Dispose();
         _cmdData = null;
       }
-      if (this._extension != null) {
-        Utils.Events.RemoveAllEventSubsriptions(this._extension);
+      if (this._extension != null)
+      {
+        Utils.Events.RemoveAllEventSubscriptions(this._extension);
         this._extension = null;
       }
       this.Site = null;
     }
 
     public override string ToString() {
-      return "DBDataSource: " + this._cmdData._dbCmd.CommandText;
+      return "DBDataSource: " + _cmdData?._dbCmd?.CommandText;
     }
   }
 
