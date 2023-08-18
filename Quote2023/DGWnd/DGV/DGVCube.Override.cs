@@ -67,7 +67,12 @@ namespace DGWnd.DGV
         if (data.GetType().Name != "DGVList_GroupItem`1")
         {
           var done = false;
-          if (((IUserSettingProperties)this).SettingKey == "houses")
+          if (((IUserSettingProperties)this).SettingKey == "elitebookkeyboard" && columnName == "COMMENT")
+          {
+            done = true;
+            EditCell(cell, data, "prom_keyboard_elitebook");
+          }
+          else if (((IUserSettingProperties)this).SettingKey == "houses")
           {
             if (columnName == "COMMENT" || columnName == "YEAR" || columnName == "FLOORS" || columnName == "DEVELOPER")
             {
@@ -225,7 +230,7 @@ namespace DGWnd.DGV
           var cellData = fi == null ? null : fi.GetValue(data);
           if (!done && cellData is string s && s.StartsWith(@"https://"))
           {
-            var sInfo = new ProcessStartInfo(s);
+            var sInfo = new ProcessStartInfo(s) { UseShellExecute = true };
             Process.Start(sInfo);
           }
         }

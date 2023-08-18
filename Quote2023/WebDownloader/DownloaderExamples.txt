@@ -1,4 +1,13 @@
-﻿TradingView
+﻿PROM.UA клавіатура hp
+https://prom.ua/ua/search?search_term=%D0%BA%D0%BB%D0%B0%D0%B2%D1%96%D0%B0%D1%82%D1%83%D1%80%D0%B0%20hp&sort=price&category=7070903&page=384
+
+https://prom.ua/ua/search?search_term=%D0%BA%D0%BB%D0%B0%D0%B2%D0%B8%D0%B0%D1%82%D1%83%D1%80%D0%B0%20Elitebook&category=7070903&page=35
+E:\Temp\Exchnage\Keyboard.Prom\клавиатура.Elitebook\клавиатура.Elitebook_{0}.html
+
+https://prom.ua/ua/search?search_term=%D0%BA%D0%BB%D0%B0%D0%B2%D1%96%D0%B0%D1%82%D1%83%D1%80%D0%B0%20Elitebook&category=7070903&page=36
+E:\Temp\Exchnage\Keyboard.Prom\клавіатура.Elitebook\клавіатура.Elitebook_{0}.html
+
+TradingView
 Industry: https://www.tradingview.com/markets/stocks-usa/sectorandindustry-sector/
 SymbolSearch: https://symbol-search.tradingview.com/s/?text=&hl=1&country=US&lang=en&type=stock&start=100&domain=production
 SymbolSearch: https://symbol-search.tradingview.com/s/?text=A&hl=1&country=US&lang=en&type=stock&start=100&domain=production

@@ -533,7 +533,8 @@
       "Olx": {"cs": "dbLvivFlat2021", "sql": "SELECT * from vOlx"},
       "RealEstate": {"layoutId":"RealEstate2021", "cs": "dbLvivFlat2021", "sql": "SELECT * from vRealEstate"},
       "VN Houses": {"cs": "dbLvivFlat2021", "sql": "SELECT * from VN_Houses"},
-      "VN Developers": {"cs": "dbLvivFlat2021", "sql": "SELECT * from VN_Developers"}
+      "VN Developers": {"cs": "dbLvivFlat2021", "sql": "SELECT * from VN_Developers"},
+      "Elitebook keyboard": {"cs": "dbLvivFlat2021", "sql": "SELECT * from prom_keyboard_elitebook"}
     }
   }
 }
