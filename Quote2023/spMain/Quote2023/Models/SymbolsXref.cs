@@ -17,7 +17,7 @@ namespace spMain.Quote2023.Models
                 using (var cmd = conn.CreateCommand())
                 {
                     conn.Open();
-                    cmd.CommandText = "SELECT * from vSymbolsLive";
+                    cmd.CommandText = "SELECT * from dbQ2023Others..vSymbolsLive";
                     using (var rdr = cmd.ExecuteReader())
                         while (rdr.Read())
                         {
