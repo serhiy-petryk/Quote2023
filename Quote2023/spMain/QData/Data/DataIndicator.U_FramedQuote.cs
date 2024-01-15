@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using spMain.QData.Common;
 using spMain.QData.DataFormat;
 
 namespace spMain.QData.Data {
@@ -28,14 +29,20 @@ namespace spMain.QData.Data {
         lastDataOffset = (int)this._tempVars[3];
       }
 
-      int newDataOffset;
-      IList data = adapter.GetData(adapterInputs, lastDataOffset, out newDataOffset);
+      IList data = adapter.GetData(adapterInputs, lastDataOffset, out var newDataOffset);
       this._tempVars[3] = newDataOffset;
+      if (ti._timeInterval > 0 && data.Count>0) // add the last blank quote if need (intraday only)
+      {
+        var lastDateTime = ((Quote) data[data.Count - 1]).Date;
+        var endTradingTime = General.GetMarketEndTime(lastDateTime).Add(new TimeSpan(0, -1, 0));
+        if (lastDateTime.TimeOfDay < endTradingTime)
+        {
+          data.Add(new Quote(lastDateTime.Date + endTradingTime, double.NaN, double.NaN, double.NaN, double.NaN, 0));
+          newDataOffset++;
+        }
+      }
 
       if (data.Count > 0) {
-        Quote lastQuote = (this._data.Count==0? null : (Quote)this._data[this._data.Count-1]);
-        DateTime? lastDate = null;
-        if (lastQuote != null) lastDate = lastQuote.date;
         switch (data[0].GetType().Name.ToLower()) {
           case "quote":
             for (int i = 0; i < (newDataOffset - lastDataOffset); i++) {
@@ -53,6 +60,7 @@ namespace spMain.QData.Data {
                 this._data.Add(new Quote(this._dates[this._dates.Count-1], q.open, q.high, q.low, q.close, q.volume));// last quote
               }
             }
+
             break;
         }
         // Update datetime array
