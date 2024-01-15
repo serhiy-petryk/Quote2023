@@ -69,8 +69,7 @@ namespace spMain.QData.DataAdapters
                             var ss = line.Split(',');
                             var date = DateTime.ParseExact(ss[0], "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)
                                 .AddMinutes(-1);
-                            var include = !showOnlyTradingHours ||
-                                          (date.TimeOfDay >= General.marketStart && date.TimeOfDay < General.marketEnd);
+                            var include = !showOnlyTradingHours || General.IsInMarketTime(date);
                             if (include)
                             {
                                 var open = Math.Round(double.Parse(ss[1], CultureInfo.InvariantCulture), 4);

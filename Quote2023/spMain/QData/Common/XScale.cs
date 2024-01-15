@@ -235,9 +235,9 @@ namespace spMain.QData.Common {
 
     static Color GetBackColor(DateTime? dt) {
       if (dt == null) return Color.WhiteSmoke;
-      int a = 192;
-      TimeSpan ts = dt.Value.TimeOfDay;
-      if (ts < General.marketStart || ts >= General.marketEnd) return Color.Gainsboro; // not market Time
+      if (!General.IsInMarketTime(dt.Value)) return Color.Gainsboro; // not market Time
+
+      var a = 192;
       switch (dt.Value.DayOfWeek.GetHashCode()) {
         case 1: return Color.FromArgb(a, 255, 192, 192); // monday
         case 2: return Color.FromArgb(a, 255, 224, 192);
@@ -376,21 +376,21 @@ namespace spMain.QData.Common {
             throw new Exception("Invalid TimeInterval in XScale.AddDateToDateArray!");
           }
 
-          TimeSpan startTS = General.marketStart;
-          TimeSpan endTS = General.marketEnd;
+          TimeSpan startTS = General.MarketStart;
           TimeSpan tsDelta = new TimeSpan(0, 0, timeInterval._timeInterval);
 
           bool flagNewDate = (lastDT == null);
           if (lastDT != null && lastDT.Value.Date != newDate.Date) {// missing previous date
             flagNewDate = true;
             TimeSpan ts = lastDT.Value.TimeOfDay + tsDelta;
-            while (ts < endTS) {
+            var marketEnd = General.GetMarketEndTime(lastDT.Value);
+            while (ts < marketEnd) {
               dates.Add(lastDT.Value.Date + ts);
               ts += tsDelta;
             }
           }
           if (flagNewDate) {
-            if (newDate.TimeOfDay >= startTS && newDate.TimeOfDay <= endTS) {// market time
+            if (General.IsInMarketTime(newDate)) {// market time
               DateTime tmp2 = newDate.Date + startTS;
               while (tmp2 <= newDate) {// fill blank dates
                 dates.Add(tmp2);
@@ -408,13 +408,14 @@ namespace spMain.QData.Common {
           }
           else {// the same date
             DateTime tmp3 = lastDT.Value;
+            var marketEnd = General.GetMarketEndTime(lastDT.Value);
             while (tmp3 < newDate) {
               DateTime nextDate = tmp3.AddSeconds(timeInterval._timeInterval);
               if (tmp3.TimeOfDay < startTS && nextDate.TimeOfDay > startTS) {
                 nextDate = tmp3.Date + startTS;
               }
-              if (tmp3.TimeOfDay < endTS && nextDate.TimeOfDay > endTS) {
-                nextDate = tmp3.Date + endTS;
+              if (tmp3.TimeOfDay < marketEnd && nextDate.TimeOfDay > marketEnd) {
+                nextDate = tmp3.Date + marketEnd;
               }
               // if ((nextDate > newDate) || (nextDate == newDate && nextDate.TimeOfDay == endTS)) break;
               if (nextDate > newDate) break;

@@ -105,7 +105,8 @@ namespace spMain.QData.DataAdapters
                 .OrderBy(a => a).ToArray();
             var tempData = new Dictionary<DateTime, Quote>();
 
-            foreach(var aa in m_Corrections.Where(a=> string.Equals(a.Key.Item1, symbol, StringComparison.InvariantCultureIgnoreCase) && a.Key.Item2 >=startDate && a.Key.Item2.Date<=endDate))
+            foreach (var aa in m_Corrections.Where(a => string.Equals(a.Key.Item1, symbol, StringComparison.InvariantCultureIgnoreCase) &&
+                a.Key.Item2 >= startDate && a.Key.Item2.Date <= endDate && (!showOnlyTradingHours || General.IsInMarketTime(a.Value.Date))))
                 tempData.Add(aa.Value.Date, aa.Value);
 
             foreach (var zipFileName in zipFileNames.OrderBy(a=>a))
@@ -120,11 +121,8 @@ namespace spMain.QData.DataAdapters
                                 entry.GetContentOfZipEntry());
                         if (o.resultsCount == 0) continue;
 
-                        foreach (var item in o.results.Where(a =>
-                                a.DateTime >= startDate && a.DateTime.Date <= endDate &&
-                                (!showOnlyTradingHours || (a.DateTime.TimeOfDay >= General.marketStart &&
-                                                           a.DateTime.TimeOfDay < General.marketEnd)))
-                            .OrderBy(a => a.DateTime))
+                        foreach (var item in o.results.Where(a => a.DateTime >= startDate && a.DateTime.Date <= endDate &&
+                          (!showOnlyTradingHours || General.IsInMarketTime(a.DateTime))).OrderBy(a => a.DateTime))
                         {
                             if (!tempData.ContainsKey(item.DateTime))
                                 tempData.Add(item.DateTime,
