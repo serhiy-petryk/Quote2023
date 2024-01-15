@@ -35,7 +35,6 @@
     <Compile Update="Comp\StockGraph\StockGraph.AdjustPane.cs" />
     <Compile Update="Comp\StockGraph\StockGraph.AxisChange.cs" />
     <Compile Update="Comp\StockGraph\StockGraph.cs" />
-    <Compile Update="Comp\StockGraph\StockGraph.Cursor.cs" />
     <Compile Update="Comp\StockGraph\StockGraph.Events.cs" />
     <Compile Update="Comp\StockGraph\StockGraph.FillData.cs" />
     <Compile Update="Comp\StockGraph\StockGraph.GraphObjects.cs" />

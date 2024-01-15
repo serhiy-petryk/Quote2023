@@ -1,11 +1,13 @@
-using System;
+п»їusing System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using ZedGraph;
 
-namespace spMain.Comp {
-  public partial class StockGraph : ZedGraphControl {
+namespace spMain.Comp
+{
+  public partial class StockGraph : ZedGraphControl
+  {
 
     const int WM_PAINT = 0x000F;
     Bitmap _cursorBMX = null;
@@ -25,12 +27,15 @@ namespace spMain.Comp {
     bool _lastContainsFocus = false;
     bool _drewCursorFlag = false;
 
-    protected override void WndProc(ref Message m) {
+    protected override void WndProc(ref Message m)
+    {
       base.WndProc(ref m);
 
-      if (m.Msg == WM_PAINT && this.ParentForm != null && this.ParentForm.ContainsFocus) {
-        // this.ParentForm.ContainsFocus: запрет на отрисовку курсора, если поверх находится другое окно
-        lock (_cursorObj) {
+      if (m.Msg == WM_PAINT && this.ParentForm != null && this.ParentForm.ContainsFocus)
+      {
+        // this.ParentForm.ContainsFocus: Р·Р°РїСЂРµС‚ РЅР° РѕС‚СЂРёСЃРѕРІРєСѓ РєСѓСЂСЃРѕСЂР°, РµСЃР»Рё РїРѕРІРµСЂС… РЅР°С…РѕРґРёС‚СЃСЏ РґСЂСѓРіРѕРµ РѕРєРЅРѕ
+        lock (_cursorObj)
+        {
           log.Add("WN_Paint_before" + ", " + DateTime.Now.TimeOfDay.ToString());
           //            if (this.cursorBMX != null) this.CursorDrawCross();
           this.CursorDrawCross();
@@ -39,10 +44,13 @@ namespace spMain.Comp {
       }
     }
 
-    void CursorRestorePicture() {
+    void CursorRestorePicture()
+    {
       _drewCursorFlag = false;
-      if (_cursorBMX != null) {// restore control image
-        if (_lastContainsFocus != this.ContainsFocus) {
+      if (_cursorBMX != null)
+      {// restore control image
+        if (_lastContainsFocus != this.ContainsFocus)
+        {
           this._lastContainsFocus = this.ContainsFocus;
           this.Invalidate();
         }
@@ -66,9 +74,11 @@ namespace spMain.Comp {
 
     public List<string> log = new List<string>();
 
-    int CursorGetActivePaneNo(Point p) {
+    int CursorGetActivePaneNo(Point p)
+    {
       PaneList panes = this.MasterPane.PaneList;
-      for (int i = 0; i < panes.Count; i++) {
+      for (int i = 0; i < panes.Count; i++)
+      {
         //        if (panes[i].Chart.Rect.Contains(p)) return i;// show cursor in pane areas
         //        if (panes[i].Rect.Contains(p)) return i;// show cursor in Graph area
         if (panes[i].Rect.Contains(p) && panes[i].Chart.Rect.Left <= p.X && (panes[i].Chart.Rect.Left + panes[i].Chart.Rect.Width) >= p.X) return i;// show cursor in Graph area
@@ -76,8 +86,10 @@ namespace spMain.Comp {
       return -1;
     }
 
-    void CursorDrawCross() {
-      if (_drewCursorFlag) {
+    void CursorDrawCross()
+    {
+      if (_drewCursorFlag)
+      {
         _drewCursorFlag = false;
         this.Invalidate();
         return;
@@ -85,7 +97,8 @@ namespace spMain.Comp {
 
       Point cursorPoint = this.PointToClient(Cursor.Position);
       int activePaneNo = this.CursorGetActivePaneNo(cursorPoint);
-      if (activePaneNo >= 0 && this._dates != null) {
+      if (activePaneNo >= 0 && this._dates != null)
+      {
         _drewCursorFlag = true;
         log.Add("DrawCross" + ", " + DateTime.Now.TimeOfDay.ToString());
         // ===================== Set X scale data
@@ -95,7 +108,8 @@ namespace spMain.Comp {
         int iCurrent = Convert.ToInt32(xCurrent - 0.5);
         int iDataCurrent = iCurrent - this._iDataMinOffset;
         string textX = "";
-        if (iCurrent >= 0 && iCurrent < this._dates.Count) {
+        if (iCurrent >= 0 && iCurrent < this._dates.Count)
+        {
           DateTime dt = this._dates[iCurrent];
           textX = dt.ToString(this._uiGraph.TimeInterval.GetXScaleFormat());
         }
@@ -104,12 +118,12 @@ namespace spMain.Comp {
         _scaleXLastX = cursorPoint.X - sizeX.Width / 2;
 
         // ================= Set Y scale data
-        /* Плохая чувствительность       double yStep = pane.Y2Axis.Scale.MinorStep;
+        /* РџР»РѕС…Р°СЏ С‡СѓРІСЃС‚РІРёС‚РµР»СЊРЅРѕСЃС‚СЊ       double yStep = pane.Y2Axis.Scale.MinorStep;
                 double y2 = Convert.ToDouble(Convert.ToInt32(y1 / yStep)) * yStep;*/
 
-        double yStep = pane.Y2Axis.Scale.MinorStep / 2.0;// чувствительность уменьшена в 2 раза
+        double yStep = pane.Y2Axis.Scale.MinorStep / 10.0;// С‡СѓРІСЃС‚РІРёС‚РµР»СЊРЅРѕСЃС‚СЊ СѓРјРµРЅСЊС€РµРЅР° РІ 2 СЂР°Р·Р°
         double y2 = Convert.ToDouble(Convert.ToInt32(yCurrent / yStep)) * yStep;
-        y2 = y2 / Math.Pow(10, pane.Y2Axis.Scale.Mag);// thousand, millions, ..
+        y2 = Math.Round(y2 / Math.Pow(10, pane.Y2Axis.Scale.Mag), 4);// thousand, millions, ..
 
         string textY = y2.ToString();
         Size sizeY = TextRenderer.MeasureText(textY, this._xLabelFont);
@@ -122,22 +136,29 @@ namespace spMain.Comp {
         _cursorBMX = csUtilsCursor.FromControlToBitmap(this, cursorPoint.X, 0, 1, this.Height - 17);// ??? 17
         _cursorBMY = csUtilsCursor.FromControlToBitmap(this, 0, cursorPoint.Y, _scaleYLastX, 1);
 
-        using (Graphics g = this.CreateGraphics()) {
+        using (Graphics g = this.CreateGraphics())
+        {
           // Header Labels
-          if (this._paneHeaders != null && this._paneHeaders.Count == this.MasterPane.PaneList.Count) {
-            for (int i = 0; i < this.MasterPane.PaneList.Count; i++) {
+          if (this._paneHeaders != null && this._paneHeaders.Count == this.MasterPane.PaneList.Count)
+          {
+            for (int i = 0; i < this.MasterPane.PaneList.Count; i++)
+            {
               GraphPane pane1 = this.MasterPane.PaneList[i];
               QData.UI.UIPane uiPane = (QData.UI.UIPane)pane1.Tag;
               this._paneHeaders[i].DrawBackground(g);
-              if (iCurrent >= 0 && iCurrent < this._dates.Count) {
+              if (iCurrent >= 0 && iCurrent < this._dates.Count)
+              {
                 double xOffset = 0;
-                for (int i1 = 0; i1 < pane1.CurveList.Count; i1++) {
-                  if (iDataCurrent >= 0 && iDataCurrent < pane1.CurveList[i1].Points.Count) {// added at 2010-08-05
+                for (int i1 = 0; i1 < pane1.CurveList.Count; i1++)
+                {
+                  if (iDataCurrent >= 0 && iDataCurrent < pane1.CurveList[i1].Points.Count)
+                  {// added at 2010-08-05
                     QData.UI.Curve curve = uiPane.Indicators[i1].Curve;
                     PointPair pp = pane1.CurveList[i1].Points[iDataCurrent];
-                    xOffset = this._paneHeaders[i].DrawLabels(g, this._paneHeaders[i]._labelTemplates[i1], pp, this._dates[iCurrent], curve,  xOffset);
+                    xOffset = this._paneHeaders[i].DrawLabels(g, this._paneHeaders[i]._labelTemplates[i1], pp, this._dates[iCurrent], curve, xOffset);
                   }
-                  else {// lovushka (cursor is in margin of X Axis)
+                  else
+                  {// lovushka (cursor is in margin of X Axis)
                   }
                 }//for (int i1 = 0; i1 < pane1.CurveList.Count; i1++) {
               }// if (iCurrent >= 0 && iCurrent < this._dates.Count) {
