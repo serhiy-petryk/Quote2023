@@ -19,7 +19,7 @@ namespace spMain
         public const string MinuteYahooDataFolder = @"D:\Quote\WebData\Minute\Yahoo\Data\";
         public const string MinuteAlphaVantageDataFolder = @"D:\Quote\WebData\Minute\AlphaVantage\Data\";
         public const string MinutePolygonDataFolder = @"E:\Quote\WebData\Minute\Polygon\Data\";
-        public const string MinutePolygon2003DataFolder = @"E:\Quote\WebData\Minute\Polygon2003\DataBuffer\";
+        public const string MinutePolygon2003DataFolder = @"E:\Quote\WebData\Minute\Polygon2003\Data\";
 
         public static Dictionary<string, Type> typeXref = new Dictionary<string, Type>
         {

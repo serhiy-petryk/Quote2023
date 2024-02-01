@@ -190,7 +190,9 @@ namespace spMain
             }
             else if (o is double)
             {
-                return NormilizeDecimalString(((double)o).ToString("R", Settings.fiNumberUS), Settings.fiNumberUS.NumberDecimalSeparator);
+                var f = Convert.ToSingle(o); // Correction decimal places on Graph labels (PaneHeader.DrwaLabel method)
+                return NormilizeDecimalString((f).ToString("R", Settings.fiNumberUS), Settings.fiNumberUS.NumberDecimalSeparator);
+                // return NormilizeDecimalString(((double)o).ToString("R", Settings.fiNumberUS), Settings.fiNumberUS.NumberDecimalSeparator);
             }
             else return o.ToString();
         }
