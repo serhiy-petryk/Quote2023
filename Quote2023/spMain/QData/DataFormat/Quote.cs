@@ -119,7 +119,7 @@ namespace spMain.QData.DataFormat {
 
     //======================================================
     //======================================================
-    public enum ValueProperty { Open, High, Low, Close, Volume, VolumeBuy, VolumeSell, VolumeBuySell, TrueRange };
+    public enum ValueProperty { Open, High, Low, Close, Volume, VolumeBuy, VolumeSell, VolumeBuySell, TrueRange, HL2, HLC3, OHLC4 };
 
     public DateTime date;
     public double open, high, low, close, volume;
