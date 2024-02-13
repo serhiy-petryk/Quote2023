@@ -119,7 +119,7 @@ namespace spMain.QData.DataFormat {
 
     //======================================================
     //======================================================
-    public enum ValueProperty { Open, High, Low, Close, Volume, VolumeBuy, VolumeSell, VolumeBuySell, TrueRange, HL2, HLC3, OHLC4 };
+    public enum ValueProperty { Open, High, Low, Close, Volume, VolumeBuy, VolumeSell, VolumeBuySell, TrueRange, HL2, HLC3, OHL3, OHLC4 };
 
     public DateTime date;
     public double open, high, low, close, volume;
@@ -193,7 +193,10 @@ namespace spMain.QData.DataFormat {
     public double HLC3 {
       get { return (this.high + this.low + this.close) / 3; }
     }
-    public double OHLC4 {
+    public double OHL3 => (this.open + this.high + this.low) / 3;
+
+    public double OHLC4
+    {
       get { return (this.open + this.high + this.low + this.close) / 4; }
     }
     public double MiddleBodyValue {

@@ -57,6 +57,9 @@ namespace spMain.QData.DataDB {
           DBIndicator item = new DBIndicator(dt.Rows[i]);
           _allIndicators.Add(item._id, item);
         }
+
+        LoadFromTradeIndicatorAssembly();
+
         // Check dependeds
         foreach (DBIndicator ind in _allIndicators.Values) {
           foreach (DependedIndicator depInd in ind._dependedInds) {
@@ -99,7 +102,6 @@ namespace spMain.QData.DataDB {
         }
       }
     }
-
 
     // ==================================== Object =================================
     static int _cntHash = 1;

@@ -252,7 +252,8 @@ namespace spMain.QData.Data {
         case "volumebuysell": return delegate(object o) { return ((Quote)o).VolumeBuySell; };
         case "hl2": return delegate(object o) { return ((Quote)o).HL2; };
         case "hlc3": return delegate(object o) { return ((Quote)o).HLC3; };
-        case "ohlc4": return delegate(object o) { return ((Quote)o).OHLC4; };
+        case "ohl3": return delegate (object o) { return ((Quote)o).OHL3; };
+        case "ohlc4": return delegate (object o) { return ((Quote)o).OHLC4; };
         case "middlebodyvalue": return delegate(object o) { return ((Quote)o).MiddleBodyValue; };
         case "bodyheight": return delegate(object o) { return ((Quote)o).BodyHeight; };
 //        default: return delegate(object o) { return (double)o; };
