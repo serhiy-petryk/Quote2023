@@ -17,10 +17,10 @@ namespace spMain.QData.DataDB
       // _allIndicators = new Dictionary<string, DBIndicator>();
       foreach (var m in mm)
       {
-        if (m.Name.StartsWith("Get"))
+        if (m.Name.StartsWith("Get") && !string.Equals(m.Name, "GetHashCode") && !string.Equals(m.Name, "GetType"))
         {
           var parameters = m.GetParameters();
-          if ((m.ReturnType.GetInterface("IEnumerable") != null && m.ReturnType.GenericTypeArguments.Length == 1) || parameters.Length == 0)
+          if (!(m.ReturnType.GetInterface("IEnumerable") != null && m.ReturnType.GenericTypeArguments.Length == 1) || parameters.Length == 0)
           {
             throw new Exception("LoadFromTradeIndicatorAssembly error. Check TradeIndicator parser!");
           }
