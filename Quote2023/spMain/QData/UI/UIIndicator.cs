@@ -372,7 +372,7 @@ namespace spMain.QData.UI {
     public override string ToString() {
       StringBuilder sb = new StringBuilder();
       foreach (Data.DataInput input in this._inputs) {
-        sb.Append("," + input._value.ToString());
+        sb.Append("," + input._value ?? "<Null>");
       }
       string s = (this._dbInd == null ? null : this._dbInd._name);
       if (sb.Length > 0) {

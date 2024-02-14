@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using Skender.Stock.Indicators;
 using Quote = spMain.QData.DataFormat.Quote;
 
@@ -787,22 +788,78 @@ namespace spMain.QData.Data {
     void Upd_TradeIndicators()
     {
       var quotes = this._childInds[0]._data;
+      var indicator = DataDB.DBIndicator.GetDBIndByID(_indID);
+      var seriousDataType = indicator.GetSeriesDataType();
+      // IList data;
+      var pp = new List<object>();
+      if (seriousDataType == typeof((DateTime, double)))
+      {
+        var quotePart = (Quote.ValueProperty)this._localInputs[0]._value;
+        var fnQuotePart = (Func<object, double>)StatFunctionsOld.GetValueDelegate(quotePart.ToString());
+        var data = new List<(DateTime, double)>();
+        foreach (Quote q in quotes)
+        {
+          var value = fnQuotePart(q);
+          data.Add((q.Date, value));
+        }
 
-      var quotePart = (Quote.ValueProperty)this._localInputs[0]._value;
-      var fnQuotePart = (Func<object, double>)StatFunctionsOld.GetValueDelegate(quotePart.ToString());
+        pp.Add(data);
+        for (var k = 1; k < _localInputs.Count; k++)
+          pp.Add(_localInputs[k]._value);
+      }
+      else if (seriousDataType ==  typeof(IQuote))
+      {
+        var data = new List<Skender.Stock.Indicators.Quote>();
+        foreach (Quote q in quotes)
+        {
+          data.Add(new Skender.Stock.Indicators.Quote
+          {
+            Date = q.Date,
+            Open = Convert.ToDecimal(q.Open),
+            High = Convert.ToDecimal(q.High),
+            Low = Convert.ToDecimal(q.Low),
+            Close = Convert.ToDecimal(q.Close),
+            Volume = Convert.ToDecimal(q.Volume)
+          });
+        }
+        pp.Add(data);
+        for (var k = 0; k < _localInputs.Count; k++)
+          pp.Add(_localInputs[k]._value);
+      }
+      else
+        throw new Exception($"Need to check for {seriousDataType.Name} serious data type");
 
-      var smoothPeriod = (int)this._localInputs[1]._value;
+      var method = indicator.GetMethod();
+      try
+      {
+        var oo = method.Invoke(null, pp.ToArray()) as IList;
+        for (var k = 0; k < oo.Count; k++)
+        {
+          var result = oo[k] as IReusableResult;
+          _data[k] = result.Value ?? double.NaN;
+        }
+      }
+      catch (Exception ex)
+      {
+        MessageBox.Show($@"ERROR!{Environment.NewLine}{ex}");
+      }
 
-      var data = new List<Ti_Value>();
+      return;
+
+      // var quotePart = (Quote.ValueProperty)this._localInputs[0]._value;
+      // var fnQuotePart = (Func<object, double>)StatFunctionsOld.GetValueDelegate(quotePart.ToString());
+
+      // var smoothPeriod = (int)this._localInputs[1]._value;
+
+      /*var data = new List<Ti_Value>();
       foreach(Quote q in quotes)
       {
         var value = fnQuotePart(q);
         data.Add(new Ti_Value { Date = q.Date, Value = double.IsNaN(value) ? null : value });
-      }
+      }*/
 
       // calculate
-      var indicator = DataDB.DBIndicator.GetDBIndByID(_indID);
-      var method = indicator.GetMethod();
+      /*var method = indicator.GetMethod();
       var oo = method.Invoke(null, new object[] { data, smoothPeriod }) as IList;
       for (var k = 0; k < oo.Count; k++)
       {
@@ -823,7 +880,7 @@ namespace spMain.QData.Data {
           Close = Convert.ToDecimal(q.Close),
           Volume = Convert.ToDecimal(q.Volume)
         });
-      }
+      }*/
 
       // calculate
       // var indicator = DataDB.DBIndicator.GetDBIndByID(_indID);
