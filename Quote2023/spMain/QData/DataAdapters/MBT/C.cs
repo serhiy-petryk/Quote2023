@@ -8,7 +8,8 @@ namespace spMain.QData.DataAdapters.MBT {
   public class C {
 
     public const string pathDBQDefault = Settings.pathData + @"DBQ\";
-    const string connTemplate = @"Provider=Microsoft.Jet.OleDb.4.0;Data Source={0}";
+    // const string connTemplate = @"Provider=Microsoft.Jet.OleDb.4.0;Data Source={0}";
+    const string connTemplate = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0}";
 
     internal const long maxUInt32 = UInt32.MaxValue;
     internal const long maxUInt16 = UInt16.MaxValue;
@@ -31,7 +32,7 @@ namespace spMain.QData.DataAdapters.MBT {
     public static readonly TimeSpan tsSessionStart = new TimeSpan(9, 30, 0);
     public static readonly TimeSpan tsSessionEnd = new TimeSpan(16, 01, 0);
 
-    public readonly static Encoding encoding = Encoding.GetEncoding(1252);//Western European (Windows)
+    // public readonly static Encoding encoding = Encoding.GetEncoding(1252);//Western European (Windows)
 
     public readonly static CultureInfo ciInvariant = CultureInfo.InvariantCulture;
     public readonly static DateTimeFormatInfo fiDateInvariant = CultureInfo.InvariantCulture.DateTimeFormat;
