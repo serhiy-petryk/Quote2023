@@ -45,13 +45,18 @@ namespace spMain.QData.Data {
       if (data.Count > 0) {
         switch (data[0].GetType().Name.ToLower()) {
           case "quote":
+          case "quotepolygon":
             for (int i = 0; i < (newDataOffset - lastDataOffset); i++) {
               Quote q = (Quote)data[i];
               int lastDateCount = this._dates.Count;
               Common.XScale.AddDateToDateArray(this._dates, q.date, ti);
 //              Common.UtilsFrame.AddDateToDateArray(this._dates, q.date, ti);
               if (this._dates.Count == lastDateCount) {//              SameTimeFrame:
-                ((Quote)this._data[this._data.Count - 1]).MergeQuotes(q);
+                var o = this._data[this._data.Count - 1];
+                if (o is QuotePolygon qp)
+                  qp.MergeQuotes(q);
+                else
+                  ((Quote)o).MergeQuotes(q);
               }
               else {
                 for (int i1 = this._data.Count; i1 < this._dates.Count -1; i1++) {

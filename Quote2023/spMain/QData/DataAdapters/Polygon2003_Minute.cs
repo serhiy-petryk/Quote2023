@@ -50,12 +50,13 @@ namespace spMain.QData.DataAdapters
                         var low = double.Parse(ss[4].Trim(), CultureInfo.InvariantCulture);
                         var close = double.Parse(ss[5].Trim(), CultureInfo.InvariantCulture);
                         var volume = double.Parse(ss[6].Trim(), CultureInfo.InvariantCulture);
+                        var tradeCount = int.Parse(ss[8].Trim(), CultureInfo.InvariantCulture);
                         var key = (symbol, date);
                         if (!m_Corrections.ContainsKey(key))
                             m_Corrections.Add(key,
-                                new Quote
+                                new QuotePolygon
                                 {
-                                    Date = date, Open = open, High = high, Low = low, Close = close, Volume = volume
+                                    Date = date, Open = open, High = high, Low = low, Close = close, Volume = volume, TradeCount = tradeCount
                                 });
                     }
                 }
@@ -126,10 +127,10 @@ namespace spMain.QData.DataAdapters
                         {
                             if (!tempData.ContainsKey(item.DateTime))
                                 tempData.Add(item.DateTime,
-                                    new Quote
+                                    new QuotePolygon
                                     {
                                         Date = item.DateTime, Open = item.Open, High = item.High, Low = item.Low,
-                                        Close = item.Close, Volume = item.Volume
+                                        Close = item.Close, Volume = item.Volume, TradeCount = item.n
                                     });
                         }
                     }

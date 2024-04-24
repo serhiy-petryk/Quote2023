@@ -239,7 +239,7 @@ namespace spMain.QData.DataFormat {
       return !(q1 == q2);
     }
 
-    public void MergeQuotes(Quote otherQuote) {
+    public virtual void MergeQuotes(Quote otherQuote) {
       if (Double.IsNaN(this.open) && !Double.IsNaN(otherQuote.open)) this.open = otherQuote.open;
       if (!Double.IsNaN(otherQuote.high)) {
         if (double.IsNaN(this.high) || this.high < otherQuote.high) this.high = otherQuote.high;
@@ -285,6 +285,18 @@ namespace spMain.QData.DataFormat {
       return null;
     }*/
 
+  }
+
+  public class QuotePolygon : Quote
+  {
+    public int TradeCount;
+
+    public override void MergeQuotes(Quote otherQuote)
+    {
+      base.MergeQuotes(otherQuote);
+      if (otherQuote is QuotePolygon qp)
+        TradeCount += qp.TradeCount;
+    }
   }
 
 }
