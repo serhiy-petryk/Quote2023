@@ -51,7 +51,7 @@ namespace spMain.QData.DataDB {
 
     static void LoadFromMDB() {
       if (_allIndicators == null) {
-        DataTable dt = csUtilsData.GetDataTable("select * from dbindicators where valid<>0", Settings.pathMdbBaseFileName);
+        DataTable dt = csUtilsData.GetDataTable("select * from dbindicators where valid<>0 order by name", Settings.pathMdbBaseFileName);
         _allIndicators = new Dictionary<string, DBIndicator>();
         for (int i = 0; i < dt.Rows.Count; i++) {
           DBIndicator item = new DBIndicator(dt.Rows[i]);

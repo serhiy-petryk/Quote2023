@@ -182,6 +182,9 @@ namespace spMain.QData.Data {
             case "volume":
               this.Upd_Volume();
               break;
+            case "trades":
+              Upd_Trades();
+              break;
             case "tradeindicators":
               Upd_TradeIndicators();
               break;
@@ -703,6 +706,17 @@ namespace spMain.QData.Data {
       for (int i = this._startItemNo; i < this._endItemNo; i++)
       {
         this._data[i] = ((Quote)this._childInds[0]._data[i]).volume;
+      }
+    }
+
+    void Upd_Trades()
+    {
+      for (int i = this._startItemNo; i < this._endItemNo; i++)
+      {
+        if (this._childInds[0]._data[i] is QuotePolygon qp)
+          this._data[i] = Convert.ToDouble(qp.TradeCount);
+        else
+          this._data[i] = double.NaN;
       }
     }
 
