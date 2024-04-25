@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Skender.Stock.Indicators;
+using spMain.QData.DataFormat;
 
 namespace spMain.QData.Data {
   public partial class DataIndicator {
@@ -15,7 +15,7 @@ namespace spMain.QData.Data {
       this._tempVars.Clear();
       foreach (string s in inputIDs) {
         DataInput di = DataInput.GetDataInputByID(s, this._localInputs);
-        if (di._dataType == typeof(spMain.QData.DataFormat.Quote.ValueProperty)) {
+        if (di._dataType == typeof(Quote.ValueProperty)) {
           this._tempVars.Add(StatFunctionsOld.GetValueDelegate(di._value.ToString()));
         }
         else {
@@ -834,7 +834,7 @@ namespace spMain.QData.Data {
         var oo = method.Invoke(null, pp.ToArray()) as IList;
         for (var k = 0; k < oo.Count; k++)
         {
-          var result = oo[k] as IReusableResult;
+          var result = oo[k] as Skender.Stock.Indicators.IReusableResult;
           _data[k] = result.Value ?? double.NaN;
         }
       }
