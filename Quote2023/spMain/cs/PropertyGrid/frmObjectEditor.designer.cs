@@ -64,6 +64,7 @@ namespace spMain.cs {
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -75,20 +76,21 @@ namespace spMain.cs {
             // 
             this.splitContainer1.Panel2.Controls.Add(this.pg);
             this.splitContainer1.Panel2.Controls.Add(this.tsPropertyGrid);
-            this.splitContainer1.Size = new System.Drawing.Size(867, 612);
-            this.splitContainer1.SplitterDistance = 341;
+            this.splitContainer1.Size = new System.Drawing.Size(1011, 706);
+            this.splitContainer1.SplitterDistance = 397;
+            this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 4;
             // 
             // listItems
             // 
             this.listItems.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listItems.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.listItems.FormattingEnabled = true;
+            this.listItems.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.listItems.ItemHeight = 15;
             this.listItems.Location = new System.Drawing.Point(0, 25);
+            this.listItems.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.listItems.Name = "listItems";
             this.listItems.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listItems.Size = new System.Drawing.Size(341, 587);
+            this.listItems.Size = new System.Drawing.Size(397, 681);
             this.listItems.TabIndex = 4;
             this.listItems.SelectedIndexChanged += new System.EventHandler(this.listItems_SelectedIndexChanged);
             this.listItems.DoubleClick += new System.EventHandler(this.listItems_DoubleClick);
@@ -106,7 +108,7 @@ namespace spMain.cs {
             this.tsTreeView.Location = new System.Drawing.Point(0, 0);
             this.tsTreeView.Name = "tsTreeView";
             this.tsTreeView.Padding = new System.Windows.Forms.Padding(0);
-            this.tsTreeView.Size = new System.Drawing.Size(341, 25);
+            this.tsTreeView.Size = new System.Drawing.Size(397, 25);
             this.tsTreeView.TabIndex = 3;
             this.tsTreeView.Text = "toolStrip1";
             // 
@@ -162,10 +164,11 @@ namespace spMain.cs {
             // 
             this.pg.CommandsVisibleIfAvailable = false;
             this.pg.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.pg.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.pg.Location = new System.Drawing.Point(0, 25);
+            this.pg.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.pg.Name = "pg";
-            this.pg.Size = new System.Drawing.Size(522, 587);
+            this.pg.Size = new System.Drawing.Size(609, 681);
             this.pg.TabIndex = 3;
             this.pg.ToolbarVisible = false;
             this.pg.SelectedGridItemChanged += new System.Windows.Forms.SelectedGridItemChangedEventHandler(this.pg_SelectedGridItemChanged);
@@ -195,14 +198,14 @@ namespace spMain.cs {
             this.tsPropertyGrid.Location = new System.Drawing.Point(0, 0);
             this.tsPropertyGrid.Name = "tsPropertyGrid";
             this.tsPropertyGrid.Padding = new System.Windows.Forms.Padding(0);
-            this.tsPropertyGrid.Size = new System.Drawing.Size(522, 25);
+            this.tsPropertyGrid.Size = new System.Drawing.Size(609, 25);
             this.tsPropertyGrid.TabIndex = 2;
             this.tsPropertyGrid.Text = "toolStrip1";
             // 
             // btnOK
             // 
             this.btnOK.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnOK.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold);
+            this.btnOK.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnOK.Image = ((System.Drawing.Image)(resources.GetObject("btnOK.Image")));
             this.btnOK.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnOK.Name = "btnOK";
@@ -350,6 +353,7 @@ namespace spMain.cs {
             // 
             // imageList
             // 
+            this.imageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
             this.imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList.ImageStream")));
             this.imageList.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList.Images.SetKeyName(0, "window.ico");
@@ -360,10 +364,11 @@ namespace spMain.cs {
             // 
             // PGfrmObjectEditor
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(867, 612);
+            this.ClientSize = new System.Drawing.Size(1011, 706);
             this.Controls.Add(this.splitContainer1);
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "PGfrmObjectEditor";
             this.Text = "frmObjectManager";
             this.splitContainer1.Panel1.ResumeLayout(false);
