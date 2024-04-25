@@ -130,9 +130,18 @@ namespace spMain.QData.Data {
       return this._dates;
     }
 
-    public string GetFileHeader() {
-      string template = (this._valueDataType == typeof(Quote) ?
-        "Date{0}" + "\t" + "Open{0}" + "\t" + "High{0}" + "\t" + "Low{0}" + "\t" + "Close{0}" + "\t" + "Volume{0}" : this._indID + "{0}");
+    public string GetFileHeader()
+    {
+      string template;
+      if (this._valueDataType == typeof(Quote) && _data.Count > 0 && _data[0] is QuotePolygon)
+        template = "Date{0}" + "\t" + "Open{0}" + "\t" + "High{0}" + "\t" + "Low{0}" + "\t" + "Close{0}" + "\t" +
+                   "Volume{0}" + "\t" + "Trades{0}";
+      else if (this._valueDataType == typeof(Quote))
+        template = "Date{0}" + "\t" + "Open{0}" + "\t" + "High{0}" + "\t" + "Low{0}" + "\t" + "Close{0}" + "\t" +
+                   "Volume{0}";
+      else
+        template = this._indID + "{0}";
+
       string sInputs = DataInput.GetDataInputListDescription(this._localInputs, "_", "_", "");
       return string.Format( template, sInputs);
     }

@@ -291,11 +291,22 @@ namespace spMain.QData.DataFormat {
   {
     public int TradeCount;
 
+    public QuotePolygon(DateTime pDate, double pOpen, double pHigh, double pLow, double pClose, double pVolume,
+      int tradeCount) : base(pDate, pOpen, pHigh, pLow, pClose, pVolume)
+    {
+      TradeCount = tradeCount;
+    }
+
     public override void MergeQuotes(Quote otherQuote)
     {
       base.MergeQuotes(otherQuote);
       if (otherQuote is QuotePolygon qp)
         TradeCount += qp.TradeCount;
+    }
+
+    public override string ToString()
+    {
+      return base.ToString() + $"\t{TradeCount}";
     }
   }
 

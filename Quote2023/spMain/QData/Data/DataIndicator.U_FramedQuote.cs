@@ -45,31 +45,54 @@ namespace spMain.QData.Data {
       if (data.Count > 0) {
         switch (data[0].GetType().Name.ToLower()) {
           case "quote":
-          case "quotepolygon":
-            for (int i = 0; i < (newDataOffset - lastDataOffset); i++) {
+            for (int i = 0; i < (newDataOffset - lastDataOffset); i++)
+            {
               Quote q = (Quote)data[i];
               int lastDateCount = this._dates.Count;
               Common.XScale.AddDateToDateArray(this._dates, q.date, ti);
-//              Common.UtilsFrame.AddDateToDateArray(this._dates, q.date, ti);
-              if (this._dates.Count == lastDateCount) {//              SameTimeFrame:
-                var o = this._data[this._data.Count - 1];
-                if (o is QuotePolygon qp)
-                  qp.MergeQuotes(q);
-                else
-                  ((Quote)o).MergeQuotes(q);
+              //              Common.UtilsFrame.AddDateToDateArray(this._dates, q.date, ti);
+              if (this._dates.Count == lastDateCount)
+              {//              SameTimeFrame:
+                  ((Quote)this._data[this._data.Count - 1]).MergeQuotes(q);
               }
-              else {
-                for (int i1 = this._data.Count; i1 < this._dates.Count -1; i1++) {
-                  this._data.Add(new Quote(this._dates[i1], double.NaN, double.NaN, double.NaN, double.NaN,0));// missing items
+              else
+              {
+                for (int i1 = this._data.Count; i1 < this._dates.Count - 1; i1++)
+                {
+                  this._data.Add(new Quote(this._dates[i1], double.NaN, double.NaN, double.NaN, double.NaN, 0));// missing items
                 }
-                this._data.Add(new Quote(this._dates[this._dates.Count-1], q.open, q.high, q.low, q.close, q.volume));// last quote
+                this._data.Add(new Quote(this._dates[this._dates.Count - 1], q.open, q.high, q.low, q.close, q.volume));// last quote
               }
             }
 
             break;
-        }
+
+          case "quotepolygon":
+            for (int i = 0; i < (newDataOffset - lastDataOffset); i++)
+            {
+              var q = (QuotePolygon)data[i];
+              int lastDateCount = this._dates.Count;
+              Common.XScale.AddDateToDateArray(this._dates, q.date, ti);
+              //              Common.UtilsFrame.AddDateToDateArray(this._dates, q.date, ti);
+              if (this._dates.Count == lastDateCount)
+              {//              SameTimeFrame:
+                ((QuotePolygon)this._data[this._data.Count - 1]).MergeQuotes(q);
+              }
+              else
+              {
+                for (int i1 = this._data.Count; i1 < this._dates.Count - 1; i1++)
+                {
+                  this._data.Add(new QuotePolygon(this._dates[i1], double.NaN, double.NaN, double.NaN, double.NaN, 0, 0));// missing items
+                }
+                this._data.Add(new QuotePolygon(this._dates[this._dates.Count - 1], q.open, q.high, q.low, q.close, q.volume, q.TradeCount));// last quote
+              }
+            }
+
+            break;
+        
+      }
         // Update datetime array
-        if (this._dates != null) {
+      if (this._dates != null) {
           for (int i = this._dates.Count; i < this._data.Count; i++) {
             this._dates.Add(((Quote)this._data[i]).date);
           }

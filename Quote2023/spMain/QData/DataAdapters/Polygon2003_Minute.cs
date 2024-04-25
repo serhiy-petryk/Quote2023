@@ -53,17 +53,9 @@ namespace spMain.QData.DataAdapters
                         var tradeCount = int.Parse(ss[8].Trim(), CultureInfo.InvariantCulture);
                         var key = (symbol, date);
                         if (!m_Corrections.ContainsKey(key))
-                            m_Corrections.Add(key,
-                                new QuotePolygon
-                                {
-                                    Date = date, Open = open, High = high, Low = low, Close = close, Volume = volume, TradeCount = tradeCount
-                                });
+                          m_Corrections.Add(key, new QuotePolygon(date, open, high, low, close, volume, tradeCount));
                     }
                 }
-                {
-                    
-                }
-
             }
 
             DateTime GetDateOfFile(string filename)
@@ -125,13 +117,10 @@ namespace spMain.QData.DataAdapters
                         foreach (var item in o.results.Where(a => a.DateTime >= startDate && a.DateTime.Date <= endDate &&
                           (!showOnlyTradingHours || General.IsInMarketTime(a.DateTime))).OrderBy(a => a.DateTime))
                         {
-                            if (!tempData.ContainsKey(item.DateTime))
-                                tempData.Add(item.DateTime,
-                                    new QuotePolygon
-                                    {
-                                        Date = item.DateTime, Open = item.Open, High = item.High, Low = item.Low,
-                                        Close = item.Close, Volume = item.Volume, TradeCount = item.n
-                                    });
+                          if (!tempData.ContainsKey(item.DateTime))
+                            tempData.Add(item.DateTime,
+                              new QuotePolygon(item.DateTime, item.Open, item.High, item.Low, item.Close, item.Volume,
+                                item.TradeCount));
                         }
                     }
                 }
