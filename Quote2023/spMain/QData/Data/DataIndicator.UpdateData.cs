@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Skender.Stock.Indicators;
-using Quote = spMain.QData.DataFormat.Quote;
 
 namespace spMain.QData.Data {
   public partial class DataIndicator {
@@ -16,7 +15,7 @@ namespace spMain.QData.Data {
       this._tempVars.Clear();
       foreach (string s in inputIDs) {
         DataInput di = DataInput.GetDataInputByID(s, this._localInputs);
-        if (di._dataType == typeof( Quote.ValueProperty)) {
+        if (di._dataType == typeof(spMain.QData.DataFormat.Quote.ValueProperty)) {
           this._tempVars.Add(StatFunctionsOld.GetValueDelegate(di._value.ToString()));
         }
         else {
