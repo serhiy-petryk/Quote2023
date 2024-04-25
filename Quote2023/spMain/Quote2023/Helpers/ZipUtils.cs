@@ -7,7 +7,7 @@ namespace spMain.Quote2023.Helpers
     public static class ZipUtils
     {
         /*  Open zip archive
-         *  using (var zipArchive = ZipFile.Open(zipFileName, ZipArchiveMode.Read))
+           using (var zipArchive = ZipFile.Open(zipFileName, ZipArchiveMode.Read))
          */
 
         public static IEnumerable<string> GetLinesOfZipEntry(this ZipArchiveEntry entry)

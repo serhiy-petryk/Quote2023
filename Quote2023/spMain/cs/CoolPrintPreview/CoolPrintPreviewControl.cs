@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace spMain.csCoolPrintPreview {
   /* ====================  Usage ========================
-   * using (CoolPrintPreviewDialog dlg = new CoolPrintPreviewDialog()) {
+    using (CoolPrintPreviewDialog dlg = new CoolPrintPreviewDialog()) {
                   dlg.Document = this.printDocument1;
                   dlg.ShowDialog(this); }*/
 

@@ -177,7 +177,7 @@ namespace ZedGraph
 	#endregion
 
 	#region Methods
-		/*
+	
 		/// <summary>
 		/// Create a new <see cref="Pen"/> object from the properties of this
 		/// <see cref="Border"/> object.
@@ -192,7 +192,7 @@ namespace ZedGraph
 		/// represents a linear multiple to be applied to font sizes, symbol sizes, etc.
 		/// </param>
 		/// <returns>A <see cref="Pen"/> object with the proper color and pen width.</returns>
-		public Pen MakePen( bool isPenWidthScaled, float scaleFactor )
+		/* public Pen MakePen( bool isPenWidthScaled, float scaleFactor )
 		{
 			float scaledPenWidth = _width;
 			if ( isPenWidthScaled )

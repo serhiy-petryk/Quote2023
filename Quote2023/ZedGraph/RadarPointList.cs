@@ -175,7 +175,7 @@ namespace ZedGraph
 
 	#region Methods
 /*
- * /// <summary>
+  /// <summary>
 		/// Add the specified PointPair to the collection.
 		/// </summary>
 		/// <param name="pt">The PointPair to be added</param>

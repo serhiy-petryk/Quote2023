@@ -154,7 +154,7 @@ namespace spMain.QData.DataAdapters {
                 /*                IEnumerable<IGrouping<long, DataFormat.MbtTickHttp>> aa1 = Enumerable.GroupBy<DataFormat.MbtTickHttp, long>(aa, delegate(DataFormat.MbtTickHttp o) { return o._date.Ticks / 10000 / 1000; });
                                 IEnumerable<IGrouping<long, DataFormat.MbtTickHttp>> aa2 = Enumerable.OrderBy<IGrouping<long, DataFormat.MbtTickHttp>, long>(aa1, delegate(IGrouping<long, DataFormat.MbtTickHttp> o) { return o.Key; });
                                 IGrouping<long, DataFormat.MbtTickHttp>[] aa3 = Enumerable.ToArray(aa2);
-                /*                foreach (IEnumerable<DataFormat.MbtTickHttp> oo in aa3) {
+                                foreach (IEnumerable<DataFormat.MbtTickHttp> oo in aa3) {
                                   IEnumerable<DataFormat.MbtTickHttp> aa4 = Enumerable.OrderBy<DataFormat.MbtTickHttp, int>(oo, delegate(DataFormat.MbtTickHttp o) { return o._no; });
                                   DateTime dt = DateTime.MinValue;
                                   double open = double.NaN;

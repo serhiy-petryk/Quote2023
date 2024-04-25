@@ -292,7 +292,7 @@ namespace spMain.cs {
 /*						KeyValuePairWrapper<string, object>[] _data=new KeyValuePairWrapper<string,object>[2];
 												_data[0] = new KeyValuePairWrapper<string, object>("Key", key);
 												_data[1] = new KeyValuePairWrapper<string, object>("Value", value);
-												/*						KeyValuePair<string, object>[] _data=new KeyValuePair<string,object>[2];
+												KeyValuePair<string, object>[] _data=new KeyValuePair<string,object>[2];
 						_data[0] = new KeyValuePair<string, object>("Key", key);
 						_data[1] = new KeyValuePair<string, object>("Value", value);*/
 						Dictionary<string, object> _data = new Dictionary<string, object>(2);
@@ -429,7 +429,7 @@ namespace spMain.cs {
             }
           }
           break;
-        //        /*  ??? 2010-05-16 Не могу активировать этот кусок кода. Он мешает через вызов PGUtils.GetParents 
+        //         ??? 2010-05-16 Не могу активировать этот кусок кода. Он мешает через вызов PGUtils.GetParents 
         case PGUtils.PropertyType.KeyValuePair:// Only for PropertyGrid ( Not TreeView)
 
           Attribute[] arrayAttrs1 = new Attribute[contextAttrs.Count];

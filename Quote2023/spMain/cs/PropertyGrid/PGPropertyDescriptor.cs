@@ -243,7 +243,7 @@ namespace spMain.cs {
 				return basePropertyDescriptor.Name;
 			}
 		}
-/*		public override bool SupportsChangeEvents {
+		public override bool SupportsChangeEvents {
 			get {
 				return base.SupportsChangeEvents;
 			}
