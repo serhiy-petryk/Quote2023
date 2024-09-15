@@ -68,7 +68,7 @@
   },
 
   "Lookups": {
-    "quoteSymbols": {"cs": "dbQuote2022", "sql": "select * from dbQ2023Others..vSymbolsLive", "isExclusive": true},
+    "quoteSymbols": {"cs": "dbQuote2022", "sql": "select * from dbQ2024..vSymbolsLive", "isExclusive": true},
     "period": {"cs": "oneSAPConn", "sql": "select distinct period from gldoclist order by 1 desc", "isExclusive": true},
     "plant": {"cs": "oneSAPConn", "sql": "select 'UA' as plant UNION ALL select distinct plant from mat_ledger order by 1", "isExclusive": true},
     "materialClass": {"cs": "oneSAPConn", "sql": "select * from v_rpt_mat_class_list order by 1", "isExclusive": true},
@@ -387,7 +387,7 @@
       "Gap Down 2013 (Yahoo daily)": {"cs": "dbQuote2022","sql": "select * from [vDayYahoo2013Gaps] WHERE [prevClose]>[Low];"},
       "Big Volume 2013 (Yahoo daily)": {"cs": "dbQuote2022","sql": "select * from [vDayYahoo2013BigVolume];"},
       "Symbols Eoddata": {"cs": "dbQuote2022","sql": "select * from SymbolsEoddata"},
-      "Live Symbols": {"cs": "dbQuote2022","sql": "select * from dbQ2023Others..vSymbolsLive"},
+      "Live Symbols": {"cs": "dbQuote2022","sql": "select * from dbQ2024.dbo.vSymbolsLive"},
       "Symbols Nasdaq": {"cs": "dbQuote2022","sql": "select * from SymbolsNasdaq;"},
       "Symbols Nasdaq (all)": {"cs": "dbQuote2022","sql": "select * from SymbolsNasdaqAll;"},
       "Screener Nasdaq (from 2021)": {"cs": "dbQuote2022","sql": "select len(Name) NameLen, * from dbQuote2023..HScreenerNasdaqStockDetails"},
