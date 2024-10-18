@@ -34,10 +34,10 @@ namespace spMain.Quote2023.Models
             {
                 _allCorrections = new Dictionary<string, Dictionary<DateTime, QuoteCorrection>>();
                 var lines = File.ReadAllLines(MinuteYahooCorrectionFiles)
-                    .Where(a => !string.IsNullOrEmpty(a) && !a.Trim().StartsWith("#"));
+                    .Where(a => !string.IsNullOrEmpty(a.Trim()) && !a.Trim().StartsWith("#"));
                 foreach (var line in lines)
                 {
-                    var ss = line.Split('\t');
+                    var ss = line.Trim().Split('\t');
                     var symbolKey = ss[0].Trim().ToUpper();
                     if (!_allCorrections.ContainsKey(symbolKey))
                         _allCorrections.Add(symbolKey, new Dictionary<DateTime, QuoteCorrection>());

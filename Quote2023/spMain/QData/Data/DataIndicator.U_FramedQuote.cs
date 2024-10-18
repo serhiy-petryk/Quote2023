@@ -70,7 +70,10 @@ namespace spMain.QData.Data {
           case "quotepolygon":
             for (int i = 0; i < (newDataOffset - lastDataOffset); i++)
             {
-              var q = (QuotePolygon)data[i];
+              // !!! Error for EDTX	2023-07-13: var q = (QuotePolygon)data[i]; 
+              var q = data[i] as QuotePolygon;
+              if (q == null) continue;
+
               int lastDateCount = this._dates.Count;
               Common.XScale.AddDateToDateArray(this._dates, q.date, ti);
               //              Common.UtilsFrame.AddDateToDateArray(this._dates, q.date, ti);
