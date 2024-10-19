@@ -37,7 +37,11 @@ namespace spMain.QData.Data {
         var endTradingTime = General.GetMarketEndTime(lastDateTime).Add(new TimeSpan(0, -1, 0));
         if (lastDateTime.TimeOfDay < endTradingTime)
         {
-          data.Add(new Quote(lastDateTime.Date + endTradingTime, double.NaN, double.NaN, double.NaN, double.NaN, 0));
+          if (data[data.Count - 1] is QuotePolygon)
+            data.Add(new QuotePolygon(lastDateTime.Date + endTradingTime, double.NaN, double.NaN, double.NaN,
+              double.NaN, 0, 0));
+          else
+            data.Add(new Quote(lastDateTime.Date + endTradingTime, double.NaN, double.NaN, double.NaN, double.NaN, 0));
           newDataOffset++;
         }
       }
@@ -70,10 +74,7 @@ namespace spMain.QData.Data {
           case "quotepolygon":
             for (int i = 0; i < (newDataOffset - lastDataOffset); i++)
             {
-              // !!! Error for EDTX	2023-07-13: var q = (QuotePolygon)data[i]; 
-              var q = data[i] as QuotePolygon;
-              if (q == null) continue;
-
+              var q = (QuotePolygon)data[i];
               int lastDateCount = this._dates.Count;
               Common.XScale.AddDateToDateArray(this._dates, q.date, ti);
               //              Common.UtilsFrame.AddDateToDateArray(this._dates, q.date, ti);
