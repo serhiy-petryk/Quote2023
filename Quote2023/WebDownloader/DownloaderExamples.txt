@@ -1,6 +1,14 @@
-﻿MorningStar profiles:
+﻿Weding:
+https://download.gallera.io/g/31-katriiin-photo/250826-nas-osoblivii-den/download/{0}.jpeg
+E:\Shared\M&TWedding\KatyaPhotos-2025-01-23\{0}.jpeg
+D:\Shared\M&TWedding\KatyaPhotos-2025-02-10\{0}.jpeg
+
+MorningStar profiles:
 https://www.morningstar.com/stocks/xase/{0}/quote
 E:\Quote\WebData\Symbols\MorningStar\Data\MSProfiles_20240615\MSProfile_xase_{0}.html
+
+https://www.morningstar.com/stocks/xnys/{0}/quote
+E:\Quote\WebData\Symbols\MorningStar\Data\MSProfiles_20250303\MSProfile_xnys_{0}.html
 
 PROM.UA клавіатура hp
 https://prom.ua/ua/search?search_term=%D0%BA%D0%BB%D0%B0%D0%B2%D1%96%D0%B0%D1%82%D1%83%D1%80%D0%B0%20hp&sort=price&category=7070903&page=384
