@@ -18,7 +18,7 @@ namespace WebDownloader {
     public event EventHandler OnPayload;
     public int totalBatchSteps;
     public bool silentMode = false;
-    public bool delayBetweenRequests = false;
+    public int delayBetweenRequests = 0;
     public csHttpAsync[] https;
     public int httpMaxAtempts = csHttpBase.httpMaxAttempts;
     public bool setCookie = true;
@@ -31,24 +31,22 @@ namespace WebDownloader {
       this.job = pJob; this.sessions = pSessions;
     }
 
-    //    public void Execute(string[] pUrls, string[] pFilenames) {
-    //  }
-    public void Execute(string[] pUrls, string[] pFilenames) {
-      this.Execute(new List<string>(pUrls), new List<string>(pFilenames));
-    }
-    public void Execute(List<string> pUrls, List<string> pFilenames) {
+    public void Execute(string[] pUrls, string[] pFileNames, bool skipRequestIfFileExists) {
       this._log.Clear();
+      urls.Clear();
+      filenames.Clear();
 
-      this.urls = pUrls; this.filenames = pFilenames;
-      if (pFilenames != null) {
-        for (int i = 0; i < pFilenames.Count; i++) {
-          string fn = pFilenames[i];
-          if (!String.IsNullOrEmpty(fn)) {
-            string path = Path.GetDirectoryName(fn);
-            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-          }
+      for (var k = 0; k < pFileNames.Length; k++)
+      {
+        if (!(File.Exists(pFileNames[k]) && skipRequestIfFileExists))
+        {
+          urls.Add(pUrls[k]);
+          filenames.Add(pFileNames[k]);
+          var path = Path.GetDirectoryName(pFileNames[k]);
+          if (!Directory.Exists(path)) Directory.CreateDirectory(path);
         }
       }
+
       int sessionCount = Math.Min(this.sessions, this.urls.Count);
       https = new csHttpAsync[sessionCount];
       httpSteps = new int[sessionCount];
@@ -101,8 +99,8 @@ namespace WebDownloader {
       }
       if (!http.requestData.cancelFlag) {// New request
         http.CreateRequest();
-        if (delayBetweenRequests)
-          Thread.Sleep(300);
+        if (delayBetweenRequests != 0)
+          Thread.Sleep(delayBetweenRequests);
         http.Execute();
       }
       else {

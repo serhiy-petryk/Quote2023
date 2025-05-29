@@ -1,4 +1,14 @@
-﻿Weding:
+﻿Opendatabot pension:
+https://court.opendatabot.ua/search?text=%D1%96%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D1%96%D1%8F+%D0%BF%D0%B5%D0%BD%D1%81%D1%96%D0%B9&adjudication_date_year=1&offset={0}
+E:\Temp\Pension2025\List01\page_{0}.html
+
+https://opendatabot.ua/court/{0}
+E:\Temp\Pension2025\Details\{0}.html
+
+http://od.reyestr.court.gov.ua/files/{0}
+E:\Temp\Pension2025\DetailsDsa\{0}
+
+Weding:
 https://download.gallera.io/g/31-katriiin-photo/250826-nas-osoblivii-den/download/{0}.jpeg
 E:\Shared\M&TWedding\KatyaPhotos-2025-01-23\{0}.jpeg
 D:\Shared\M&TWedding\KatyaPhotos-2025-02-10\{0}.jpeg

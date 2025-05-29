@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Collections.Specialized;
 using System.Text;
+using System.Threading;
 
 namespace WebDownloader {
 	/// <summary>
@@ -378,6 +379,7 @@ namespace WebDownloader {
 		}
 
 		protected void ProcessError(Exception ex) {
+      Thread.Sleep(2100);
 			/*if (this.response != null) {
         response.Close();
         ((IDisposable)response).Dispose();

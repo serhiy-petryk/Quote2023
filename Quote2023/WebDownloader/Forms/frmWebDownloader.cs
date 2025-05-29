@@ -71,9 +71,9 @@ namespace WebDownloader {
       using (csHttpFileUploader x = new csHttpFileUploader(job, this.sessions))
       {
         x.silentMode = this.cbSilent.Checked;
-        x.delayBetweenRequests = this.cbDelay.Checked;
+        x.delayBetweenRequests = Convert.ToInt32(this.numDelay.Value);
         if (this.postFlag) x.OnSetDataForRequest += new csHttpBase.dlgSetDataForRequest(x_OnSetDataForRequest);
-        x.Execute(this.urls, this.filenames);
+        x.Execute(this.urls, this.filenames, cbSkipRequest.Checked);
       }
     }
 
