@@ -10,9 +10,7 @@ namespace spMain.Quote2023.Models
     public class MinuteYahoo
     {
         // Settings
-        private const string BaseFolder = @"D:\Quote\";
-        private const string MinuteYahooDataFolder = BaseFolder + @"WebData\Minute\Yahoo\Data\";
-        private const string MinuteYahooCorrectionFiles = MinuteYahooDataFolder + "YahooMinuteCorrections.txt";
+        private const string MinuteYahooCorrectionFiles = Settings.MinuteYahooDataFolder + "YahooMinuteCorrections.txt";
 
         private class QuoteCorrection
         {
