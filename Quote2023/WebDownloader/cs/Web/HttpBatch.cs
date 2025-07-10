@@ -23,8 +23,8 @@ namespace WebDownloader {
     public int httpMaxAtempts = csHttpBase.httpMaxAttempts;
     public bool setCookie = true;
     private int[] httpSteps;
-    List<string> urls;
-    List<string> filenames;
+    List<string> urls = new List<string>();
+    List<string> filenames = new List<string>();
 		public object userData;
 
     public csHttpFileUploader(csJob pJob, int pSessions) {

@@ -1,4 +1,10 @@
-﻿Opendatabot pension:
+﻿UAKino:
+https://uakino.best/page/{0}/ (1-2300)*10
+https://uakino.best/filmy/page/{0}/ (1-368)
+E:\Temp\uakino\MainList\page_{0}.html
+E:\Temp\uakino\FilmyList\page_{0}.html
+
+Opendatabot pension:
 https://court.opendatabot.ua/search?text=%D1%96%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D1%86%D1%96%D1%8F+%D0%BF%D0%B5%D0%BD%D1%81%D1%96%D0%B9&adjudication_date_year=1&offset={0}
 E:\Temp\Pension2025\List01\page_{0}.html
 
